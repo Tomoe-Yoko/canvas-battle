@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-// import { Geist, Geist_Mono } from "next/font/google";
+// import { Noto_Sans_JP } from "next/font/google";
+import { DotGothic16 } from "next/font/google";
 import "./globals.css";
 
 // const geistSans = Geist({
@@ -7,10 +8,10 @@ import "./globals.css";
 //   subsets: ["latin"],
 // });
 
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
+const DotGothic = DotGothic16({
+  subsets: ["latin-ext"],
+  weight: "400",
+});
 
 export const metadata: Metadata = {
   title: "Canbas Battle",
@@ -23,11 +24,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      {/* <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      > */}
-      <body>{children}</body>
+    <html lang="ja">
+      <body className={`${DotGothic.className} antialiased bg-[#23293b]`}>
+        <div className="max-w-[500px] min-h-svh m-auto border-r border-l border-white">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
