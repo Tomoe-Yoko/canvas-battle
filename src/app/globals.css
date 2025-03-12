@@ -29,6 +29,19 @@ body {
   consider using classes instead of the `@apply` directive
   @see https://tailwindcss.com/docs/reusing-styles#avoiding-premature-abstraction
 */
+
+/* input系 */
+.label-style {
+  @apply text-base font-semibold tracking-wide;
+}
+.input-style {
+  @apply w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none;
+}
+.validation {
+  @apply text-red-400 text-sm mb-4;
+}
+
+/* ////////////////////////////////////// */
 .mask-line {
   @apply fill-none stroke-[white] stroke-[240] animate-[draw_5s_forwards_ease-out];
   /* マスク用の色を白に */
