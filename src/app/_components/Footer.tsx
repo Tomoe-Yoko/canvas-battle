@@ -5,18 +5,29 @@ import { GiTargetDummy } from "react-icons/gi";
 import { BsRocketTakeoff } from "react-icons/bs";
 import { LuPaintbrushVertical } from "react-icons/lu";
 import { AiOutlineLogout } from "react-icons/ai";
+import Link from "next/link";
+// import { useRouter } from "next/router";
+// import { supabase } from "../_utils/supabase";
+
 export const Footer = () => {
+  // const router = useRouter();
+  // const handleLogout = () => {
+  //   await supabase.auth.signOut();
+  //   router.push("/");
+  // };
+  // return handleLogout;
   return (
     <div className="flex bg-white">
-      <button>
+      <Link href={"/me"}>
         <GiTargetDummy />
-      </button>
-      <button>
+      </Link>
+      <Link href={"/ready"}>
         <BsRocketTakeoff />
-      </button>
-      <button>
+      </Link>
+      <Link href={"/painting"}>
         <LuPaintbrushVertical />
-      </button>
+      </Link>
+      {/* <button onClick={handleLogout}> */}
       <button>
         <AiOutlineLogout />
       </button>
