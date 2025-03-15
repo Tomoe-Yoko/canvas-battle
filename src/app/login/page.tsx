@@ -6,9 +6,20 @@ import { Button } from "../_components/Button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from "../_utils/validationSchema";
 import toast, { Toaster } from "react-hot-toast";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+  const router = useRouter();
+  // useEffect(() => {
+  //   const checkSession = async () => {
+  //     const { data } = await supabase.auth.getSession();
+  //     if (data?.session) {
+  //       router.push("/me");
+  //     }
+  //   };
+  //   checkSession();
+  // }, [router]);
+
   const {
     register,
     handleSubmit,
@@ -29,7 +40,8 @@ const Page = () => {
         icon: "😭",
       });
     } else {
-      router.replace("/me");
+      router.push("/me");
+      // APIにリクエストを送信する処理
     }
   };
 
