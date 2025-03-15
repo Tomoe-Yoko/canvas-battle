@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-:root {
+/* :root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -23,4 +23,37 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+} */
+/*
+  Based on TailwindCSS recommendations,
+  consider using classes instead of the `@apply` directive
+  @see https://tailwindcss.com/docs/reusing-styles#avoiding-premature-abstraction
+*/
+
+/* input系 */
+.label-style {
+  @apply text-base font-semibold tracking-wide;
+}
+.input-style {
+  @apply w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none;
+}
+.validation {
+  @apply text-red-400 text-sm mb-4;
+}
+
+/* ////////////////////////////////////// */
+.mask-line {
+  @apply fill-none stroke-[white] stroke-[240] animate-[draw_5s_forwards_ease-out];
+  /* マスク用の色を白に */
+  stroke-linecap: round;
+  stroke-dasharray: 10000;
+  stroke-dashoffset: 10000;
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+svg {
+  @apply w-full h-auto;
 }
