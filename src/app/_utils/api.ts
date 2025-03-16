@@ -51,13 +51,13 @@ export const api = {
 
   put: async <RequestType, ResponseType>(
     endpoint: string,
-    payload: RequestType
+    payload: RequestType //更新データ
   ) => {
     try {
       const res = await fetch(endpoint, {
         method: "PUT",
         headers: {
-          "Content-Type": "application?json",
+          "Content-Type": "application/json",
           Authorization: await getAccessToken(),
         },
         body: JSON.stringify(payload),

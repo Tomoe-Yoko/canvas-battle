@@ -15,11 +15,12 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  name     String
-  email    String    @unique
-  monsters Monster[]
-  battles  Battle[]
+  id             Int       @id @default(autoincrement())
+  supabaseUserId String    @unique @map("supabase_user_id")
+  name           String
+  email          String    @unique
+  monsters       Monster[]
+  battles        Battle[]
 }
 
 model Monster {
