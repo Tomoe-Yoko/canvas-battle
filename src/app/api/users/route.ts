@@ -38,3 +38,33 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json({ error: "エラー" }, { status: 500 });
   }
 };
+
+export const GET = async (request: NextRequest) => {
+  const token = request.headers.get("Authorization") || "";
+
+  const { data, error } = await supabase.auth.getUser(token);
+  if (error) {
+    console.error("SupabaseError:", error.message);
+    return NextResponse.json({ error: "認証エラー" }, { status: 401 });
+  }
+  // const supabaseUserId = data.user.id;
+
+  const prisma = await buildPrisma();
+  const user = await prisma.user.findUnique({
+    where: { supabaseUserId: data.user?.id || "" },
+  });
+  if (!user) {
+    return NextResponse.json(
+      { error: "ユーザーが見つかりません" },
+      { status: 404 }
+    );
+  }
+  try {
+    const data = { userName: user.name, email: user.email };
+    return NextResponse.json({ status: "OK", data });
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+  }
+};

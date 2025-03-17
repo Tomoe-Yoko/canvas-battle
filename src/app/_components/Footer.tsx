@@ -22,8 +22,6 @@ export const Footer = () => {
   // return handleLogout;
   return (
     <div className="fixed bottom-0 left-0 w-full bg-white p-4">
-      {/* <div className="flex bg-white justify-around p-4"> */}
-      {/* <IconContext.Provider value={{ color: "#ccc", }}> */}
       <nav className="w-full">
         <ul className="flex justify-around w-full">
           <li className="flex flex-col items-center justify-center gap-2">
@@ -57,7 +55,6 @@ export const Footer = () => {
           </li>
         </ul>
       </nav>
-      {/* </IconContext.Provider> */}
     </div>
   );
 };

@@ -7,9 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from "../_utils/validationSchema";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { api } from "../_utils/api";
+import { useFetch } from "../_hooks/useFetch";
 
 const Page = () => {
   const router = useRouter();
+  const { session, token, isLoading } = useSupabaseSession();
   // useEffect(() => {
   //   const checkSession = async () => {
   //     const { data } = await supabase.auth.getSession();
@@ -19,7 +22,9 @@ const Page = () => {
   //   };
   //   checkSession();
   // }, [router]);
-
+  const { data: sessionData, error: sessionError } = useFetch<{
+    session?: { access_token?: string };
+  }>("/api/users");
   const {
     register,
     handleSubmit,
@@ -39,11 +44,22 @@ const Page = () => {
       toast("ログインに失敗", {
         icon: "😭",
       });
-    } else {
-      router.push("/me");
-      // APIにリクエストを送信する処理
+      return;
+    }
+
+    if (sessionData) {
+      const token = sessionData.session?.access_token; // tokenを取得
+      if (token) {
+        await api.post("api/users", { token }); // tokenを使ったAPIリクエスト
+      }
+      router.push("/me"); // ログイン成功後は"/me"にリダイレクト
     }
   };
+
+  // セッションが取得できているかをチェック
+  if (sessionError) {
+    console.error("Session retrieval failed:", sessionError);
+  }
 
   return (
     <div className=" min-h-screen bg-[#1a1d29]">
