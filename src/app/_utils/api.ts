@@ -14,7 +14,11 @@ export const api = {
           Authorization: await getAccessToken(),
         },
       });
-      if (res.status !== 200) throw new Error("データの取得に失敗しました。");
+      if (res.status !== 200) {
+        const errorData = await res.json(); // エラーレスポンスを取得
+        console.error("Error fetching data:", errorData); // エラーログを出力
+        // throw new Error("データの取得に失敗しました。");
+      }
 
       const data: ResponseType = await res.json();
       return data;
@@ -32,7 +36,7 @@ export const api = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorizaion: await getAccessToken(),
+          Authorization: await getAccessToken(),
         },
         body: JSON.stringify(payload),
       });

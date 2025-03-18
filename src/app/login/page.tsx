@@ -7,24 +7,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from "../_utils/validationSchema";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+// import { useSupabaseSession } from "../_hooks/useSupabaseSession";
 import { api } from "../_utils/api";
 import { useFetch } from "../_hooks/useFetch";
 
 const Page = () => {
   const router = useRouter();
-  const { session, token, isLoading } = useSupabaseSession();
-  // useEffect(() => {
-  //   const checkSession = async () => {
-  //     const { data } = await supabase.auth.getSession();
-  //     if (data?.session) {
-  //       router.push("/me");
-  //     }
-  //   };
-  //   checkSession();
-  // }, [router]);
+
   const { data: sessionData, error: sessionError } = useFetch<{
     session?: { access_token?: string };
   }>("/api/users");
+
   const {
     register,
     handleSubmit,
@@ -50,7 +43,7 @@ const Page = () => {
     if (sessionData) {
       const token = sessionData.session?.access_token; // tokenを取得
       if (token) {
-        await api.post("api/users", { token }); // tokenを使ったAPIリクエスト
+        await api.post("/api/users", { token }); // tokenを使ったAPIリクエスト
       }
       router.push("/me"); // ログイン成功後は"/me"にリダイレクト
     }
