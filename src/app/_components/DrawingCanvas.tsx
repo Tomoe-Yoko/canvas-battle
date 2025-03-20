@@ -2,7 +2,11 @@
 
 import React, { useRef, useState } from "react";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
-import { Button } from "./Button";
+// import { Button } from "./Button";
+import { BsEraserFill, BsPencilFill } from "react-icons/bs";
+import { TbClearAll } from "react-icons/tb";
+import { IoReturnUpBackOutline } from "react-icons/io5";
+import { RiDownload2Fill } from "react-icons/ri";
 
 const DrawingCanvas = () => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
@@ -31,11 +35,16 @@ const DrawingCanvas = () => {
 
   return (
     <div>
-      <section className="w-full my-8">
-        <h2 className="text-3xl p-4 text-white">お絵かきしよう！</h2>
+      <section className="w-full mb-[20vh]">
+        <h2 className="text-2xl p-4 text-white text-center mb-6">
+          モンスターを書こう！
+        </h2>
         <div className="ml-2 flex items-center space-x-2">
           <div className="">
-            <label htmlFor="color" className="block text-center  text-sm">
+            <label
+              htmlFor="color"
+              className="block text-center text-sm text-white"
+            >
               色
             </label>
             <input
@@ -47,7 +56,11 @@ const DrawingCanvas = () => {
             />
           </div>
           <div className=" ">
-            <label htmlFor="strokeWidth" className="block text-sm text-center">
+            <label
+              htmlFor="strokeWidth"
+              className="block text-sm text-center text-white
+            "
+            >
               ペンの太さ
             </label>
             <input
@@ -62,59 +75,55 @@ const DrawingCanvas = () => {
             />
           </div>
           {/* 消しゴム（白色に変更） */}
-          <Button
-            variant="bg-blue"
+          <button
             type="button"
             onClick={() => canvasRef.current?.eraseMode(true)}
+            className="bg-white p-2 rounded-full w-[50px]"
           >
-            消しゴム
-          </Button>
+            <BsEraserFill />
+          </button>
 
           {/* ペンに戻す（eraseMode を false にする） */}
-          <Button
-            variant="bg-blue"
+          <button
             type="button"
             onClick={() => canvasRef.current?.eraseMode(false)}
+            className="bg-white p-2 rounded-full w-[50px]"
           >
-            ペン
-          </Button>
+            <BsPencilFill />
+          </button>
 
           {/* 全消しボタン */}
-          <Button
+          <button
+            type="button"
             onClick={() =>
               canvasRef.current && canvasRef.current?.clearCanvas()
             }
-            variant="bg-blue"
-            type="button"
+            className="bg-white p-2 rounded-full w-[50px]"
           >
-            全消し
-          </Button>
+            <TbClearAll />
+          </button>
           {/* 戻るボタン */}
-          <Button
+          <button
+            type="button"
             onClick={() => canvasRef.current && canvasRef.current?.undo()}
-            variant="bg-blue"
-            type="button"
+            className="bg-white p-2 rounded-full w-[50px]"
           >
-            戻る
-          </Button>
+            <IoReturnUpBackOutline />
+          </button>
 
-          {/* やり直しボタン */}
-          {/* <Button
-            onClick={() => canvasRef.current && canvasRef.current?.redo()}
-            variant="bg-blue"
-            type="button"
-          >
-            やり直し
-          </Button> */}
           {/* 保存ボタン */}
-          <Button onClick={downloadImage} variant="bg-blue" type="button">
-            保存
-          </Button>
+          <button
+            type="button"
+            onClick={downloadImage}
+            className="bg-white p-2 rounded-full w-[50px]"
+          >
+            <RiDownload2Fill />
+          </button>
         </div>
         <ReactSketchCanvas
           ref={canvasRef}
           width="100%"
-          height="600px"
+          height="80vh"
           strokeColor={penColor}
           strokeWidth={strokeWidth}
         />
