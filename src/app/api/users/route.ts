@@ -26,7 +26,7 @@ export const POST = async (request: NextRequest) => {
       data: {
         supabaseUserId: data.user?.id || "",
         email: data.user?.email || "",
-        name: data.user?.user_metadata.full_name || "",
+        userName: data.user?.user_metadata.full_name || "",
       },
     });
     return NextResponse.json(
@@ -60,7 +60,7 @@ export const GET = async (request: NextRequest) => {
     );
   }
   try {
-    const data = { userName: user.name, email: user.email };
+    const data = { userName: user.userName, email: user.email };
     return NextResponse.json({ status: "OK", data });
   } catch (error) {
     if (error instanceof Error) {

@@ -31,7 +31,7 @@ export const Footer = () => {
             </Link>
           </li>
           <li className="flex flex-col items-center justify-center gap-2">
-            <Link href="/ready" className="flex flex-col items-center gap-2">
+            <Link href="/battle" className="flex flex-col items-center gap-2">
               {/* <FaRocket /> */}
               <FaSpaghettiMonsterFlying className="px-6" />
               <p className="w-[6rem] text-[0.9rem] text-center">じゃんけん</p>
