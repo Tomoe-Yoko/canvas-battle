@@ -6,31 +6,86 @@ import { BsEraserFill, BsPencilFill } from "react-icons/bs";
 import { TbClearAll } from "react-icons/tb";
 import { IoReturnUpBackOutline } from "react-icons/io5";
 import { RiDownload2Fill } from "react-icons/ri";
+import { Modal } from "./Modal";
+import { supabase } from "../_utils/supabase";
+import { useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
+import toast from "react-hot-toast";
 
 const DrawingCanvas = () => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
   const [penColor, setPenColor] = useState("black");
   const [strokeWidth, setStrokeWidth] = useState(3);
+  // const [isOpen, setIsOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [monsterName, setMonsterName] = useState("");
+  const router = useRouter();
+  // const closeModal = () => {
+  //   setIsOpen(false);
+  // };
 
-  const downloadImage = async () => {
+  //Modal
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  //画像を保存
+  const saveMonster = async (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
     if (!canvasRef.current) return;
+    if (!monsterName.trim()) {
+      toast.error("モンスターに名前をつけてね！");
+      return;
+    }
+
     try {
-      // 画像をエクスポート
       const imageData = await canvasRef.current.exportImage("png");
 
-      // ダウンロード用のリンクを作成
-      const link = document.createElement("a");
-      link.href = imageData;
-      link.download = "my-drawing.png"; // 保存するファイル名
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      alert("画像を保存したよ");
+      const fileId = uuidv4();
+      const fileName = `monsters/${fileId}.png`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("monster-images")
+        .upload(fileName, dataURLtoBlob(imageData), {
+          contentType: "image/png",
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { error: dbError } = await supabase
+        .from("Monster")
+        .insert([{ name: monsterName, thumbnailImageKey: fileId, userId: 1 }]);
+
+      if (dbError) throw dbError;
+
+      toast.success("モンスターが保存されました！");
+      setIsModalOpen(false);
+      router.refresh();
     } catch (e) {
-      console.error("画像の保存が出来ませんでした", e);
-      alert("画像が保存できなかったよ。もう一回ためしてみて");
+      console.error("保存エラー:", e);
+      toast.error("保存に失敗しました…");
     }
   };
+
+  // const downloadImage = async () => {
+  //   if (!canvasRef.current) return;
+  //   try {
+  //     // 画像をエクスポート
+  //     const imageData = await canvasRef.current.exportImage("png");
+
+  //     // ダウンロード用のリンクを作成
+  //     const link = document.createElement("a");
+  //     link.href = imageData;
+  //     link.download = "my-drawing.png"; // 保存するファイル名
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+  //     alert("画像を保存したよ");
+  //   } catch (e) {
+  //     console.error("画像の保存が出来ませんでした", e);
+  //     alert("画像が保存できなかったよ。もう一回ためしてみて");
+  //   }
+  // };
 
   return (
     <div>
@@ -66,9 +121,9 @@ const DrawingCanvas = () => {
               <input
                 id="strokeWidth"
                 type="range"
-                min="1"
-                max="10"
-                step="1"
+                min="2"
+                max="20"
+                step="2"
                 value={strokeWidth}
                 onChange={(e) => setStrokeWidth(Number(e.target.value))}
                 className="w-40 cursor-pointer my-2"
@@ -117,7 +172,7 @@ const DrawingCanvas = () => {
             {/* 保存ボタン */}
             <button
               type="button"
-              onClick={downloadImage}
+              onClick={openModal}
               className="bg-white p-2 rounded-full w-[50px]"
             >
               <RiDownload2Fill />
@@ -132,8 +187,43 @@ const DrawingCanvas = () => {
           strokeWidth={strokeWidth}
         />
       </section>
+
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <div className="bg-white px-6 py-8 rounded-lg shadow-lg w-[90%]">
+          <h3 className="text-lg font-bold mb-4">なまえをつけよう</h3>
+          <input
+            type="text"
+            value={monsterName}
+            onChange={(e) => setMonsterName(e.target.value)}
+            className="p-4 text-2xl border border-blue-700"
+          />
+          <div className="flex justify-end space-x-2 mt-4">
+            <button
+              onClick={closeModal}
+              className="bg-gray-400 text-white px-4 py-2 rounded"
+            >
+              キャンセル
+            </button>
+            <button
+              onClick={saveMonster}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              保存
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
+
+  //画像データをBlobに変換する関数 　　必要か検証！
+  const dataURLtoBlob = (dataURL: string) => {
+    const byteString = atob(dataURL.split(",")[1]);
+    const arrayBuffer = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++)
+      arrayBuffer[i] = byteString.charCodeAt(i);
+    return new Blob([arrayBuffer], { type: "image/png" });
+  };
 };
 
 export default DrawingCanvas;

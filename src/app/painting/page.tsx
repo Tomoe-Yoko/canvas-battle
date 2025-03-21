@@ -1,16 +1,18 @@
+"use client";
 import React from "react";
 import DrawingCanvas from "../_components/DrawingCanvas";
 import { Header } from "../_components/Header";
 import { Footer } from "../_components/Footer";
 
-const page = () => {
+const Page = () => {
   return (
     <div>
       <Header />
       <DrawingCanvas />
+
       <Footer />
     </div>
   );
 };
 
-export default page;
+export default Page;
