@@ -14,7 +14,6 @@ interface SignUpForm {
   email: string;
   password: string;
 }
-// import { Button } from "../_components/Button";
 
 const Page = () => {
   const {

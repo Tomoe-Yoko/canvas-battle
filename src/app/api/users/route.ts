@@ -26,7 +26,7 @@ export const POST = async (request: NextRequest) => {
       data: {
         supabaseUserId: data.user?.id || "",
         email: data.user?.email || "",
-        userName: data.user?.user_metadata.full_name || "",
+        name: data.user?.user_metadata.userName || "",
       },
     });
     return NextResponse.json(
@@ -47,7 +47,6 @@ export const GET = async (request: NextRequest) => {
     console.error("SupabaseError:", error.message);
     return NextResponse.json({ error: "認証エラー" }, { status: 401 });
   }
-  // const supabaseUserId = data.user.id;
 
   const prisma = await buildPrisma();
   const user = await prisma.user.findUnique({
@@ -60,7 +59,7 @@ export const GET = async (request: NextRequest) => {
     );
   }
   try {
-    const data = { userName: user.userName, email: user.email };
+    const data = { userName: user.name, email: user.email };
     return NextResponse.json({ status: "OK", data });
   } catch (error) {
     if (error instanceof Error) {

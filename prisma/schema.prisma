@@ -24,22 +24,28 @@ model User {
 }
 
 model Monster {
-  id     Int    @id @default(autoincrement())
-  name   String
-  userId Int
-  User   User   @relation(fields: [userId], references: [id])
+  id                Int      @id @default(autoincrement())
+  userId            Int
+  name              String
+  thumbnailImageKey String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  User User @relation(fields: [userId], references: [id])
 
   battles Battle[]
 }
 
 model Battle {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   userId    Int
-  User      User    @relation(fields: [userId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
   monsterId Int
-  monster   Monster @relation(fields: [monsterId], references: [id])
+  monster   Monster  @relation(fields: [monsterId], references: [id])
   enemyId   Int?
   result    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // dbpushして、prismaを登録！
