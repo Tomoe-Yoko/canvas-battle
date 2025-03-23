@@ -40,13 +40,13 @@ const DrawingCanvas = () => {
     }
 
     try {
-      const { data: user, error: authError } = await supabase.auth.getUser(); // 🟢 ユーザー情報を取得
+      const { data: user, error: authError } = await supabase.auth.getUser(); // ユーザー情報を取得
       if (authError || !user || !user.user) {
         toast.error("ログインしてください");
         return;
       }
 
-      const userId = user.user.id; // 🟢 ログイン中のユーザーの ID
+      const userId = user.user.id; // ログイン中のユーザーの ID
 
       const imageData = await canvasRef.current.exportImage("png");
       const fileId = uuidv4();
