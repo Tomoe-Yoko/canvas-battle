@@ -19,6 +19,7 @@ const DrawingCanvas = () => {
   // const [isOpen, setIsOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [monsterName, setMonsterName] = useState("");
+  const [thumbnailImageKey, setThumbnailImageKey] = useState("");
   const router = useRouter();
   // const closeModal = () => {
   //   setIsOpen(false);
@@ -39,22 +40,34 @@ const DrawingCanvas = () => {
     }
 
     try {
-      const imageData = await canvasRef.current.exportImage("png");
+      const { data: user, error: authError } = await supabase.auth.getUser(); // 🟢 ユーザー情報を取得
+      if (authError || !user || !user.user) {
+        toast.error("ログインしてください");
+        return;
+      }
 
+      const userId = user.user.id; // 🟢 ログイン中のユーザーの ID
+
+      const imageData = await canvasRef.current.exportImage("png");
       const fileId = uuidv4();
       const fileName = `monsters/${fileId}.png`;
 
       const { error: uploadError } = await supabase.storage
-        .from("monster-images")
+        .from("post-monster")
         .upload(fileName, dataURLtoBlob(imageData), {
           contentType: "image/png",
+          cacheControl: "3600",
+          upsert: false,
         });
-
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        toast.error("画像が保存出来ませんでした。もう一度お試しください。");
+        throw uploadError;
+      }
+      setThumbnailImageKey(fileName);
 
       const { error: dbError } = await supabase
-        .from("Monster")
-        .insert([{ name: monsterName, thumbnailImageKey: fileId, userId: 1 }]);
+        .from("post-monster")
+        .insert([{ name: monsterName, thumbnailImageKey: fileName, userId }]);
 
       if (dbError) throw dbError;
 
