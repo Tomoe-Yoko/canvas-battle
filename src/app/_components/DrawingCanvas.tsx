@@ -11,6 +11,8 @@ import { supabase } from "../_utils/supabase";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
+import { CreateMonsterPostRequestBody } from "../_types/monsters";
+import { api } from "../_utils/api";
 
 interface User {
   user: {
@@ -26,13 +28,11 @@ const DrawingCanvas = ({ user }: { user: User }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [monsterName, setMonsterName] = useState("");
   const [thumbnailImageKey, setThumbnailImageKey] = useState("");
-  // const [thumbnailImageUrl, setThumbnailImageUrl] = useState<null | string>(
-  //   null
-  // );
+
   const router = useRouter();
 
   if (!user || !user.user) {
-    toast.error("ログインしてください");
+    toast.error("ログインしてね");
     return;
   }
   //Modal
@@ -50,8 +50,7 @@ const DrawingCanvas = ({ user }: { user: User }) => {
     }
 
     try {
-      const userId = user.user.id; // ログイン中のユーザーの ID
-
+      const userId = Number(user.user.id); // ログイン中のユーザーの IDを数値に変換
       const imageData = await canvasRef.current.exportImage("png");
       const fileId = uuidv4();
       const fileName = `private/${fileId}.png`;
@@ -59,68 +58,34 @@ const DrawingCanvas = ({ user }: { user: User }) => {
       const { error: uploadError } = await supabase.storage
         .from("post-monster")
         .upload(fileName, dataURLtoBlob(imageData), {
-          // contentType: "image/png",
           cacheControl: "3600",
           upsert: false,
         });
       if (uploadError) {
-        toast.error("画像が保存出来ませんでした。もう一度お試しください。");
+        toast.error("画像が保存できなかったよ。もう一回ためしてみて");
         throw uploadError;
       }
       setThumbnailImageKey(fileName);
 
-      const { error: dbError } = await supabase
-        .from("post-monster")
-        .insert([{ name: monsterName, thumbnailImageKey: fileName, userId }]);
-
-      if (dbError) throw dbError;
-
-      // APIに画像情報を送信
-      const res = await fetch(`/api/monster`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: user.user.id,
-        },
-        body: JSON.stringify({
-          thumbnailImageKey: fileName,
-        }),
-      });
-      if (res.ok) {
-        toast.success("モンスターが保存されました！");
-        setIsModalOpen(false);
-        router.refresh();
-      } else {
-        const errorData = await res.json();
-        throw new Error(
-          `API error: ${errorData.message || "Unknown error occurred"}`
-        );
-      }
+      const monsterData: CreateMonsterPostRequestBody = {
+        userId,
+        name: monsterName,
+        thumbnailImageKey: fileName,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      await api.post<CreateMonsterPostRequestBody, typeof monsterData>(
+        "/api/monsters",
+        monsterData
+      );
+      toast.success("モンスターが保存された！");
+      setIsModalOpen(false);
+      router.refresh();
     } catch (e) {
       console.error("保存エラー:", e);
-      toast.error("保存に失敗しました。もう一度お試しください。");
+      toast.error("画像が保存できなかったよ。もう一回ためしてみて");
     }
   };
-
-  // const downloadImage = async () => {
-  //   if (!canvasRef.current) return;
-  //   try {
-  //     // 画像をエクスポート
-  //     const imageData = await canvasRef.current.exportImage("png");
-
-  //     // ダウンロード用のリンクを作成
-  //     const link = document.createElement("a");
-  //     link.href = imageData;
-  //     link.download = "my-drawing.png"; // 保存するファイル名
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     document.body.removeChild(link);
-  //     alert("画像を保存したよ");
-  //   } catch (e) {
-  //     console.error("画像の保存が出来ませんでした", e);
-  //     alert("画像が保存できなかったよ。もう一回ためしてみて");
-  //   }
-  // };
 
   return (
     <div>
@@ -262,3 +227,23 @@ const DrawingCanvas = ({ user }: { user: User }) => {
 };
 
 export default DrawingCanvas;
+
+// const downloadImage = async () => {
+//   if (!canvasRef.current) return;
+//   try {
+//     // 画像をエクスポート
+//     const imageData = await canvasRef.current.exportImage("png");
+
+//     // ダウンロード用のリンクを作成
+//     const link = document.createElement("a");
+//     link.href = imageData;
+//     link.download = "my-drawing.png"; // 保存するファイル名
+//     document.body.appendChild(link);
+//     link.click();
+//     document.body.removeChild(link);
+//     alert("画像を保存したよ");
+//   } catch (e) {
+//     console.error("画像の保存が出来ませんでした", e);
+//     alert("画像が保存できなかったよ。もう一回ためしてみて");
+//   }
+// };
