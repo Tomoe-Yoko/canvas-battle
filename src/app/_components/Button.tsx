@@ -1,6 +1,6 @@
 import React, { ComponentPropsWithoutRef, ReactNode } from "react";
 
-type Variant = "bg-333" | "submit";
+type Variant = "bg-333" | "submit" | "bg-blue";
 
 interface Props extends Omit<ComponentPropsWithoutRef<"button">, "className"> {
   variant: Variant;
@@ -13,6 +13,8 @@ export const Button = ({ variant, children, ...props }: Props) => {
         return "bg-[#333] text-white border-white";
       case "submit":
         return "bg-[#333] text-white text-[1rem] px-12 py-2 rounded tracking-[0.3rem] hover:bg-[#555]";
+      case "bg-blue":
+        return "bg-[#4E89FF] text-white";
 
       default:
         return "";
