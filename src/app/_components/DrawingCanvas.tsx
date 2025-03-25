@@ -12,19 +12,29 @@ import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
 
-const DrawingCanvas = () => {
+interface User {
+  user: {
+    id: string;
+    name?: string;
+  };
+}
+
+const DrawingCanvas = ({ user }: { user: User }) => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
   const [penColor, setPenColor] = useState("black");
   const [strokeWidth, setStrokeWidth] = useState(3);
-  // const [isOpen, setIsOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [monsterName, setMonsterName] = useState("");
   const [thumbnailImageKey, setThumbnailImageKey] = useState("");
+  // const [thumbnailImageUrl, setThumbnailImageUrl] = useState<null | string>(
+  //   null
+  // );
   const router = useRouter();
-  // const closeModal = () => {
-  //   setIsOpen(false);
-  // };
 
+  if (!user || !user.user) {
+    toast.error("ログインしてください");
+    return;
+  }
   //Modal
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
@@ -40,22 +50,16 @@ const DrawingCanvas = () => {
     }
 
     try {
-      const { data: user, error: authError } = await supabase.auth.getUser(); // ユーザー情報を取得
-      if (authError || !user || !user.user) {
-        toast.error("ログインしてください");
-        return;
-      }
-
       const userId = user.user.id; // ログイン中のユーザーの ID
 
       const imageData = await canvasRef.current.exportImage("png");
       const fileId = uuidv4();
-      const fileName = `monsters/${fileId}.png`;
+      const fileName = `private/${fileId}.png`;
 
       const { error: uploadError } = await supabase.storage
         .from("post-monster")
         .upload(fileName, dataURLtoBlob(imageData), {
-          contentType: "image/png",
+          // contentType: "image/png",
           cacheControl: "3600",
           upsert: false,
         });
@@ -71,12 +75,30 @@ const DrawingCanvas = () => {
 
       if (dbError) throw dbError;
 
-      toast.success("モンスターが保存されました！");
-      setIsModalOpen(false);
-      router.refresh();
+      // APIに画像情報を送信
+      const res = await fetch(`/api/monster`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: user.user.id,
+        },
+        body: JSON.stringify({
+          thumbnailImageKey: fileName,
+        }),
+      });
+      if (res.ok) {
+        toast.success("モンスターが保存されました！");
+        setIsModalOpen(false);
+        router.refresh();
+      } else {
+        const errorData = await res.json();
+        throw new Error(
+          `API error: ${errorData.message || "Unknown error occurred"}`
+        );
+      }
     } catch (e) {
       console.error("保存エラー:", e);
-      toast.error("保存に失敗しました…");
+      toast.error("保存に失敗しました。もう一度お試しください。");
     }
   };
 
