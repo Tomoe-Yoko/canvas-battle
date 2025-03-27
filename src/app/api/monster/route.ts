@@ -19,7 +19,7 @@ export const POST = async (request: NextRequest) => {
 
   try {
     const body: CreateMonsterPostRequestBody = await request.json();
-    const { userId, name, thumbnailImageKey } = body;
+    const { name, thumbnailImageKey } = body;
     const data = await prisma.monster.create({
       data: {
         userId: user.id,
@@ -37,4 +37,4 @@ export const POST = async (request: NextRequest) => {
       return NextResponse.json({ error: error.message }, { status: 400 });
   }
 };
-//builderror作るところから！
+//postman、認証utils作るところから！
