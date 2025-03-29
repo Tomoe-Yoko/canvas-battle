@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildPrisma } from "@/app/_utils/prisma";
 import { supabase } from "@/app/_utils/supabase";
+import { getAuthenticatedUser } from "@/app/_utils/auth";
 
 export const POST = async (request: NextRequest) => {
   try {
@@ -40,24 +41,13 @@ export const POST = async (request: NextRequest) => {
 };
 
 export const GET = async (request: NextRequest) => {
-  const token = request.headers.get("Authorization") || "";
-
-  const { data, error } = await supabase.auth.getUser(token);
-  if (error) {
-    console.error("SupabaseError:", error.message);
-    return NextResponse.json({ error: "認証エラー" }, { status: 401 });
+  const authResult = await getAuthenticatedUser(request);
+  if (authResult instanceof NextResponse) {
+    return authResult;
   }
 
-  const prisma = await buildPrisma();
-  const user = await prisma.user.findUnique({
-    where: { supabaseUserId: data.user?.id || "" },
-  });
-  if (!user) {
-    return NextResponse.json(
-      { error: "ユーザーが見つかりません" },
-      { status: 404 }
-    );
-  }
+  const { user } = authResult; // 認証されたユーザー情報を取得
+
   try {
     const data = { userName: user.name, email: user.email };
     return NextResponse.json({ status: "OK", data });
