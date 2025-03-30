@@ -10,16 +10,17 @@ import { Modal } from "./Modal";
 import { supabase } from "../_utils/supabase";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { CreateMonsterPostRequestBody } from "../_types/monsters";
 import { api } from "../_utils/api";
+import { User } from "@supabase/auth-js";
 
-interface User {
-  user: {
-    id: string;
-    name?: string;
-  };
-}
+// interface User {
+//   user: {
+//     id: number;
+//     name?: string;
+//   };
+// }
 
 const DrawingCanvas = ({ user }: { user: User }) => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
@@ -27,14 +28,10 @@ const DrawingCanvas = ({ user }: { user: User }) => {
   const [strokeWidth, setStrokeWidth] = useState(3);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [monsterName, setMonsterName] = useState("");
-  const [thumbnailImageKey, setThumbnailImageKey] = useState("");
+  const [thumbnailsImageKey, setThumbnailImageKey] = useState("");
 
   const router = useRouter();
 
-  if (!user || !user.user) {
-    toast.error("ログインしてね");
-    return;
-  }
   //Modal
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
@@ -49,15 +46,26 @@ const DrawingCanvas = ({ user }: { user: User }) => {
       return;
     }
 
+    //画像データをBlobに変換する関数
+    const dataURLtoBlob = (dataURL: string) => {
+      const byteString = atob(dataURL.split(",")[1]);
+      const arrayBuffer = new Uint8Array(byteString.length);
+      for (let i = 0; i < byteString.length; i++)
+        arrayBuffer[i] = byteString.charCodeAt(i);
+      return new Blob([arrayBuffer], { type: "image/png" });
+    };
     try {
-      const userId = Number(user.user.id); // ログイン中のユーザーの IDを数値に変換
+      // const userId = Number(user.user.id); // ログイン中のユーザーの IDを数値に変換
       const imageData = await canvasRef.current.exportImage("png");
       const fileId = uuidv4();
       const fileName = `private/${fileId}.png`;
 
+      // 🔹 Base64 から Blob に変換
+      const blobData = dataURLtoBlob(imageData);
+
       const { error: uploadError } = await supabase.storage
         .from("post-monster")
-        .upload(fileName, dataURLtoBlob(imageData), {
+        .upload(fileName, blobData, {
           cacheControl: "3600",
           upsert: false,
         });
@@ -68,14 +76,14 @@ const DrawingCanvas = ({ user }: { user: User }) => {
       setThumbnailImageKey(fileName);
 
       const monsterData: CreateMonsterPostRequestBody = {
-        userId,
+        userId: Number(user.id),
         name: monsterName,
         thumbnailImageKey: fileName,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
       await api.post<CreateMonsterPostRequestBody, typeof monsterData>(
-        "/api/monsters",
+        "/api/monster",
         monsterData
       );
       toast.success("モンスターが保存された！");
@@ -213,17 +221,9 @@ const DrawingCanvas = ({ user }: { user: User }) => {
           </div>
         </div>
       </Modal>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
-
-  //画像データをBlobに変換する関数 　　必要か検証！
-  const dataURLtoBlob = (dataURL: string) => {
-    const byteString = atob(dataURL.split(",")[1]);
-    const arrayBuffer = new Uint8Array(byteString.length);
-    for (let i = 0; i < byteString.length; i++)
-      arrayBuffer[i] = byteString.charCodeAt(i);
-    return new Blob([arrayBuffer], { type: "image/png" });
-  };
 };
 
 export default DrawingCanvas;
