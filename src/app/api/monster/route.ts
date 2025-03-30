@@ -1,21 +1,15 @@
 import { CreateMonsterPostRequestBody } from "@/app/_types/monsters";
+import { getAuthenticatedUser } from "@/app/_utils/auth";
 import { buildPrisma } from "@/app/_utils/prisma";
-import { supabase } from "@/app/_utils/supabase";
+// import { supabase } from "@/app/_utils/supabase";
+// import { request } from "http";
 import { NextRequest, NextResponse } from "next/server";
+const prisma = await buildPrisma();
 
 export const POST = async (request: NextRequest) => {
-  const prisma = await buildPrisma();
   const token = request.headers.get("Authorization") ?? "";
-  const { error, data } = await supabase.auth.getUser(token);
-  if (error)
-    return NextResponse.json({ status: error.message }, { status: 400 });
-  const supabaseUserId = data.user.id;
-  const user = await prisma.user.findUnique({ where: { supabaseUserId } });
-  if (!user)
-    return NextResponse.json(
-      { message: "ユーザーが見つかりませんでした" },
-      { status: 404 }
-    );
+  const { user, errorResponse } = await getAuthenticatedUser(token);
+  if (errorResponse) return errorResponse;
 
   try {
     const body: CreateMonsterPostRequestBody = await request.json();
@@ -37,4 +31,25 @@ export const POST = async (request: NextRequest) => {
       return NextResponse.json({ error: error.message }, { status: 400 });
   }
 };
-//postman、認証utils作るところから！
+
+export const GET = async (request: NextRequest) => {
+  const token = request.headers.get("Authorization") ?? "";
+  const { user, errorResponse } = await getAuthenticatedUser(token);
+  if (errorResponse) return errorResponse;
+  try {
+    const monstersView = await prisma.monster.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: "desc" },
+    });
+    return NextResponse.json(
+      {
+        status: "OK",
+        monstersView,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    if (error instanceof Error)
+      return NextResponse.json({ error: error.message }, { status: 400 });
+  }
+};

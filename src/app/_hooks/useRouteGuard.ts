@@ -1,11 +1,11 @@
 // //アクセス制限のロジックを一括管理（認可）
 // "use client";
 // import { useEffect } from "react";
-// import { useSupabaseSssion } from "./useSupabaseSssion";
+// import { useSupabaseSession } from "./useSupabaseSession";
 // import { useRouter } from "next/router";
 
 // export const useRouteGuard = () => {
-//   const { session, isLoading } = useSupabaseSssion();
+//   const { session, isLoading } = useSupabaseSession();
 //   const router = useRouter();
 
 //   useEffect(() => {
