@@ -20,7 +20,6 @@ const Page = () => {
   return (
     <div>
       <Header />
-
       {session?.user ? (
         <DrawingCanvas user={session.user} />
       ) : (
