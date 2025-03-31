@@ -26,9 +26,7 @@ const Page = () => {
   return (
     <>
       <Header />
-
       <DrawingCanvas user={session.user} />
-
       <Footer />
     </>
   );

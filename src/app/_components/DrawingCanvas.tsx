@@ -15,13 +15,6 @@ import { CreateMonsterPostRequestBody } from "../_types/monsters";
 import { api } from "../_utils/api";
 import { User } from "@supabase/auth-js";
 
-// interface User {
-//   user: {
-//     id: number;
-//     name?: string;
-//   };
-// }
-
 const DrawingCanvas = ({ user }: { user: User }) => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
   const [penColor, setPenColor] = useState("black");

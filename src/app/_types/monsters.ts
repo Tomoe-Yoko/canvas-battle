@@ -3,6 +3,7 @@ export interface Monster {
   id: number;
   userId: number;
   name: string;
+  thumbnailImageKey: string;
 }
 
 export interface CreateMonsterPostRequestBody {
