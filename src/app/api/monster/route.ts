@@ -41,6 +41,10 @@ export const GET = async (request: NextRequest) => {
       where: { userId: user.id },
       orderBy: { createdAt: "desc" },
     });
+    console.log("API Response:", {
+      status: "OK",
+      monstersView,
+    });
     return NextResponse.json(
       {
         status: "OK",

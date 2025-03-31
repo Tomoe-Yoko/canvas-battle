@@ -38,7 +38,9 @@ export const useFetch = <T>(path: string, config?: SWRConfiguration<T>) => {
   const fetcher = async () => {
     try {
       const response = await api.get<{ data: T }>(path);
-      console.log("Fetched data:", response.data); // デバッグ用
+      // console.log("Fetched data:", response.data); // デバッグ用
+      console.log("Full API response:", response); // APIのレスポンス全体を確認
+      console.log("Fetched data:", response.data); // ここが undefined かチェック
       return response.data; // 明示的に .data を返す
     } catch (error) {
       console.error("API fetch error:", error); // エラー詳細を出力

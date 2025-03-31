@@ -220,23 +220,3 @@ const DrawingCanvas = ({ user }: { user: User }) => {
 };
 
 export default DrawingCanvas;
-
-// const downloadImage = async () => {
-//   if (!canvasRef.current) return;
-//   try {
-//     // 画像をエクスポート
-//     const imageData = await canvasRef.current.exportImage("png");
-
-//     // ダウンロード用のリンクを作成
-//     const link = document.createElement("a");
-//     link.href = imageData;
-//     link.download = "my-drawing.png"; // 保存するファイル名
-//     document.body.appendChild(link);
-//     link.click();
-//     document.body.removeChild(link);
-//     alert("画像を保存したよ");
-//   } catch (e) {
-//     console.error("画像の保存が出来ませんでした", e);
-//     alert("画像が保存できなかったよ。もう一回ためしてみて");
-//   }
-// };
