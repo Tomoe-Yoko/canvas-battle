@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import DrawingCanvas from "../_components/DrawingCanvas";
 import { Header } from "../_components/Header";
 import { Footer } from "../_components/Footer";
@@ -9,27 +9,28 @@ import toast from "react-hot-toast";
 
 const Page = () => {
   const { session, isLoading } = useSupabaseSession();
-  if (!session) {
-    toast.error("ログインしてね");
-    return null;
-  }
+  // session がないときにエラートーストを表示
+  useEffect(() => {
+    if (!isLoading && !session?.user) {
+      toast.error("ログインしてね");
+    }
+  }, [session, isLoading]); // session や isLoading が変わったときに実行
+
   if (isLoading) {
     return <Loading />;
   }
+  if (!session?.user) {
+    return null;
+  }
 
   return (
-    <div>
+    <>
       <Header />
-      {session?.user ? (
-        <DrawingCanvas user={session.user} />
-      ) : (
-        (() => {
-          toast.error("ログインしてください");
-          return null;
-        })()
-      )}
+
+      <DrawingCanvas user={session.user} />
+
       <Footer />
-    </div>
+    </>
   );
 };
 

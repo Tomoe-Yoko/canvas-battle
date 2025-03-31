@@ -41,7 +41,8 @@ export const POST = async (request: NextRequest) => {
 };
 
 export const GET = async (request: NextRequest) => {
-  const authResult = await getAuthenticatedUser(request);
+  const token = request.headers.get("Authorization") || "";
+  const authResult = await getAuthenticatedUser(token);
   if (authResult instanceof NextResponse) {
     return authResult;
   }
@@ -49,7 +50,7 @@ export const GET = async (request: NextRequest) => {
   const { user } = authResult; // 認証されたユーザー情報を取得
 
   try {
-    const data = { userName: user.name, email: user.email };
+    const data = { userName: user?.name, email: user?.email };
     return NextResponse.json({ status: "OK", data });
   } catch (error) {
     if (error instanceof Error) {
@@ -57,5 +58,3 @@ export const GET = async (request: NextRequest) => {
     }
   }
 };
-
-// PUT
