@@ -2,7 +2,6 @@
 import { z } from "zod";
 
 export const validationSchema = z.object({
-  userName: z.string().nonempty("名前は必須です。"),
   email: z
     .string()
     .nonempty("メールアドレスは必須です。")
