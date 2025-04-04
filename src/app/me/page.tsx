@@ -11,26 +11,30 @@ import { useFetch } from "../_hooks/useFetch";
 import { supabase } from "../_utils/supabase";
 
 const Page = () => {
-  const { session, isLoading } = useSupabaseSession();
+  const { session, isLoading: sessionLoading } = useSupabaseSession();
   const [monsters, setMonsters] = useState<CreateMonsterResponseBody[]>([]);
   const [imageUrls, setImageUrls] = useState<{ [key: string]: string }>({});
 
-  const { data, error } = useFetch<{
+  const {
+    data,
+    error,
+    isLoading: fetchLoading,
+  } = useFetch<{
     status: string;
     monstersView: CreateMonsterResponseBody[];
   }>("/api/monster");
-  // session がないときにエラートーストを表示
+  const isLoading = sessionLoading || fetchLoading; // ローディング状態を統合
+
   useEffect(() => {
-    if (!isLoading && !session?.user) {
+    if (!sessionLoading && !session?.user) {
       toast.error("ログインしてね");
     }
-  }, [session, isLoading]);
+  }, [session, sessionLoading]);
 
   useEffect(() => {
-    if (data && data.monstersView) {
+    if (data?.monstersView) {
       setMonsters(data.monstersView);
 
-      // 画像URLを取得
       const fetchImageUrls = async () => {
         const urls: { [key: string]: string } = {};
         for (const monster of data.monstersView) {
@@ -38,7 +42,7 @@ const Page = () => {
             .from("post-monster")
             .getPublicUrl(monster.thumbnailImageKey);
 
-          if (imageData.publicUrl) {
+          if (imageData?.publicUrl) {
             urls[monster.thumbnailImageKey] = imageData.publicUrl;
           }
         }
@@ -47,12 +51,13 @@ const Page = () => {
 
       fetchImageUrls();
     }
-  }, [data]);
+  }, [data]); // 依存配列に data を追加
 
   if (isLoading) return <Loading />;
-  if (!session?.user) return null;
-  if (error) {
+  // if (!session?.user) return null;
+  if (error instanceof Error) {
     toast.error("モンスターの取得に失敗しました");
+
     return (
       <p className="text-center text-red-500">データの取得に失敗しました</p>
     );
@@ -62,12 +67,12 @@ const Page = () => {
     <div>
       <Header />
       <div className="flex flex-wrap justify-center gap-4">
-        {data !== undefined && data?.monstersView.length > 0 ? (
-          data.monstersView.map((monster) => (
+        {data !== undefined && data?.monstersView?.length > 0 ? ( // data.monstersView が存在し、かつ長さが 0 より大きい場合
+          data.monstersView.map((monsters) => (
             <Image
-              key={monster.id}
-              src={imageUrls[monster.thumbnailImageKey] || "/placeholder.png"}
-              alt={monster.name}
+              key={monsters.id}
+              src={imageUrls[monsters.thumbnailImageKey] || "/placeholder.png"}
+              alt={monsters.name}
               width={600}
               height={848}
               priority
