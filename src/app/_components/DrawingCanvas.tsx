@@ -14,6 +14,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { CreateMonsterPostRequestBody } from "../_types/monsters";
 import { api } from "../_utils/api";
 import { User } from "@supabase/auth-js";
+import { Button } from "./Button";
 
 const DrawingCanvas = ({ user }: { user: User }) => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
@@ -81,7 +82,8 @@ const DrawingCanvas = ({ user }: { user: User }) => {
       );
       toast.success("モンスターが保存された！");
       setIsModalOpen(false);
-      router.refresh();
+      // router.refresh();
+      router.push("/me");
     } catch (e) {
       console.error("保存エラー:", e);
       toast.error("画像が保存できなかったよ。もう一回ためしてみて");
@@ -190,7 +192,7 @@ const DrawingCanvas = ({ user }: { user: User }) => {
       </section>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <div className="bg-white px-6 py-8 rounded-lg shadow-lg w-[90%]">
+        <div className="bg-white px-6 py-8 rounded-lg shadow-lg w-[430px]">
           <h3 className="text-lg font-bold mb-4">なまえをつけよう</h3>
           <input
             type="text"
@@ -199,18 +201,12 @@ const DrawingCanvas = ({ user }: { user: User }) => {
             className="p-4 text-2xl border border-blue-700"
           />
           <div className="flex justify-end space-x-2 mt-4">
-            <button
-              onClick={closeModal}
-              className="bg-gray-400 text-white px-4 py-2 rounded"
-            >
+            <Button onClick={closeModal} variant="cancel">
               キャンセル
-            </button>
-            <button
-              onClick={saveMonster}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
+            </Button>
+            <Button variant="bg-blue" onClick={saveMonster}>
               保存
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>

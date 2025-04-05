@@ -4,8 +4,8 @@ import { supabase } from "@/app/_utils/supabase";
 import { getAuthenticatedUser } from "@/app/_utils/auth";
 
 export const POST = async (request: NextRequest) => {
+  const prisma = await buildPrisma();
   try {
-    const prisma = await buildPrisma();
     const token = request.headers.get("Authorization");
     if (!token) {
       return NextResponse.json({ error: "認証エラー" }, { status: 401 });

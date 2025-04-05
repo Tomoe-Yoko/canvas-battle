@@ -5,7 +5,7 @@ import { Footer } from "../_components/Footer";
 import { CreateMonsterResponseBody } from "../_types/monsters";
 import Image from "next/image";
 import { useSupabaseSession } from "../_hooks/useSupabaseSession";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import Loading from "../loading";
 import { useFetch } from "../_hooks/useFetch";
 import { supabase } from "../_utils/supabase";
@@ -47,11 +47,6 @@ const Page = () => {
             .from("post-monster")
             .createSignedUrl(monster.thumbnailImageKey, 60 * 60 * 24); // 有効期限を24時間に設定 (秒単位)
 
-          // if (signedUrlError) {
-          //   console.error("署名付きURLの生成エラー:", signedUrlError);
-          //   continue; // エラーが発生した場合はスキップ
-          // }
-
           if (signedUrlData?.signedUrl) {
             urls[monster.thumbnailImageKey] = signedUrlData.signedUrl;
           }
@@ -88,7 +83,7 @@ const Page = () => {
       if (response.ok) {
         toast.success("名前を更新したよ！");
         closeModal();
-        location.reload(); // ←またはSWREのrevalidate使ってもOK
+        // location.reload(); // ←またはSWREのrevalidate使ってもOK
       } else {
         toast.error("名前の更新に失敗");
       }
@@ -137,18 +132,20 @@ const Page = () => {
   return (
     <div>
       <Header />
-      <div className="flex flex-wrap justify-between gap-6 pt-[3rem] pb-[10rem]">
+      <h2 className="text-white text-xl pt-[1.5rem] pl-[1rem] pb-[0.5rem]">
+        ーーー きみのモンスター
+      </h2>
+      <div className="flex flex-wrap justify-between gap-6 pt-[1rem] pb-[10rem]">
         {Object.keys(imageUrls).length === monsters.length ? (
           monsters.map((monster) => (
-            <div key={monster.id}>
+            <div key={monster.id} onClick={() => openModal(monster)}>
               <Image
                 src={imageUrls[monster.thumbnailImageKey] || "/placeholder.png"}
                 alt={monster.name}
                 width={300}
                 height={200}
                 priority
-                className="sm:max-w-[215px] max-w-[180px] min-w-[110px] object-contain bg-gray-200 m-2"
-                onClick={() => openModal(monster)}
+                className="sm:max-w-[215px] max-w-[180px] min-w-[110px] object-contain bg-gray-200 m-2 aspect-square"
               />
               <p className="w-[180px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[1rem] rounded-md">
                 {monster.name}
@@ -178,7 +175,7 @@ const Page = () => {
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                className="border rounded text-white w-[70%]"
+                className="border rounded text-white w-[70%] px-2"
               />
               <Button variant="bg-blue" onClick={handleNameUpdate}>
                 なまえ
@@ -194,6 +191,7 @@ const Page = () => {
           </div>
         )}
       </Modal>
+      <Toaster />
       <Footer />
     </div>
   );
