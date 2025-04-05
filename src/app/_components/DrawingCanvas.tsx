@@ -21,7 +21,7 @@ const DrawingCanvas = ({ user }: { user: User }) => {
   const [strokeWidth, setStrokeWidth] = useState(3);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [monsterName, setMonsterName] = useState("");
-  const [thumbnailsImageKey, setThumbnailImageKey] = useState("");
+  const [thumbnailImageKey, setThumbnailImageKey] = useState("");
 
   const router = useRouter();
 
