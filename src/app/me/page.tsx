@@ -11,6 +11,8 @@ import { useFetch } from "../_hooks/useFetch";
 import { supabase } from "../_utils/supabase";
 import { Modal } from "../_components/Modal";
 import { Button } from "../_components/Button";
+import { api } from "../_utils/api";
+import { mutate } from "swr";
 
 const Page = () => {
   const { session, isLoading: sessionLoading } = useSupabaseSession();
@@ -72,21 +74,13 @@ const Page = () => {
   const handleNameUpdate = async () => {
     if (!selectedMonster) return;
     try {
-      const response = await fetch(`/api/monster/${selectedMonster.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: session?.access_token ?? "",
-        },
-        body: JSON.stringify({ name: newName }),
-      });
-      if (response.ok) {
-        toast.success("名前を更新したよ！");
-        closeModal();
-        // location.reload(); // ←またはSWREのrevalidate使ってもOK
-      } else {
-        toast.error("名前の更新に失敗");
+      if (!newName.trim()) {
+        toast.error("名前を入力してね！");
+        return;
       }
+      await api.put(`/api/monster/${selectedMonster.id}`, { name: newName });
+      closeModal();
+      toast.success("名前を更新したよ！");
     } catch (err) {
       console.error(err);
       toast.error("エラーが発生しました");
@@ -99,18 +93,19 @@ const Page = () => {
     if (!confirm) return;
 
     try {
-      const response = await fetch(`/api/monster/${selectedMonster.id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: session?.access_token ?? "",
-        },
-      });
-      if (response.ok) {
-        toast.success("削除しました！");
-        closeModal();
-        location.reload(); // 同上
-      } else {
-        toast.error("削除に失敗しました");
+      await api.del(`/api/monster/${selectedMonster.id}`); // バケット内の画像を削除
+      const { error: storageError } = await supabase.storage
+        .from("post-monster") // バケット名を指定
+        .remove([selectedMonster.thumbnailImageKey]); // thumbnailImageKeyを利用
+      closeModal();
+      toast.success("削除しました！");
+      mutate("/api/monster"); // SWRのキャッシュを更新
+
+      if (storageError) {
+        toast.error("バケットから画像を削除できませんでした。");
+        throw new Error(
+          `Failed to delete image from bucket: ${storageError.message}`
+        );
       }
     } catch (err) {
       console.error(err);
@@ -120,7 +115,6 @@ const Page = () => {
 
   /////////
   if (isLoading) return <Loading />;
-  // if (!session?.user) return null;
   if (error instanceof Error) {
     toast.error("モンスターの取得に失敗しました");
 
@@ -138,7 +132,11 @@ const Page = () => {
       <div className="flex flex-wrap justify-between gap-6 pt-[1rem] pb-[10rem]">
         {Object.keys(imageUrls).length === monsters.length ? (
           monsters.map((monster) => (
-            <div key={monster.id} onClick={() => openModal(monster)}>
+            <div
+              key={monster.id}
+              onClick={() => openModal(monster)}
+              className="cursor-pointer"
+            >
               <Image
                 src={imageUrls[monster.thumbnailImageKey] || "/placeholder.png"}
                 alt={monster.name}
