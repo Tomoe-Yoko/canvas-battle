@@ -3,13 +3,14 @@ import React from "react";
 import { Button } from "../_components/Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { validationSchema } from "../_utils/validationSchema";
+import { loginSchema } from "../_utils/validationSchema";
 import { supabase } from "../_utils/supabase";
 import { api } from "../_utils/api";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
+import { Header } from "../_components/Header";
 interface LoginForm {
-  userName: string;
+  userName?: string;
   email: string;
   password: string;
 }
@@ -21,7 +22,7 @@ const Page = () => {
     formState: { errors },
   } = useForm<LoginForm>({
     mode: "onChange",
-    resolver: zodResolver(validationSchema),
+    resolver: zodResolver(loginSchema),
   });
   const onSubmit = async (data: LoginForm) => {
     try {
@@ -49,6 +50,7 @@ const Page = () => {
   };
   return (
     <div className=" min-h-screen bg-[#1a1d29]">
+      <Header />
       <h2 className="text-white text-center text-[24px] py-16">ログイン</h2>
 
       <form

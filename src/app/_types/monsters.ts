@@ -3,6 +3,7 @@ export interface Monster {
   id: number;
   userId: number;
   name: string;
+  thumbnailImageKey: string;
 }
 
 export interface CreateMonsterPostRequestBody {
@@ -12,6 +13,14 @@ export interface CreateMonsterPostRequestBody {
   createdAt: string;
   updatedAt: string;
 }
+
+// export type CreateMonsterPostRequestBody = {
+//   userId: number;
+//   name: string;
+//   thumbnailImageKey: string;
+//   createdAt: string;
+//   updatedAt: string;
+// } | null;
 
 export interface CreateMonsterResponseBody extends Monster {
   createdAt: Date;

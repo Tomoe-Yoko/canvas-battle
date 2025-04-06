@@ -1,34 +1,34 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import DrawingCanvas from "../_components/DrawingCanvas";
 import { Header } from "../_components/Header";
 import { Footer } from "../_components/Footer";
-import { useFetch } from "../_hooks/useFetch";
 import Loading from "@/app/loading";
+import { useSupabaseSession } from "../_hooks/useSupabaseSession"; // 修正後のフックを正しくインポート
+import toast from "react-hot-toast";
 
 const Page = () => {
-  const { data: user, error } = useFetch("/auth/user");
-  const [loading, setLoading] = useState(false);
-  if (loading) {
-    setLoading(true);
+  const { session, isLoading } = useSupabaseSession();
+  // session がないときにエラートーストを表示
+  useEffect(() => {
+    if (!isLoading && !session?.user) {
+      toast.error("ログインしてね");
+    }
+  }, [session, isLoading]); // session や isLoading が変わったときに実行
+
+  if (isLoading) {
     return <Loading />;
   }
+  if (!session?.user) {
+    return null;
+  }
+
   return (
-    <div>
+    <>
       <Header />
-      {/* ログイン状態の表示 */}
-      <div className="text-center my-4">
-        {error ? (
-          <p className="text-red-500">エラーが発生しました</p>
-        ) : user ? (
-          <p>ログイン中: {user.user?.email}</p>
-        ) : (
-          <p>ログインしていません</p>
-        )}
-      </div>
-      <DrawingCanvas user={user} />
+      <DrawingCanvas user={session.user} />
       <Footer />
-    </div>
+    </>
   );
 };
 

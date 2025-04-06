@@ -10,16 +10,11 @@ import { Modal } from "./Modal";
 import { supabase } from "../_utils/supabase";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { CreateMonsterPostRequestBody } from "../_types/monsters";
 import { api } from "../_utils/api";
-
-interface User {
-  user: {
-    id: string;
-    name?: string;
-  };
-}
+import { User } from "@supabase/auth-js";
+import { Button } from "./Button";
 
 const DrawingCanvas = ({ user }: { user: User }) => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
@@ -31,10 +26,6 @@ const DrawingCanvas = ({ user }: { user: User }) => {
 
   const router = useRouter();
 
-  if (!user || !user.user) {
-    toast.error("ログインしてね");
-    return;
-  }
   //Modal
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
@@ -49,15 +40,26 @@ const DrawingCanvas = ({ user }: { user: User }) => {
       return;
     }
 
+    //画像データをBlobに変換する関数
+    const dataURLtoBlob = (dataURL: string) => {
+      const byteString = atob(dataURL.split(",")[1]);
+      const arrayBuffer = new Uint8Array(byteString.length);
+      for (let i = 0; i < byteString.length; i++)
+        arrayBuffer[i] = byteString.charCodeAt(i);
+      return new Blob([arrayBuffer], { type: "image/png" });
+    };
     try {
-      const userId = Number(user.user.id); // ログイン中のユーザーの IDを数値に変換
+      // const userId = Number(user.user.id); // ログイン中のユーザーの IDを数値に変換
       const imageData = await canvasRef.current.exportImage("png");
       const fileId = uuidv4();
       const fileName = `private/${fileId}.png`;
 
+      // 🔹 Base64 から Blob に変換
+      const blobData = dataURLtoBlob(imageData);
+
       const { error: uploadError } = await supabase.storage
         .from("post-monster")
-        .upload(fileName, dataURLtoBlob(imageData), {
+        .upload(fileName, blobData, {
           cacheControl: "3600",
           upsert: false,
         });
@@ -68,19 +70,20 @@ const DrawingCanvas = ({ user }: { user: User }) => {
       setThumbnailImageKey(fileName);
 
       const monsterData: CreateMonsterPostRequestBody = {
-        userId,
+        userId: Number(user.id),
         name: monsterName,
         thumbnailImageKey: fileName,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
       await api.post<CreateMonsterPostRequestBody, typeof monsterData>(
-        "/api/monsters",
+        "/api/monster",
         monsterData
       );
       toast.success("モンスターが保存された！");
       setIsModalOpen(false);
-      router.refresh();
+      // router.refresh();
+      router.push("/me");
     } catch (e) {
       console.error("保存エラー:", e);
       toast.error("画像が保存できなかったよ。もう一回ためしてみて");
@@ -189,7 +192,7 @@ const DrawingCanvas = ({ user }: { user: User }) => {
       </section>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <div className="bg-white px-6 py-8 rounded-lg shadow-lg w-[90%]">
+        <div className="bg-white px-6 py-8 rounded-lg shadow-lg w-[430px]">
           <h3 className="text-lg font-bold mb-4">なまえをつけよう</h3>
           <input
             type="text"
@@ -198,52 +201,18 @@ const DrawingCanvas = ({ user }: { user: User }) => {
             className="p-4 text-2xl border border-blue-700"
           />
           <div className="flex justify-end space-x-2 mt-4">
-            <button
-              onClick={closeModal}
-              className="bg-gray-400 text-white px-4 py-2 rounded"
-            >
+            <Button onClick={closeModal} variant="cancel">
               キャンセル
-            </button>
-            <button
-              onClick={saveMonster}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
+            </Button>
+            <Button variant="bg-blue" onClick={saveMonster}>
               保存
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
-
-  //画像データをBlobに変換する関数 　　必要か検証！
-  const dataURLtoBlob = (dataURL: string) => {
-    const byteString = atob(dataURL.split(",")[1]);
-    const arrayBuffer = new Uint8Array(byteString.length);
-    for (let i = 0; i < byteString.length; i++)
-      arrayBuffer[i] = byteString.charCodeAt(i);
-    return new Blob([arrayBuffer], { type: "image/png" });
-  };
 };
 
 export default DrawingCanvas;
-
-// const downloadImage = async () => {
-//   if (!canvasRef.current) return;
-//   try {
-//     // 画像をエクスポート
-//     const imageData = await canvasRef.current.exportImage("png");
-
-//     // ダウンロード用のリンクを作成
-//     const link = document.createElement("a");
-//     link.href = imageData;
-//     link.download = "my-drawing.png"; // 保存するファイル名
-//     document.body.appendChild(link);
-//     link.click();
-//     document.body.removeChild(link);
-//     alert("画像を保存したよ");
-//   } catch (e) {
-//     console.error("画像の保存が出来ませんでした", e);
-//     alert("画像が保存できなかったよ。もう一回ためしてみて");
-//   }
-// };
