@@ -12,6 +12,7 @@ import { supabase } from "../_utils/supabase";
 import { Modal } from "../_components/Modal";
 import { Button } from "../_components/Button";
 import { api } from "../_utils/api";
+import Link from "next/link";
 
 const Page = () => {
   const { session, isLoading: sessionLoading } = useSupabaseSession();
@@ -142,7 +143,7 @@ const Page = () => {
     <div>
       <Header />
       <h2 className="text-white text-xl pt-[1.5rem] pl-[1rem] pb-[0.5rem]">
-        ーーー きみのモンスター👾
+        ーーー きみの作ったモンスター👾
       </h2>
       <div className="flex flex-wrap justify-between gap-6 pt-[1rem] pb-[10rem]">
         {Object.keys(imageUrls).length === monsters.length ? (
@@ -168,6 +169,15 @@ const Page = () => {
         ) : (
           <Loading />
         )}
+
+        <p className=" block w-full p-4 text-center text-white">
+          どのキャラクターもイケてる！
+          <br />
+          てきとじゃんけんで戦ってみてね🔥
+        </p>
+        <Link href="/battle_ready" className="mx-auto ">
+          <Button variant="bg-blue">じゃんけんをする</Button>
+        </Link>
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {selectedMonster && (
