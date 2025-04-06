@@ -14,14 +14,6 @@ export interface CreateMonsterPostRequestBody {
   updatedAt: string;
 }
 
-// export type CreateMonsterPostRequestBody = {
-//   userId: number;
-//   name: string;
-//   thumbnailImageKey: string;
-//   createdAt: string;
-//   updatedAt: string;
-// } | null;
-
 export interface CreateMonsterResponseBody extends Monster {
   createdAt: Date;
   updatedAt: Date;

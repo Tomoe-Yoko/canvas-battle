@@ -4,13 +4,6 @@ export const SvgMemo = () => {
   return (
     <div>
       <div className="relative z-top-kv" style={{ opacity: 1 }}>
-        {/* <svg
-xmlns="http://www.w3.org/2000/svg"
-width="1366"
-height="768"
-viewBox="0 0 1366 768"
-class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[55%] w-full h-auto overflow-visible block"
-> */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={1366}

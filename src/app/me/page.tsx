@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Header } from "../_components/Header";
 import { Footer } from "../_components/Footer";
 import { CreateMonsterResponseBody } from "../_types/monsters";
@@ -12,7 +12,6 @@ import { supabase } from "../_utils/supabase";
 import { Modal } from "../_components/Modal";
 import { Button } from "../_components/Button";
 import { api } from "../_utils/api";
-import { mutate } from "swr";
 
 const Page = () => {
   const { session, isLoading: sessionLoading } = useSupabaseSession();
@@ -37,28 +36,30 @@ const Page = () => {
       toast.error("ログインしてね");
     }
   }, [session, sessionLoading]);
+  const fetchImageUrls = useCallback(
+    async (monsterList: CreateMonsterResponseBody[]) => {
+      const urls: { [key: string]: string } = {};
+      for (const monster of monsterList) {
+        const { data: signedUrlData } = await supabase.storage
+          .from("post-monster")
+          .createSignedUrl(monster.thumbnailImageKey, 60 * 60 * 24);
+
+        if (signedUrlData?.signedUrl) {
+          urls[monster.thumbnailImageKey] = signedUrlData.signedUrl;
+        }
+      }
+      setImageUrls(urls);
+    },
+    []
+  );
 
   useEffect(() => {
     if (data?.monstersView) {
       setMonsters(data.monstersView);
-      console.log(data.monstersView); // ここで monstersView を確認
-      const fetchImageUrls = async () => {
-        const urls: { [key: string]: string } = {};
-        for (const monster of data.monstersView) {
-          const { data: signedUrlData } = await supabase.storage
-            .from("post-monster")
-            .createSignedUrl(monster.thumbnailImageKey, 60 * 60 * 24); // 有効期限を24時間に設定 (秒単位)
-
-          if (signedUrlData?.signedUrl) {
-            urls[monster.thumbnailImageKey] = signedUrlData.signedUrl;
-          }
-        }
-        setImageUrls(urls);
-      };
-
-      fetchImageUrls();
+      fetchImageUrls(data.monstersView); // 再利用！
     }
-  }, [data]); // 依存配列に data を追加
+  }, [data, fetchImageUrls]);
+
   //Modal
   const openModal = (monster: CreateMonsterResponseBody) => {
     setSelectedMonster(monster);
@@ -81,6 +82,14 @@ const Page = () => {
       await api.put(`/api/monster/${selectedMonster.id}`, { name: newName });
       closeModal();
       toast.success("名前を更新したよ！");
+      const updated = await api.get<{
+        status: string;
+        monstersView: CreateMonsterResponseBody[];
+      }>("/api/monster");
+      if (updated?.monstersView) {
+        setMonsters(updated.monstersView);
+        await fetchImageUrls(updated.monstersView); // 再利用！
+      }
     } catch (err) {
       console.error(err);
       toast.error("エラーが発生しました");
@@ -99,8 +108,14 @@ const Page = () => {
         .remove([selectedMonster.thumbnailImageKey]); // thumbnailImageKeyを利用
       closeModal();
       toast.success("削除しました！");
-      mutate("/api/monster"); // SWRのキャッシュを更新
-
+      const updated = await api.get<{
+        status: string;
+        monstersView: CreateMonsterResponseBody[];
+      }>("/api/monster");
+      if (updated?.monstersView) {
+        setMonsters(updated.monstersView);
+        await fetchImageUrls(updated.monstersView); // 再利用！
+      }
       if (storageError) {
         toast.error("バケットから画像を削除できませんでした。");
         throw new Error(
