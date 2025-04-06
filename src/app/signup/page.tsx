@@ -1,13 +1,12 @@
-// 3. ログイン画面の実装（認証）から！！！
-
 "use client";
 import { supabase } from "../_utils/supabase";
 import React from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { validationSchema } from "../_utils/validationSchema";
+import { signUpSchema } from "../_utils/validationSchema";
 import { Button } from "../_components/Button";
+import { Header } from "../_components/Header";
 
 interface SignUpForm {
   userName: string;
@@ -23,7 +22,7 @@ const Page = () => {
     reset,
   } = useForm<SignUpForm>({
     mode: "onChange",
-    resolver: zodResolver(validationSchema),
+    resolver: zodResolver(signUpSchema),
   });
 
   const onSubmit = async (data: SignUpForm) => {
@@ -51,6 +50,7 @@ const Page = () => {
 
   return (
     <div className=" min-h-screen bg-[#1a1d29]">
+      <Header />
       <h2 className="text-white text-center text-[24px] py-16">ユーザー登録</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
