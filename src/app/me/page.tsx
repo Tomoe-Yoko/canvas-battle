@@ -142,9 +142,12 @@ const Page = () => {
   return (
     <div>
       <Header />
-      <h2 className="text-white text-xl pt-[1.5rem] pl-[1rem] pb-[0.5rem]">
-        ーーー きみの作ったモンスター👾
+      <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
+        じぶんページ
       </h2>
+      <h3 className="text-white text-xl pt-[1.5rem] pl-[1rem] pb-[0.5rem]">
+        ーーー きみの作ったモンスター👾
+      </h3>
       <div className="flex flex-wrap justify-between gap-6 pt-[1rem] pb-[10rem]">
         {Object.keys(imageUrls).length === monsters.length ? (
           monsters.map((monster) => (
