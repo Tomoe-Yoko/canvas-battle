@@ -4,7 +4,7 @@ import { Header } from "../../_components/Header";
 import { Footer } from "../../_components/Footer";
 import Image from "next/image";
 import { useSupabaseSession } from "../../_hooks/useSupabaseSession";
-import { BattleResponse } from "../../_types/battle";
+import { CreateBattleRequestBody } from "../../_types/battle";
 import toast from "react-hot-toast";
 import Loading from "../../loading";
 import { Button } from "../../_components/Button";
@@ -60,7 +60,7 @@ const Page = () => {
 
     try {
       await api.post<
-        BattleResponse,
+        CreateBattleRequestBody,
         {
           userId: string;
           monsterId: number;

@@ -43,7 +43,7 @@ model Battle {
   User      User     @relation(fields: [userId], references: [id])
   monsterId Int
   monster   Monster  @relation("YourMonster", fields: [monsterId], references: [id])
-  enemyId   Int?
+  enemyId   Int
   enemy     Monster? @relation("EnemyMonster", fields: [enemyId], references: [id])
   result    String?
   createdAt DateTime @default(now())
