@@ -27,7 +27,7 @@ export const api = {
     }
   },
 
-  post: async <ResponseType, RequestType = undefined>(
+  post: async <ResponseType, RequestType>(
     endpoint: string,
     payload: RequestType
   ) => {

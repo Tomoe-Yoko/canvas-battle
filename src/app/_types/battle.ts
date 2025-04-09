@@ -20,5 +20,5 @@ export interface BattleResponse {
   userId: number;
   monsterId: number;
   enemyId: number;
-  result: "win" | "lose" | "draw"; // じゃんけんの結果
+  result: "win" | "lose" | "draw" | null; // ← null を許容
 }

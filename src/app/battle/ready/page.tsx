@@ -1,14 +1,18 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import { Header } from "../_components/Header";
-import { Footer } from "../_components/Footer";
+import { Header } from "../../_components/Header";
+import { Footer } from "../../_components/Footer";
 import Image from "next/image";
-import { useSupabaseSession } from "../_hooks/useSupabaseSession";
-import { useFetch } from "../_hooks/useFetch";
+import { useSupabaseSession } from "../../_hooks/useSupabaseSession";
+import { useFetch } from "../../_hooks/useFetch";
 import toast from "react-hot-toast";
-import { CreateMonsterResponseBody } from "../_types/monsters";
-import Loading from "../loading";
-import { supabase } from "../_utils/supabase";
+import { CreateMonsterResponseBody } from "../../_types/monsters";
+import Loading from "../../loading";
+import { supabase } from "../../_utils/supabase";
+import { Button } from "../../_components/Button";
+import { api } from "../../_utils/api";
+import { BattleResponse } from "../../_types/battle";
+import router from "next/router";
 
 const Page = () => {
   const { session, isLoading: sessionLoading } = useSupabaseSession();
@@ -59,15 +63,6 @@ const Page = () => {
   }, [data, fetchImageUrls]);
   ////////////monnster選択
   const handleMonsterClick = (monster: CreateMonsterResponseBody) => {
-    // if (!selectedYourMonster) {
-    //   setSelectedYourMonster(monster);
-    // } else if (!selectedEnemyMonster && selectedYourMonster.id !== monster.id) {
-    //   setSelectedEnemyMonster(monster);
-    // } else {
-    //   // すでに両方選ばれている場合はリセットする（または何もしない）
-    //   toast("モンスターは2体まで選べます（リセットはページ更新）");
-    // }
-    // すでに「きみのモンスター」として選ばれている場合 → 解除
     if (selectedYourMonster?.id === monster.id) {
       setSelectedYourMonster(null);
       return;
@@ -88,17 +83,45 @@ const Page = () => {
       toast("2体まで選べます。解除したい場合はもう一度クリックしてね！");
     }
   };
+
+  // モンスター選択後の処理
+  const handleMonsterBattle = async () => {
+    if (!selectedYourMonster || !selectedEnemyMonster || !session?.user?.id) {
+      toast.error("必要な情報が足りません！");
+      return;
+    }
+
+    try {
+      const response = await api.post<
+        BattleResponse,
+        {
+          userId: string;
+          monsterId: number;
+          enemyId: number;
+        }
+      >("/api/battle", {
+        userId: session.user.id,
+        monsterId: selectedYourMonster.id,
+        enemyId: selectedEnemyMonster.id,
+      });
+
+      const data = response;
+
+      console.log("バトル情報:", data);
+
+      // ページ遷移
+      router.push(`/battle/[id]`);
+    } catch (err) {
+      toast.error("バトル登録に失敗しました");
+      console.error(err);
+    }
+  };
   if (isLoading) return <Loading />;
   if (error instanceof Error) {
     toast.error("モンスターの取得に失敗しました");
-
-    return (
-      <p className="text-center text-red-500">データの取得に失敗しました</p>
-    );
   }
-
   return (
-    <div>
+    <div className="pb-[10rem]">
       <Header />
       <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
         モンスターをえらぶ
@@ -136,7 +159,7 @@ const Page = () => {
         )}
       </div>
       <hr className=" text-white w-[90%] mx-auto my-[1rem]" />
-      <div className="flex gap-2 pt-[0.5rem] pb-[10rem] justify-center">
+      <div className="flex gap-2 pt-[0.5rem]  justify-center">
         <div>
           <p className="text-white text-ml pt-[1rem] text-center">
             🟢きみのモンスター
@@ -185,6 +208,11 @@ const Page = () => {
             </div>
           )}
         </div>
+      </div>
+      <div className="flex justify-center mt-8">
+        <Button onClick={handleMonsterBattle} variant={"bg-blue"}>
+          バトルをはじめる！
+        </Button>
       </div>
       <Footer />
     </div>
