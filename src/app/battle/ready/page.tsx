@@ -1,67 +1,34 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Header } from "../../_components/Header";
 import { Footer } from "../../_components/Footer";
 import Image from "next/image";
 import { useSupabaseSession } from "../../_hooks/useSupabaseSession";
-import { useFetch } from "../../_hooks/useFetch";
+import { BattleResponse } from "../../_types/battle";
 import toast from "react-hot-toast";
-import { CreateMonsterResponseBody } from "../../_types/monsters";
 import Loading from "../../loading";
-import { supabase } from "../../_utils/supabase";
 import { Button } from "../../_components/Button";
 import { api } from "../../_utils/api";
-import { BattleResponse } from "../../_types/battle";
 import router from "next/router";
+import useFetchMonsters from "@/app/_hooks/useFetchMonsters";
+import { CreateMonsterResponseBody } from "../../_types/monsters";
 
 const Page = () => {
-  const { session, isLoading: sessionLoading } = useSupabaseSession();
-  const [monsters, setMonsters] = useState<CreateMonsterResponseBody[]>([]);
-  const [imageUrls, setImageUrls] = useState<{ [key: string]: string }>({});
+  const { session, isLoading: sessionLoading } = useSupabaseSession(); //ログイン中のユーザー情報を取得
   const [selectedYourMonster, setSelectedYourMonster] =
     useState<CreateMonsterResponseBody | null>(null);
   const [selectedEnemyMonster, setSelectedEnemyMonster] =
     useState<CreateMonsterResponseBody | null>(null);
-
-  const {
-    data,
-    error,
-    isLoading: fetchLoading,
-  } = useFetch<{
-    status: string;
-    monstersView: CreateMonsterResponseBody[];
-  }>("/api/monster");
-  const isLoading = sessionLoading || fetchLoading; // ローディング状態を統合
+  // モンスターと画像URLを一括取得
+  const { monsters, imageUrls, isLoading, error } = useFetchMonsters();
 
   useEffect(() => {
     if (!sessionLoading && !session?.user) {
       toast.error("ログインしてね");
     }
   }, [session, sessionLoading]);
-  const fetchImageUrls = useCallback(
-    async (monsterList: CreateMonsterResponseBody[]) => {
-      const urls: { [key: string]: string } = {};
-      for (const monster of monsterList) {
-        const { data: signedUrlData } = await supabase.storage
-          .from("post-monster")
-          .createSignedUrl(monster.thumbnailImageKey, 60 * 60 * 24);
 
-        if (signedUrlData?.signedUrl) {
-          urls[monster.thumbnailImageKey] = signedUrlData.signedUrl;
-        }
-      }
-      setImageUrls(urls);
-    },
-    []
-  );
-
-  useEffect(() => {
-    if (data?.monstersView) {
-      setMonsters(data.monstersView);
-      fetchImageUrls(data.monstersView); // 再利用！
-    }
-  }, [data, fetchImageUrls]);
-  ////////////monnster選択
+  ////////////monster選択
   const handleMonsterClick = (monster: CreateMonsterResponseBody) => {
     if (selectedYourMonster?.id === monster.id) {
       setSelectedYourMonster(null);
@@ -84,7 +51,7 @@ const Page = () => {
     }
   };
 
-  // モンスター選択後の処理
+  //  バトルをはじめるボタンを押下
   const handleMonsterBattle = async () => {
     if (!selectedYourMonster || !selectedEnemyMonster || !session?.user?.id) {
       toast.error("必要な情報が足りません！");
@@ -92,7 +59,7 @@ const Page = () => {
     }
 
     try {
-      const response = await api.post<
+      await api.post<
         BattleResponse,
         {
           userId: string;
@@ -104,10 +71,6 @@ const Page = () => {
         monsterId: selectedYourMonster.id,
         enemyId: selectedEnemyMonster.id,
       });
-
-      const data = response;
-
-      console.log("バトル情報:", data);
 
       // ページ遷移
       router.push(`/battle/[id]`);

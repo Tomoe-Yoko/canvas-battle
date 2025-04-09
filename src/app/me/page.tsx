@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Header } from "../_components/Header";
 import { Footer } from "../_components/Footer";
 import { CreateMonsterResponseBody } from "../_types/monsters";
@@ -7,59 +7,30 @@ import Image from "next/image";
 import { useSupabaseSession } from "../_hooks/useSupabaseSession";
 import toast, { Toaster } from "react-hot-toast";
 import Loading from "../loading";
-import { useFetch } from "../_hooks/useFetch";
+
 import { supabase } from "../_utils/supabase";
 import { Modal } from "../_components/Modal";
 import { Button } from "../_components/Button";
 import { api } from "../_utils/api";
 import Link from "next/link";
+import useFetchMonsters from "../_hooks/useFetchMonsters";
 
 const Page = () => {
   const { session, isLoading: sessionLoading } = useSupabaseSession();
-  const [monsters, setMonsters] = useState<CreateMonsterResponseBody[]>([]);
-  const [imageUrls, setImageUrls] = useState<{ [key: string]: string }>({});
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMonster, setSelectedMonster] =
     useState<CreateMonsterResponseBody | null>(null);
   const [newName, setNewName] = useState("");
-  const {
-    data,
-    error,
-    isLoading: fetchLoading,
-  } = useFetch<{
-    status: string;
-    monstersView: CreateMonsterResponseBody[];
-  }>("/api/monster");
-  const isLoading = sessionLoading || fetchLoading; // ローディング状態を統合
+
+  // モンスターと画像URLを一括取得
+  const { monsters, imageUrls, isLoading, error, mutate } = useFetchMonsters();
 
   useEffect(() => {
     if (!sessionLoading && !session?.user) {
       toast.error("ログインしてね");
     }
   }, [session, sessionLoading]);
-  const fetchImageUrls = useCallback(
-    async (monsterList: CreateMonsterResponseBody[]) => {
-      const urls: { [key: string]: string } = {};
-      for (const monster of monsterList) {
-        const { data: signedUrlData } = await supabase.storage
-          .from("post-monster")
-          .createSignedUrl(monster.thumbnailImageKey, 60 * 60 * 24);
-
-        if (signedUrlData?.signedUrl) {
-          urls[monster.thumbnailImageKey] = signedUrlData.signedUrl;
-        }
-      }
-      setImageUrls(urls);
-    },
-    []
-  );
-
-  useEffect(() => {
-    if (data?.monstersView) {
-      setMonsters(data.monstersView);
-      fetchImageUrls(data.monstersView); // 再利用！
-    }
-  }, [data, fetchImageUrls]);
 
   //Modal
   const openModal = (monster: CreateMonsterResponseBody) => {
@@ -82,15 +53,12 @@ const Page = () => {
       }
       await api.put(`/api/monster/${selectedMonster.id}`, { name: newName });
       closeModal();
+      await mutate();
       toast.success("名前を更新したよ！");
-      const updated = await api.get<{
+      await api.get<{
         status: string;
         monstersView: CreateMonsterResponseBody[];
       }>("/api/monster");
-      if (updated?.monstersView) {
-        setMonsters(updated.monstersView);
-        await fetchImageUrls(updated.monstersView); // 再利用！
-      }
     } catch (err) {
       console.error(err);
       toast.error("エラーが発生しました");
@@ -108,15 +76,13 @@ const Page = () => {
         .from("post-monster") // バケット名を指定
         .remove([selectedMonster.thumbnailImageKey]); // thumbnailImageKeyを利用
       closeModal();
+      await mutate();
       toast.success("削除しました！");
-      const updated = await api.get<{
+      await api.get<{
         status: string;
         monstersView: CreateMonsterResponseBody[];
       }>("/api/monster");
-      if (updated?.monstersView) {
-        setMonsters(updated.monstersView);
-        await fetchImageUrls(updated.monstersView); // 再利用！
-      }
+
       if (storageError) {
         toast.error("バケットから画像を削除できませんでした。");
         throw new Error(
@@ -178,7 +144,7 @@ const Page = () => {
           <br />
           てきとじゃんけんで戦ってみてね🔥
         </p>
-        <Link href="/battle_ready" className="mx-auto ">
+        <Link href="/battle/ready" className="mx-auto ">
           <Button variant="bg-blue">じゃんけんをする</Button>
         </Link>
       </div>
