@@ -1,8 +1,6 @@
 import { CreateMonsterPostRequestBody } from "@/app/_types/monsters";
 import { getAuthenticatedUser } from "@/app/_utils/auth";
 import { buildPrisma } from "@/app/_utils/prisma";
-// import { supabase } from "@/app/_utils/supabase";
-// import { request } from "http";
 import { NextRequest, NextResponse } from "next/server";
 const prisma = await buildPrisma();
 
