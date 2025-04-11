@@ -93,34 +93,42 @@ const BattleResultPage = () => {
   const { monster, enemy } = data.battleView;
 
   return (
-    <div className="text-white p-4 text-center">
+    <div className="p-4">
       <Header />
-      <h2 className="text-2xl font-bold mb-4">バトル結果</h2>
+      <h2 className="text-3xl font-bold mb-4 pl-8 text-center text-white tracking-[6px]">
+        BATTLE🔥
+      </h2>
 
-      <div className="flex justify-around items-center">
+      <div className="">
         {/* 自分のモンスター */}
         <div>
-          <Image
-            src={monsterUrl}
-            alt="きみのモンスター"
-            width={150}
-            height={150}
-            className="object-contain bg-gray-200"
-          />
-          <p className="mt-2">{monster.name}</p>
+          <p className="mt-4 mr-8 text-white text-right">
+            きみ：{monster.name}
+          </p>
+          <div className="flex justify-end">
+            <Image
+              src={monsterUrl}
+              alt="きみのモンスター"
+              width={210}
+              height={210}
+              className="object-contain bg-gray-200  rounded-full"
+            />
+          </div>
         </div>
         {/* VS */}
         <div className="text-3xl">⚔️</div>
         {/* 敵のモンスター */}
         <div>
-          <Image
-            src={enemyUrl}
-            alt="敵のモンスター"
-            width={150}
-            height={150}
-            className="object-contain bg-gray-200"
-          />
-          <p className="mt-2">{enemy.name}</p>
+          <p className="mt-4 ml-8 text-white text-left">てき：{enemy.name}</p>
+          <div>
+            <Image
+              src={enemyUrl}
+              alt="敵のモンスター"
+              width={210}
+              height={210}
+              className="object-contain bg-gray-200 rounded-full"
+            />
+          </div>
         </div>
       </div>
       <Footer />
