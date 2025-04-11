@@ -9,12 +9,13 @@ import toast from "react-hot-toast";
 import Loading from "../../loading";
 import { Button } from "../../_components/Button";
 import { api } from "../../_utils/api";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import useFetchMonsters from "@/app/_hooks/useFetchMonsters";
 import { CreateMonsterResponseBody } from "../../_types/monsters";
 
 const Page = () => {
   const { session, isLoading: sessionLoading } = useSupabaseSession(); //ログイン中のユーザー情報を取得
+  const router = useRouter();
   const [selectedYourMonster, setSelectedYourMonster] =
     useState<CreateMonsterResponseBody | null>(null);
   const [selectedEnemyMonster, setSelectedEnemyMonster] =
@@ -53,27 +54,25 @@ const Page = () => {
 
   //  バトルをはじめるボタンを押下
   const handleMonsterBattle = async () => {
-    if (!selectedYourMonster || !selectedEnemyMonster || !session?.user?.id) {
+    if (!selectedYourMonster || !selectedEnemyMonster || !session?.user.id) {
       toast.error("必要な情報が足りません！");
       return;
     }
 
     try {
-      await api.post<
+      const res = await api.post<
         CreateBattleRequestBody,
-        {
-          userId: string;
-          monsterId: number;
-          enemyId: number;
-        }
+        { id: number; userId: string; monsterId: number; enemyId: number }
       >("/api/battle", {
+        id: Date.now(), // Example: Use a unique identifier like a timestamp
         userId: session.user.id,
         monsterId: selectedYourMonster.id,
         enemyId: selectedEnemyMonster.id,
       });
 
-      // ページ遷移
-      router.push(`/battle/[id]`);
+      const { id } = res; // Extract battleId from the response
+      // router.push(`/battle/${id}/start`);
+      router.push(`/battle/${id}`);
     } catch (err) {
       toast.error("バトル登録に失敗しました");
       console.error(err);

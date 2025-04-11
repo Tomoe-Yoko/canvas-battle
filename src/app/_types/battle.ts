@@ -8,6 +8,7 @@ export interface Battle {
 
 // バトルリクエスト型（APIへ送るデータ）
 export interface CreateBattleRequestBody {
+  id: number;
   userId: number;
   monsterId: number;
   enemyId: number;
