@@ -13,10 +13,14 @@ import { v4 as uuidv4 } from "uuid";
 import toast, { Toaster } from "react-hot-toast";
 import { CreateMonsterPostRequestBody } from "../_types/monsters";
 import { api } from "../_utils/api";
-import { User } from "@supabase/auth-js";
+// import { User } from "@supabase/auth-js";
 import { Button } from "./Button";
+interface Props {
+  user: { id: string };
+  session: { user: { id: string } };
+}
 
-const DrawingCanvas = ({ user }: { user: User }) => {
+const DrawingCanvas: React.FC<Props> = ({ session }) => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
   const [penColor, setPenColor] = useState("black");
   const [strokeWidth, setStrokeWidth] = useState(3);
@@ -49,7 +53,6 @@ const DrawingCanvas = ({ user }: { user: User }) => {
       return new Blob([arrayBuffer], { type: "image/png" });
     };
     try {
-      // const userId = Number(user.user.id); // ログイン中のユーザーの IDを数値に変換
       const imageData = await canvasRef.current.exportImage("png");
       const fileId = uuidv4();
       const fileName = `private/${fileId}.png`;
@@ -70,7 +73,7 @@ const DrawingCanvas = ({ user }: { user: User }) => {
       setThumbnailImageKey(fileName);
 
       const monsterData: CreateMonsterPostRequestBody = {
-        userId: Number(user.id),
+        userId: Number(session.user.id),
         name: monsterName,
         thumbnailImageKey: fileName,
         createdAt: new Date().toISOString(),
