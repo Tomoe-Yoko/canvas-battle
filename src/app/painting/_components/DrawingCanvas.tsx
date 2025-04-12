@@ -6,15 +6,16 @@ import { BsEraserFill, BsPencilFill } from "react-icons/bs";
 import { TbClearAll } from "react-icons/tb";
 import { IoReturnUpBackOutline } from "react-icons/io5";
 import { RiDownload2Fill } from "react-icons/ri";
-import { Modal } from "./Modal";
-import { supabase } from "../_utils/supabase";
+import { supabase } from "@/app/_utils/supabase";
+import { Modal } from "@/app/_components/Modal";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import toast, { Toaster } from "react-hot-toast";
-import { CreateMonsterPostRequestBody } from "../_types/monsters";
-import { api } from "../_utils/api";
-// import { User } from "@supabase/auth-js";
-import { Button } from "./Button";
+import { CreateMonsterPostRequestBody } from "@/app/_types/monsters";
+import { api } from "@/app/_utils/api";
+
+import { Button } from "@/app/_components/Button";
+
 interface Props {
   user: { id: string };
   session: { user: { id: string } };
