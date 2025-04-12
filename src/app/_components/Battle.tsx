@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 type Hand = "rock" | "scissors" | "paper";
-const hands: Hand[] = ["rock", "scissors", "paper"];
 
 const Battle = () => {
+  const hands: Hand[] = ["rock", "scissors", "paper"];
   const [yourHand, setYourHand] = useState<Hand | null>(null);
   const [cpuHand, setCpuHand] = useState<Hand | null>(null);
   const [result, setResult] = useState<string>("");
@@ -58,9 +58,6 @@ const Battle = () => {
   return (
     <>
       <div className="flex flex-col items-start justify-center bg-gray-100">
-        <h2 className="text-2xl font-bold text-gray-600">
-          じゃんけんバトルだ！
-        </h2>
         {/* hp */}
         <div className="mt-3 flex gap-8">
           <div>
