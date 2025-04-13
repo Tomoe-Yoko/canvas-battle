@@ -49,7 +49,7 @@ const Page = () => {
   };
 
   return (
-    <div className=" min-h-screen bg-[#1a1d29]">
+    <div className=" min-h-screen">
       <Header />
       <h2 className="text-white text-center text-[24px] py-16">ユーザー登録</h2>
       <form
