@@ -108,7 +108,7 @@ const BattleResultPage = () => {
       <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
         BATTLE🔥
       </h2>
-      <div className="p-4">
+      <div className="px-4">
         {/* 自分のモンスター */}
         <div className="flex">
           <div className="w-[60%] flex flex-col items-center">
@@ -129,7 +129,7 @@ const BattleResultPage = () => {
                 <span
                   key={i}
                   className={`text-[30px] ${
-                    i < yourHp ? "text-red-400" : "text-gray-300"
+                    i < yourHp ? "text-red-600" : "text-gray-600"
                   }`}
                 >
                   ♥
@@ -141,24 +141,25 @@ const BattleResultPage = () => {
           {/* 手を選択するボタン */}
           <div className="flex flex-col items-center w-[40%] mt-[2rem]">
             <p className="text-center text-blue-400">どれをだす？</p>
-            {hands.map((hand) => (
+            {hands.map((hand, index) => (
               <button
                 key={hand}
                 onClick={() => play(hand)}
-                className="w-8/12 px-4 py-2 text-[32px] border border-blue-400 rounded-full hover:bg-blue-400"
+                className={`w-8/12 px-4 py-2 mb-1 text-[32px] border border-blue-400 rounded-full hover:bg-blue-400 animate-blink btn-blink-${
+                  index + 1
+                }`}
               >
                 {hand === "rock" ? "✊" : hand === "scissors" ? "✌️" : "✋"}
               </button>
             ))}
           </div>
         </div>
-        {/* VS */}
         {/* 結果 */}
         <div className="mt-5 text-lg">
           {yourHand && cpuHand ? (
             <div className="flex flex-col items-center bg-gray-700">
               <div>
-                <p className="text-[36px] text-white my-2">
+                <p className="text-[24px] text-white my-2">
                   けっか:
                   {result}
                 </p>
@@ -183,19 +184,19 @@ const BattleResultPage = () => {
               </div>
             </div>
           ) : (
-            <p className="h-[109px] text-center text-[36px] text-red-500 my-2">
+            <p className="h-[90px] pt-4 text-center text-[24px] text-gray-300 bg-gray-700">
               対戦中...
             </p>
           )}
         </div>
         {/* ゲーム終了表示 */}
         {gameOver && (
-          <div className="my-5">
-            <p className="text-xl font-bold">
-              {yourHp > 0 ? "きみの勝利！" : "GameOver..."}
+          <div className="flex justify-center items-center my-1">
+            <p className="text-xl font-bold text-white">
+              {yourHp > 0 ? "きみの勝利🎉" : "GameOver...😵‍💫"}
             </p>
             <button
-              className="mt-3 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500"
+              className="mt-3 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
               onClick={resetGame}
             >
               もう一回する！
@@ -204,7 +205,7 @@ const BattleResultPage = () => {
         )}
         {/* 敵のモンスター */}
         <div className="flex">
-          <div className="w-[40%] ">
+          <div className="w-[40%] mt-[-3rem]">
             <Roulette
               mustSpin={mustSpin}
               spinKey={spinKey}
@@ -227,7 +228,7 @@ const BattleResultPage = () => {
                 <span
                   key={i}
                   className={`text-[30px] ${
-                    i < cpuHp ? "text-red-400" : "text-gray-300"
+                    i < cpuHp ? "text-red-600" : "text-gray-600"
                   }`}
                 >
                   ♥

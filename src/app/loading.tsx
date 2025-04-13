@@ -5,16 +5,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 const Loading = () => {
   return (
     <div aria-label="Now Loading..." className="w-[80%] h-[60vh] mx-auto">
-      {/* <Skeleton /> */}
-      {/* <div className="wrapper">
-        <div className="circle"></div>
-        <div className="circle"></div>
-        <div className="circle"></div>
-        <div className="shadow"></div>
-        <div className="shadow"></div>
-        <div className="shadow"></div>
-        <span>Loading</span>
-    </div> */}
       <div className="relative w-[200px] h-[60px] left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <div className="circle w-[15px] h-[15px] absolute rounded-full bg-white left-[16%] animate-circle"></div>
         <div className="circle w-[15px] h-[15px] absolute rounded-full bg-white left-[40%] animate-circle delay-[0.2s]"></div>
