@@ -97,9 +97,6 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
   return (
     <div>
       <section className="w-full mb-[20vh]">
-        <h2 className="text-2xl p-4 text-white text-center mb-6">
-          モンスターを描こう！
-        </h2>
         <div className="ml-2  space-x-2">
           <div className="flex items-center justify-center space-x-2">
             <div>
