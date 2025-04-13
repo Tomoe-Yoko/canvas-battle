@@ -2,19 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { Header } from "../../_components/Header";
+// import { Header } from "../../_components/Header";
 import { Footer } from "../../_components/Footer";
 import Image from "next/image";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import Loading from "@/app/loading";
 import toast from "react-hot-toast";
 import { useFetch } from "@/app/_hooks/useFetch";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import useBattleGame from "../_hooks/useBattleGame";
+import { supabase } from "@/app/_utils/supabase";
+import Roulette from "../_components/Roulette";
 
 interface BattleViewResponse {
   id: number;
@@ -40,7 +37,20 @@ const BattleResultPage = () => {
 
   const [monsterUrl, setMonsterUrl] = useState<string>("");
   const [enemyUrl, setEnemyUrl] = useState<string>("");
-
+  const {
+    hands,
+    cpuHand,
+    result,
+    mustSpin,
+    spinKey,
+    play,
+    handleCpuStop,
+    resetGame,
+    yourHp,
+    cpuHp,
+    yourHand,
+    gameOver,
+  } = useBattleGame(); // ルーレットの状態を管理するカスタムフック
   useEffect(() => {
     if (!sessionLoading && !session?.user) {
       toast.error("ログインしてね");
@@ -93,44 +103,141 @@ const BattleResultPage = () => {
   const { monster, enemy } = data.battleView;
 
   return (
-    <div className="p-4">
-      <Header />
-      <h2 className="text-3xl font-bold mb-4 pl-8 text-center text-white tracking-[6px]">
+    <div className="mb-60">
+      {/* <Header /> */}
+      <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
         BATTLE🔥
       </h2>
-
-      <div className="">
+      <div className="p-4">
         {/* 自分のモンスター */}
-        <div>
-          <p className="mt-4 mr-8 text-white text-right">
-            きみ：{monster.name}
-          </p>
-          <div className="flex justify-end">
-            <Image
-              src={monsterUrl}
-              alt="きみのモンスター"
-              width={210}
-              height={210}
-              className="object-contain bg-gray-200  rounded-full"
-            />
+        <div className="flex">
+          <div className="w-[60%] flex flex-col items-center">
+            <p className="mt-4 mr-8 text-white text-right">
+              きみ：{monster.name}
+            </p>
+            <div className="flex justify-end">
+              <Image
+                src={monsterUrl}
+                alt="きみのモンスター"
+                width={210}
+                height={210}
+                className="object-contain bg-gray-200  rounded-full "
+              />
+            </div>
+            <div className="flex gap-1 justify-center">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <span
+                  key={i}
+                  className={`text-[30px] ${
+                    i < yourHp ? "text-red-400" : "text-gray-300"
+                  }`}
+                >
+                  ♥
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* 手を選択するボタン */}
+          <div className="flex flex-col items-center w-[40%] mt-[2rem]">
+            <p className="text-center text-blue-400">どれをだす？</p>
+            {hands.map((hand) => (
+              <button
+                key={hand}
+                onClick={() => play(hand)}
+                className="w-8/12 px-4 py-2 text-[32px] border border-blue-400 rounded-full hover:bg-blue-400"
+              >
+                {hand === "rock" ? "✊" : hand === "scissors" ? "✌️" : "✋"}
+              </button>
+            ))}
           </div>
         </div>
         {/* VS */}
-        <div className="text-3xl">⚔️</div>
+        {/* 結果 */}
+        <div className="mt-5 text-lg">
+          {yourHand && cpuHand ? (
+            <div className="flex flex-col items-center bg-gray-700">
+              <div>
+                <p className="text-[36px] text-white my-2">
+                  けっか:
+                  {result}
+                </p>
+              </div>
+              <div className="flex">
+                <p className="text-blue-400 text-[24px]">
+                  きみ:
+                  {yourHand === "rock"
+                    ? "✊"
+                    : yourHand === "scissors"
+                    ? "✌️"
+                    : "✋"}
+                </p>
+                <p className="text-purple-400 text-[24px]">
+                  てき:
+                  {cpuHand === "rock"
+                    ? "✊"
+                    : cpuHand === "scissors"
+                    ? "✌️"
+                    : "✋"}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <p className="h-[109px] text-center text-[36px] text-red-500 my-2">
+              対戦中...
+            </p>
+          )}
+        </div>
+        {/* ゲーム終了表示 */}
+        {gameOver && (
+          <div className="my-5">
+            <p className="text-xl font-bold">
+              {yourHp > 0 ? "きみの勝利！" : "GameOver..."}
+            </p>
+            <button
+              className="mt-3 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500"
+              onClick={resetGame}
+            >
+              もう一回する！
+            </button>
+          </div>
+        )}
         {/* 敵のモンスター */}
-        <div>
-          <p className="mt-4 ml-8 text-white text-left">てき：{enemy.name}</p>
-          <div>
-            <Image
-              src={enemyUrl}
-              alt="敵のモンスター"
-              width={210}
-              height={210}
-              className="object-contain bg-gray-200 rounded-full"
+        <div className="flex">
+          <div className="w-[40%] ">
+            <Roulette
+              mustSpin={mustSpin}
+              spinKey={spinKey}
+              onStop={handleCpuStop}
             />
+          </div>
+          <div className="w-[60%] flex flex-col items-center">
+            <p className="mt-4 ml-8 text-white text-left">てき：{enemy.name}</p>
+            <div>
+              <Image
+                src={enemyUrl}
+                alt="敵のモンスター"
+                width={210}
+                height={210}
+                className="object-contain bg-gray-200 rounded-full"
+              />
+            </div>{" "}
+            <div className="flex gap-1 justify-center">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <span
+                  key={i}
+                  className={`text-[30px] ${
+                    i < cpuHp ? "text-red-400" : "text-gray-300"
+                  }`}
+                >
+                  ♥
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
+
       <Footer />
     </div>
   );
