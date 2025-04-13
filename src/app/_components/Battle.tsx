@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Roulette } from "./Roulette";
+import Roulette from "../battle/_components/Roulette";
 type Hand = "rock" | "scissors" | "paper";
 
 const Battle = () => {
