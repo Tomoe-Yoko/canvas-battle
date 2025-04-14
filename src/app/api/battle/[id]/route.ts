@@ -12,7 +12,7 @@ export const GET = async (
   const token = request.headers.get("Authorization") ?? "";
   const { errorResponse } = await getAuthenticatedUser(token);
   if (errorResponse) return errorResponse;
-  const { id } = params;
+  const { id } = await params;
   const battleId = parseInt(id, 10);
   if (isNaN(battleId))
     return NextResponse.json(

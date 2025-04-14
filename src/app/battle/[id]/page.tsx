@@ -1,42 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+// import { useEffect, useState } from "react";
+// import { useParams } from "next/navigation";
 // import { Header } from "../../_components/Header";
 import { Footer } from "../../_components/Footer";
 import Image from "next/image";
-import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import Loading from "@/app/loading";
-import toast from "react-hot-toast";
-import { useFetch } from "@/app/_hooks/useFetch";
 import useBattleGame from "../_hooks/useBattleGame";
-import { supabase } from "@/app/_utils/supabase";
 import Roulette from "../_components/Roulette";
-
-interface BattleViewResponse {
-  id: number;
-  monster: {
-    name: string;
-    thumbnailImageKey: string;
-  };
-  enemy: {
-    name: string;
-    thumbnailImageKey: string;
-  };
-}
+import useGetBattleMonster from "../_hooks/useGetBattleMonster";
 
 const BattleResultPage = () => {
-  const { session, isLoading: sessionLoading } = useSupabaseSession();
-  const params = useParams(); // ← これで [id] を取得
-  const battleId = params?.id as string;
-
-  const { data, isLoading: fetchLoading } = useFetch<{
-    status: string;
-    battleView: BattleViewResponse;
-  }>(`/api/battle/${battleId}`);
-
-  const [monsterUrl, setMonsterUrl] = useState<string>("");
-  const [enemyUrl, setEnemyUrl] = useState<string>("");
   const {
     hands,
     cpuHand,
@@ -51,44 +25,9 @@ const BattleResultPage = () => {
     yourHand,
     gameOver,
   } = useBattleGame(); // ルーレットの状態を管理するカスタムフック
-  useEffect(() => {
-    if (!sessionLoading && !session?.user) {
-      toast.error("ログインしてね");
-    }
-  }, [sessionLoading, session]);
 
-  useEffect(() => {
-    const generateSignedUrls = async () => {
-      if (!data?.battleView) return;
-
-      const { monster, enemy } = data.battleView;
-
-      try {
-        const { data: mData, error: mError } = await supabase.storage
-          .from("post-monster")
-          .createSignedUrl(monster.thumbnailImageKey, 60);
-
-        const { data: eData, error: eError } = await supabase.storage
-          .from("post-monster")
-          .createSignedUrl(enemy.thumbnailImageKey, 60);
-
-        if (mError || eError) {
-          toast.error("画像の取得に失敗しました");
-          return;
-        }
-
-        setMonsterUrl(mData?.signedUrl || "");
-        setEnemyUrl(eData?.signedUrl || "");
-      } catch (err) {
-        console.error("サインドURL取得エラー:", err);
-        toast.error("画像URLの取得に失敗しました");
-      }
-    };
-
-    if (data?.battleView) {
-      generateSignedUrls();
-    }
-  }, [data]);
+  const { fetchLoading, monsterUrl, enemyUrl, sessionLoading, data } =
+    useGetBattleMonster(); // バトルするモンスター画像を取得するカスタムフック
 
   if (
     sessionLoading ||
@@ -222,7 +161,7 @@ const BattleResultPage = () => {
                 height={210}
                 className="object-contain bg-gray-200 rounded-full"
               />
-            </div>{" "}
+            </div>
             <div className="flex gap-1 justify-center">
               {Array.from({ length: 3 }).map((_, i) => (
                 <span
