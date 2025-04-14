@@ -72,7 +72,7 @@ const Page = () => {
 
       const { id } = res; // Extract battleId from the response
       // router.push(`/battle/${id}/start`);
-      router.push(`/battle/${id}`);
+      router.push(`/battle/${id}/start`);
     } catch (err) {
       toast.error("バトル登録に失敗しました");
       console.error(err);
