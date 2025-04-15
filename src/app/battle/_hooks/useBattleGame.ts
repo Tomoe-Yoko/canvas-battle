@@ -6,7 +6,7 @@ const useBattleGame = () => {
   const hands: Hand[] = ["rock", "scissors", "paper"];
   const [yourHand, setYourHand] = useState<Hand | null>(null);
   const [cpuHand, setCpuHand] = useState<Hand | null>(null);
-  const [result, setResult] = useState<"win" | "lose" | "draw" | null>(null);
+  const [result, setResult] = useState<string | null>(null);
   const [yourHp, setYourHp] = useState<number>(3);
   const [cpuHp, setCpuHp] = useState<number>(3);
   const [gameOver, setGameOver] = useState<boolean>(false);
@@ -42,7 +42,14 @@ const useBattleGame = () => {
     setCpuHand(cpuChoice); // 敵の手をセット
     if (!yourHand) return;
     const matchResult = judge(yourHand, cpuChoice);
-    setResult(matchResult); // 結果をセット
+    //日本語で表示
+    const ResultText =
+      matchResult === "win"
+        ? "勝ち🎉"
+        : matchResult === "lose"
+        ? "負け😭"
+        : "あいこ😗";
+    setResult(ResultText); // 結果をセット
     if (matchResult === "lose") {
       setYourHp((hp) => hp - 1);
     } else if (matchResult === "win") {

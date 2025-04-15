@@ -1,7 +1,4 @@
 "use client";
-
-// import { useEffect, useState } from "react";
-// import { useParams } from "next/navigation";
 // import { Header } from "../../_components/Header";
 import { Footer } from "../../_components/Footer";
 import Image from "next/image";
