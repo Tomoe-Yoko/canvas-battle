@@ -12,7 +12,7 @@ const useBattleGame = () => {
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [mustSpin, setMustSpin] = useState(false);
   const [spinKey, setSpinKey] = useState(0); // 敵ルーレット開始イベントを検知するためのキー
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   //勝敗
   const judge = (you: Hand, cpu: Hand): "win" | "lose" | "draw" => {
     if (you === cpu) return "draw";
@@ -62,7 +62,15 @@ const useBattleGame = () => {
       cpuHp - (matchResult === "win" ? 1 : 0) === 0
     ) {
       setGameOver(true);
+      openModal();
     }
+  };
+  //Modal
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
   // ゲームリセット
   const resetGame = () => {
@@ -72,6 +80,7 @@ const useBattleGame = () => {
     setYourHp(3);
     setCpuHp(3);
     setGameOver(false);
+    closeModal();
   };
   return {
     hands,
@@ -86,6 +95,8 @@ const useBattleGame = () => {
     cpuHp,
     yourHand,
     gameOver,
+    isModalOpen,
+    closeModal,
   };
 };
 

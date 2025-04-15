@@ -6,6 +6,7 @@ import Loading from "@/app/loading";
 import useBattleGame from "../_hooks/useBattleGame";
 import Roulette from "../_components/Roulette";
 import useGetBattleMonster from "../_hooks/useGetBattleMonster";
+import { Modal } from "@/app/_components/Modal";
 
 const BattleResultPage = () => {
   const {
@@ -21,6 +22,8 @@ const BattleResultPage = () => {
     cpuHp,
     yourHand,
     gameOver,
+    isModalOpen,
+    closeModal,
   } = useBattleGame(); // ルーレットの状態を管理するカスタムフック
 
   const { fetchLoading, monsterUrl, enemyUrl, sessionLoading, data } =
@@ -125,20 +128,6 @@ const BattleResultPage = () => {
             </p>
           )}
         </div>
-        {/* ゲーム終了表示 */}
-        {gameOver && (
-          <div className="flex justify-center items-center my-1">
-            <p className="text-xl font-bold text-white">
-              {yourHp > 0 ? "きみの勝利🎉" : "GameOver...😵‍💫"}
-            </p>
-            <button
-              className="mt-3 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-              onClick={resetGame}
-            >
-              もう一回する！
-            </button>
-          </div>
-        )}
         {/* 敵のモンスター */}
         <div className="flex">
           <div className="w-[40%] mt-[-3rem]">
@@ -174,7 +163,22 @@ const BattleResultPage = () => {
           </div>
         </div>
       </div>
-
+      {/* ゲーム終了表示 */}
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {gameOver && (
+          <div className="flex flex-col items-center my-1 bg-[#23293b] p-10 rounded-lg">
+            <p className="text-3xl font-bold text-white">
+              {yourHp > 0 ? "きみの勝利🎉" : "GameOver...😵‍💫"}
+            </p>
+            <button
+              className="mt-8  px-6 py-4 text-2xl bg-yellow-500 text-white rounded hover:bg-yellow-600"
+              onClick={resetGame}
+            >
+              もう一回する！
+            </button>
+          </div>
+        )}
+      </Modal>
       <Footer />
     </div>
   );
