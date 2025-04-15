@@ -51,7 +51,7 @@ const BattleResultPage = () => {
         {/* 自分のモンスター */}
         <div className="flex">
           <div className="w-[60%] flex flex-col items-center">
-            <p className="mt-4 mr-8 text-white text-right">
+            <p className="mt-4 mb-2 mr-8 text-white text-right">
               きみ：{monster.name}
             </p>
             <div className="flex justify-end">
@@ -94,7 +94,7 @@ const BattleResultPage = () => {
           </div>
         </div>
         {/* 結果 */}
-        <div className="mt-5 text-lg">
+        <div className="mt-2 text-lg">
           {yourHand && cpuHand ? (
             <div className="flex flex-col items-center bg-gray-700">
               <div>
@@ -104,7 +104,7 @@ const BattleResultPage = () => {
                 </p>
               </div>
               <div className="flex">
-                <p className="text-blue-400 text-[24px]">
+                <p className="text-blue-400 text-[18px]">
                   きみ:
                   {yourHand === "rock"
                     ? "✊"
@@ -112,7 +112,7 @@ const BattleResultPage = () => {
                     ? "✌️"
                     : "✋"}
                 </p>
-                <p className="text-purple-400 text-[24px]">
+                <p className="text-purple-400 text-[18px]">
                   てき:
                   {cpuHand === "rock"
                     ? "✊"
@@ -138,7 +138,9 @@ const BattleResultPage = () => {
             />
           </div>
           <div className="w-[60%] flex flex-col items-center">
-            <p className="mt-4 ml-8 text-white text-left">てき：{enemy.name}</p>
+            <p className="mt-4 mb-2 ml-8 text-white text-left">
+              てき：{enemy.name}
+            </p>
             <div>
               <Image
                 src={enemyUrl}
