@@ -7,30 +7,24 @@ import Image from "next/image";
 import { useSupabaseSession } from "../_hooks/useSupabaseSession";
 import toast, { Toaster } from "react-hot-toast";
 import Loading from "../loading";
-import { useFetch } from "../_hooks/useFetch";
+
 import { supabase } from "../_utils/supabase";
 import { Modal } from "../_components/Modal";
 import { Button } from "../_components/Button";
 import { api } from "../_utils/api";
-import { mutate } from "swr";
+import Link from "next/link";
+import useFetchMonsters from "../_hooks/useFetchMonsters";
 
 const Page = () => {
   const { session, isLoading: sessionLoading } = useSupabaseSession();
-  const [monsters, setMonsters] = useState<CreateMonsterResponseBody[]>([]);
-  const [imageUrls, setImageUrls] = useState<{ [key: string]: string }>({});
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMonster, setSelectedMonster] =
     useState<CreateMonsterResponseBody | null>(null);
   const [newName, setNewName] = useState("");
-  const {
-    data,
-    error,
-    isLoading: fetchLoading,
-  } = useFetch<{
-    status: string;
-    monstersView: CreateMonsterResponseBody[];
-  }>("/api/monster");
-  const isLoading = sessionLoading || fetchLoading; // ローディング状態を統合
+
+  // モンスターと画像URLを一括取得
+  const { monsters, imageUrls, isLoading, error, mutate } = useFetchMonsters();
 
   useEffect(() => {
     if (!sessionLoading && !session?.user) {
@@ -38,27 +32,6 @@ const Page = () => {
     }
   }, [session, sessionLoading]);
 
-  useEffect(() => {
-    if (data?.monstersView) {
-      setMonsters(data.monstersView);
-      console.log(data.monstersView); // ここで monstersView を確認
-      const fetchImageUrls = async () => {
-        const urls: { [key: string]: string } = {};
-        for (const monster of data.monstersView) {
-          const { data: signedUrlData } = await supabase.storage
-            .from("post-monster")
-            .createSignedUrl(monster.thumbnailImageKey, 60 * 60 * 24); // 有効期限を24時間に設定 (秒単位)
-
-          if (signedUrlData?.signedUrl) {
-            urls[monster.thumbnailImageKey] = signedUrlData.signedUrl;
-          }
-        }
-        setImageUrls(urls);
-      };
-
-      fetchImageUrls();
-    }
-  }, [data]); // 依存配列に data を追加
   //Modal
   const openModal = (monster: CreateMonsterResponseBody) => {
     setSelectedMonster(monster);
@@ -80,7 +53,12 @@ const Page = () => {
       }
       await api.put(`/api/monster/${selectedMonster.id}`, { name: newName });
       closeModal();
+      await mutate();
       toast.success("名前を更新したよ！");
+      await api.get<{
+        status: string;
+        monstersView: CreateMonsterResponseBody[];
+      }>("/api/monster");
     } catch (err) {
       console.error(err);
       toast.error("エラーが発生しました");
@@ -98,8 +76,12 @@ const Page = () => {
         .from("post-monster") // バケット名を指定
         .remove([selectedMonster.thumbnailImageKey]); // thumbnailImageKeyを利用
       closeModal();
+      await mutate();
       toast.success("削除しました！");
-      mutate("/api/monster"); // SWRのキャッシュを更新
+      await api.get<{
+        status: string;
+        monstersView: CreateMonsterResponseBody[];
+      }>("/api/monster");
 
       if (storageError) {
         toast.error("バケットから画像を削除できませんでした。");
@@ -126,9 +108,12 @@ const Page = () => {
   return (
     <div>
       <Header />
-      <h2 className="text-white text-xl pt-[1.5rem] pl-[1rem] pb-[0.5rem]">
-        ーーー きみのモンスター👾
+      <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
+        じぶんページ
       </h2>
+      <h3 className="text-white text-xl pt-[1.5rem] pl-[1rem] pb-[0.5rem]">
+        ーーー きみの作ったモンスター👾
+      </h3>
       <div className="flex flex-wrap justify-between gap-6 pt-[1rem] pb-[10rem]">
         {Object.keys(imageUrls).length === monsters.length ? (
           monsters.map((monster) => (
@@ -153,6 +138,15 @@ const Page = () => {
         ) : (
           <Loading />
         )}
+
+        <p className=" block w-full p-4 text-center text-white">
+          どのキャラクターもイケてる😎
+          <br />
+          てきとじゃんけんで戦ってみてね🔥
+        </p>
+        <Link href="/battle/ready" className="mx-auto ">
+          <Button variant="bg-blue">じゃんけんをする</Button>
+        </Link>
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {selectedMonster && (

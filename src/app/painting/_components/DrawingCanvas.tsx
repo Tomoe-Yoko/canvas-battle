@@ -6,17 +6,22 @@ import { BsEraserFill, BsPencilFill } from "react-icons/bs";
 import { TbClearAll } from "react-icons/tb";
 import { IoReturnUpBackOutline } from "react-icons/io5";
 import { RiDownload2Fill } from "react-icons/ri";
-import { Modal } from "./Modal";
-import { supabase } from "../_utils/supabase";
+import { supabase } from "@/app/_utils/supabase";
+import { Modal } from "@/app/_components/Modal";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import toast, { Toaster } from "react-hot-toast";
-import { CreateMonsterPostRequestBody } from "../_types/monsters";
-import { api } from "../_utils/api";
-import { User } from "@supabase/auth-js";
-import { Button } from "./Button";
+import { CreateMonsterPostRequestBody } from "@/app/_types/monsters";
+import { api } from "@/app/_utils/api";
 
-const DrawingCanvas = ({ user }: { user: User }) => {
+import { Button } from "@/app/_components/Button";
+
+interface Props {
+  user: { id: string };
+  session: { user: { id: string } };
+}
+
+const DrawingCanvas: React.FC<Props> = ({ session }) => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
   const [penColor, setPenColor] = useState("black");
   const [strokeWidth, setStrokeWidth] = useState(3);
@@ -49,7 +54,6 @@ const DrawingCanvas = ({ user }: { user: User }) => {
       return new Blob([arrayBuffer], { type: "image/png" });
     };
     try {
-      // const userId = Number(user.user.id); // ログイン中のユーザーの IDを数値に変換
       const imageData = await canvasRef.current.exportImage("png");
       const fileId = uuidv4();
       const fileName = `private/${fileId}.png`;
@@ -70,7 +74,7 @@ const DrawingCanvas = ({ user }: { user: User }) => {
       setThumbnailImageKey(fileName);
 
       const monsterData: CreateMonsterPostRequestBody = {
-        userId: Number(user.id),
+        userId: Number(session.user.id),
         name: monsterName,
         thumbnailImageKey: fileName,
         createdAt: new Date().toISOString(),
@@ -93,9 +97,6 @@ const DrawingCanvas = ({ user }: { user: User }) => {
   return (
     <div>
       <section className="w-full mb-[20vh]">
-        <h2 className="text-2xl p-4 text-white text-center mb-6">
-          モンスターを描こう！
-        </h2>
         <div className="ml-2  space-x-2">
           <div className="flex items-center justify-center space-x-2">
             <div>

@@ -1,17 +1,7 @@
 //zod
 import { z } from "zod";
 
-// export const validationSchema = z.object({
-//   userName: z.string().optional(), // userName をオプショナルに設定
-//   email: z
-//     .string()
-//     .nonempty("メールアドレスは必須です。")
-//     .email("メールアドレスの形式で入力してください。"),
-//   password: z
-//     .string()
-//     .nonempty("パスワードは必須です。")
-//     .min(8, "8文字以上で入力してください"),
-// });
+// ページごとに書くのが良い
 // サインアップ用
 export const signUpSchema = z.object({
   userName: z.string().min(1, "名前は必須です"),

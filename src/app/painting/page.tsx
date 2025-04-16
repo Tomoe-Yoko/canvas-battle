@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect } from "react";
-import DrawingCanvas from "../_components/DrawingCanvas";
 import { Header } from "../_components/Header";
 import { Footer } from "../_components/Footer";
 import Loading from "@/app/loading";
 import { useSupabaseSession } from "../_hooks/useSupabaseSession"; // 修正後のフックを正しくインポート
 import toast from "react-hot-toast";
+import DrawingCanvas from "./_components/DrawingCanvas";
 
 const Page = () => {
   const { session, isLoading } = useSupabaseSession();
@@ -26,7 +26,10 @@ const Page = () => {
   return (
     <>
       <Header />
-      <DrawingCanvas user={session.user} />
+      <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
+        モンスターを描こう！
+      </h2>
+      <DrawingCanvas user={session.user} session={session} />
       <Footer />
     </>
   );

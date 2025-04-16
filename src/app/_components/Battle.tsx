@@ -1,56 +1,68 @@
 "use client";
 import React, { useState } from "react";
+import Roulette from "../battle/_components/Roulette";
 type Hand = "rock" | "scissors" | "paper";
-const hands: Hand[] = ["rock", "scissors", "paper"];
 
 const Battle = () => {
+  const hands: Hand[] = ["rock", "scissors", "paper"];
   const [yourHand, setYourHand] = useState<Hand | null>(null);
   const [cpuHand, setCpuHand] = useState<Hand | null>(null);
-  const [result, setResult] = useState<string>("");
+  const [result, setResult] = useState<"win" | "lose" | "draw" | null>(null);
   const [yourHp, setYourHp] = useState<number>(3);
   const [cpuHp, setCpuHp] = useState<number>(3);
   const [gameOver, setGameOver] = useState<boolean>(false);
+  const [mustSpin, setMustSpin] = useState(false);
+  const [spinKey, setSpinKey] = useState(0); // 敵ルーレット開始イベントを検知するためのキー
 
   //勝敗
-  const judge = (you: Hand, cpu: Hand) => {
-    if (you === cpu) return "引き分け～";
+  const judge = (you: Hand, cpu: Hand): "win" | "lose" | "draw" => {
+    if (you === cpu) return "draw";
     if (
       (you === "rock" && cpu === "scissors") ||
       (you === "scissors" && cpu === "paper") ||
       (you === "paper" && cpu === "rock")
     ) {
-      return "きみの勝ち！";
+      return "win";
     }
-    return "きみの負け。。";
+    return "lose";
   };
 
-  //じゃんけん
+  //じゃんけんトリガー
   const play = (hand: Hand) => {
     if (gameOver) return;
-    const cpuChoice = hands[Math.floor(Math.random() * 3)];
-    const matchResult = judge(hand, cpuChoice);
     setYourHand(hand);
-    setCpuHand(cpuChoice);
-    setResult(matchResult);
-    if (matchResult === "きみの負け。。") {
-      setYourHp((n) => n - 1);
-    } else if (matchResult === "きみの勝ち！") {
-      setCpuHp((n) => n - 1);
+    setCpuHand(null); // 敵の手はルーレット後に決まる
+    setResult(null);
+    setSpinKey((prev) => prev + 1); // スピンキーを更新してルーレットを回す
+    setMustSpin(true); // ルーレットを回すフラグを立てる
+  };
+
+  // 敵のルーレットが止まったときに呼ぶ
+  const handleCpuStop = (cpuChoice: Hand) => {
+    setMustSpin(false); // ルーレットをとめる
+    setCpuHand(cpuChoice); // 敵の手をセット
+    if (!yourHand) return;
+    const matchResult = judge(yourHand, cpuChoice);
+    setResult(matchResult); // 結果をセット
+    if (matchResult === "lose") {
+      setYourHp((hp) => hp - 1);
+    } else if (matchResult === "win") {
+      setCpuHp((hp) => hp - 1);
     }
+
     // HPが0になったらゲーム終了
     if (
-      yourHp - (matchResult === "きみの負け。。" ? 1 : 0) === 0 ||
-      cpuHp - (matchResult === "きみの勝ち！" ? 1 : 0) === 0
+      yourHp - (matchResult === "lose" ? 1 : 0) === 0 ||
+      cpuHp - (matchResult === "win" ? 1 : 0) === 0
     ) {
       setGameOver(true);
     }
   };
-
   // ゲームリセット
   const resetGame = () => {
     setYourHand(null);
     setCpuHand(null);
-    setResult("");
+    setResult(null);
     setYourHp(3);
     setCpuHp(3);
     setGameOver(false);
@@ -58,9 +70,6 @@ const Battle = () => {
   return (
     <>
       <div className="flex flex-col items-start justify-center bg-gray-100">
-        <h2 className="text-2xl font-bold text-gray-600">
-          じゃんけんバトルだ！
-        </h2>
         {/* hp */}
         <div className="mt-3 flex gap-8">
           <div>
@@ -107,6 +116,11 @@ const Battle = () => {
               </span>
             ))}
           </div>
+          <Roulette
+            mustSpin={mustSpin}
+            spinKey={spinKey}
+            onStop={handleCpuStop}
+          />
         </div>
         {/* 結果 */}
         <div className="mt-5 text-lg">
@@ -156,12 +170,5 @@ const Battle = () => {
     </>
   );
 };
-
-// import React from 'react'
-
-//   return (
-//     <div>Battle</div>
-//   )
-// }
 
 export default Battle;

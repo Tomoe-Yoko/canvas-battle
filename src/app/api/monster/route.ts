@@ -1,8 +1,6 @@
 import { CreateMonsterPostRequestBody } from "@/app/_types/monsters";
 import { getAuthenticatedUser } from "@/app/_utils/auth";
 import { buildPrisma } from "@/app/_utils/prisma";
-// import { supabase } from "@/app/_utils/supabase";
-// import { request } from "http";
 import { NextRequest, NextResponse } from "next/server";
 const prisma = await buildPrisma();
 
@@ -40,10 +38,6 @@ export const GET = async (request: NextRequest) => {
     const monstersView = await prisma.monster.findMany({
       where: { userId: user.id },
       orderBy: { createdAt: "desc" },
-    });
-    console.log("API Response:", {
-      status: "OK",
-      monstersView,
     });
     return NextResponse.json(
       {
