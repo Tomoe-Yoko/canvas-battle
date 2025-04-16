@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
+import confetti from "canvas-confetti";
 type Hand = "rock" | "scissors" | "paper";
-
 const useBattleGame = () => {
   const hands: Hand[] = ["rock", "scissors", "paper"];
   const [yourHand, setYourHand] = useState<Hand | null>(null);
@@ -35,7 +35,14 @@ const useBattleGame = () => {
     setSpinKey((prev) => prev + 1); // スピンキーを更新してルーレットを回す
     setMustSpin(true); // ルーレットを回すフラグを立てる
   };
+  //勝った時のエフェクト
 
+  const launchParticles = () => {
+    confetti({
+      particleCount: 150,
+      spread: 360,
+    });
+  };
   // 敵のルーレットが止まったときに呼ぶ
   const handleCpuStop = (cpuChoice: Hand) => {
     setMustSpin(false); // ルーレットをとめる
@@ -54,6 +61,7 @@ const useBattleGame = () => {
       setYourHp((hp) => hp - 1);
     } else if (matchResult === "win") {
       setCpuHp((hp) => hp - 1);
+      launchParticles(); // 勝ったときのエフェクト
     }
 
     // HPが0になったらゲーム終了

@@ -7,6 +7,7 @@ import useBattleGame from "../_hooks/useBattleGame";
 import Roulette from "../_components/Roulette";
 import useGetBattleMonster from "../_hooks/useGetBattleMonster";
 import { Modal } from "@/app/_components/Modal";
+import { motion } from "framer-motion";
 
 const BattleResultPage = () => {
   const {
@@ -64,16 +65,23 @@ const BattleResultPage = () => {
               />
             </div>
             <div className="flex gap-1 justify-center">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <span
-                  key={i}
-                  className={`text-[30px] ${
-                    i < yourHp ? "text-red-600" : "text-gray-600"
-                  }`}
-                >
-                  ♥
-                </span>
-              ))}
+              {Array.from({ length: 3 }).map((_, i) => {
+                const isAlive = i < yourHp;
+                return (
+                  <motion.span
+                    key={`your-heart-${i}-${isAlive}`} // 変化に反応させるyour-heart-:ただの識別用（任意の名前でOK）
+                    initial={{ scale: 2.4 }}
+                    animate={{
+                      scale: 1,
+                      color: isAlive ? "#dc2626" : "#ececec",
+                    }}
+                    transition={{ duration: 0.7 }}
+                    className="text-[30px]"
+                  >
+                    ♥
+                  </motion.span>
+                );
+              })}
             </div>
           </div>
 
@@ -151,16 +159,23 @@ const BattleResultPage = () => {
               />
             </div>
             <div className="flex gap-1 justify-center">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <span
-                  key={i}
-                  className={`text-[30px] ${
-                    i < cpuHp ? "text-red-600" : "text-gray-600"
-                  }`}
-                >
-                  ♥
-                </span>
-              ))}
+              {Array.from({ length: 3 }).map((_, i) => {
+                const isAlive = i < cpuHp;
+                return (
+                  <motion.span
+                    key={`cpu-heart-${i}-${isAlive}`} // 変化に反応させる
+                    initial={{ scale: 2.4 }}
+                    animate={{
+                      scale: 1,
+                      color: isAlive ? "#dc2626" : "#ececec",
+                    }}
+                    className="text-[30px]"
+                    transition={{ duration: 0.7 }}
+                  >
+                    ♥
+                  </motion.span>
+                );
+              })}
             </div>
           </div>
         </div>
