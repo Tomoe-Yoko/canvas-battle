@@ -114,7 +114,7 @@ const Page = () => {
       <h3 className="text-white text-xl pt-[1.5rem] pl-[1rem] pb-[0.5rem]">
         ーーー きみの作ったモンスター👾
       </h3>
-      <div className="flex flex-wrap justify-between gap-6 pt-[1rem] pb-[10rem]">
+      <div className="flex flex-wrap justify-between gap-2 pt-[1rem] pb-[10rem]">
         {Object.keys(imageUrls).length === monsters.length ? (
           monsters.map((monster) => (
             <div
@@ -128,9 +128,9 @@ const Page = () => {
                 width={300}
                 height={200}
                 priority
-                className="sm:max-w-[215px] max-w-[180px] min-w-[110px] object-contain bg-gray-200 m-2 aspect-square"
+                className="sm:max-w-[215px] max-w-[150px] min-w-[110px] object-contain bg-gray-200 m-2 aspect-square"
               />
-              <p className="w-[180px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[1rem] rounded-md">
+              <p className="w-[150px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[0.8rem] rounded-md">
                 {monster.name}
               </p>
             </div>
@@ -160,14 +160,14 @@ const Page = () => {
               width={600}
               height={600}
               priority
-              className="max-w-[430px]  object-contain bg-gray-200  mx-auto"
+              className="max-w-[330px]  object-contain bg-gray-200  mx-auto"
             />
-            <div className="p-2 flex gap-2 w-[90%] mx-auto">
+            <div className="p-2 flex items-center gap-2 w-[90%] mx-auto">
               <input
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                className="border rounded text-white w-[70%] px-2"
+                className="border rounded text-white w-[60%] h-16 px-2 py-2"
               />
               <Button variant="bg-blue" onClick={handleNameUpdate}>
                 なまえ
