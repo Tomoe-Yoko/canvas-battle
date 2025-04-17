@@ -104,7 +104,7 @@ const Page = () => {
   }
 
   return (
-    <div className="mb-[10rem]">
+    <div className="mb-[5rem]">
       <Header />
       <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
         じぶんページ
@@ -112,13 +112,13 @@ const Page = () => {
       <h3 className="text-white text-xl pt-[1.5rem] pl-[1rem] pb-[0.5rem]">
         ーーー きみの作ったモンスター👾
       </h3>
-      <div className="flex flex-wrap justify-between gap-2 pt-[1rem] pb-[10rem]">
+      <div className="w-[90%] mx-auto flex flex-wrap justify-between gap-1 pt-[1rem] pb-[10rem]">
         {Object.keys(imageUrls).length === monsters.length ? (
           monsters.map((monster) => (
             <div
               key={monster.id}
               onClick={() => openModal(monster)}
-              className="cursor-pointer"
+              className="cursor-pointer sm:max-w-[215px] max-w-[150px] min-w-[43%] pb-4"
             >
               <Image
                 src={imageUrls[monster.thumbnailImageKey] || "/placeholder.png"}
@@ -126,7 +126,7 @@ const Page = () => {
                 width={300}
                 height={200}
                 priority
-                className="sm:max-w-[215px] max-w-[150px] min-w-[110px] object-contain bg-gray-200 m-2 aspect-square"
+                className="  object-contain bg-gray-200 aspect-square"
               />
               <p className="w-[150px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[0.8rem] rounded-md">
                 {monster.name}
@@ -163,7 +163,7 @@ const Page = () => {
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {selectedMonster && (
-          <div>
+          <div className="mt-30">
             <Image
               src={
                 imageUrls[selectedMonster.thumbnailImageKey] ||

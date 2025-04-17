@@ -104,7 +104,7 @@ const BattleResultPage = () => {
         {/* 結果 */}
         <div className="mt-2 text-lg">
           {yourHand && cpuHand ? (
-            <div className="flex flex-col items-center bg-gray-700">
+            <div className="flex justify-around items-center bg-gray-700">
               <div>
                 <p className="text-[24px] text-white my-2">
                   けっか:
@@ -131,7 +131,7 @@ const BattleResultPage = () => {
               </div>
             </div>
           ) : (
-            <p className="h-[90px] pt-4 text-center text-[24px] text-gray-300 bg-gray-700">
+            <p className="h-[53px] pt-2 text-center text-[24px] text-gray-300 bg-gray-700">
               対戦中...
             </p>
           )}
@@ -181,21 +181,30 @@ const BattleResultPage = () => {
         </div>
       </div>
       {/* ゲーム終了表示 */}
+
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        {gameOver && (
-          <div className="flex flex-col items-center my-1 bg-[#23293b] p-10 rounded-lg">
-            <p className="text-3xl font-bold text-white">
-              {yourHp > 0 ? "きみの勝利🎉" : "GameOver...😵‍💫"}
-            </p>
-            <button
-              className="mt-8  px-6 py-4 text-2xl bg-yellow-500 text-white rounded hover:bg-yellow-600"
-              onClick={resetGame}
-            >
-              もう一回する！
-            </button>
-          </div>
-        )}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className="bg-[#23293b] p-10 rounded-lg"
+        >
+          {gameOver && (
+            <div className="flex flex-col items-center my-1 bg-[#23293b] p-10 rounded-lg">
+              <p className="text-3xl font-bold text-white">
+                {yourHp > 0 ? "きみの勝利🎉" : "GameOver...😵‍💫"}
+              </p>
+              <button
+                className="mt-8  px-6 py-4 text-2xl bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                onClick={resetGame}
+              >
+                もう一回する！
+              </button>
+            </div>
+          )}
+        </motion.div>
       </Modal>
+
       <Footer />
     </div>
   );
