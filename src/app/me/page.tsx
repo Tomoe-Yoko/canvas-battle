@@ -7,7 +7,6 @@ import Image from "next/image";
 import { useSupabaseSession } from "../_hooks/useSupabaseSession";
 import toast, { Toaster } from "react-hot-toast";
 import Loading from "../loading";
-
 import { supabase } from "../_utils/supabase";
 import { Modal } from "../_components/Modal";
 import { Button } from "../_components/Button";
@@ -17,7 +16,6 @@ import useFetchMonsters from "../_hooks/useFetchMonsters";
 
 const Page = () => {
   const { session, isLoading: sessionLoading } = useSupabaseSession();
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMonster, setSelectedMonster] =
     useState<CreateMonsterResponseBody | null>(null);
@@ -106,7 +104,7 @@ const Page = () => {
   }
 
   return (
-    <div>
+    <div className="mb-[10rem]">
       <Header />
       <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
         じぶんページ
@@ -139,14 +137,29 @@ const Page = () => {
           <Loading />
         )}
 
-        <p className=" block w-full p-4 text-center text-white">
-          どのキャラクターもイケてる😎
-          <br />
-          てきとじゃんけんで戦ってみてね🔥
-        </p>
-        <Link href="/battle/ready" className="mx-auto ">
-          <Button variant="bg-blue">じゃんけんをする</Button>
-        </Link>
+        {monsters.length > 0 ? (
+          <>
+            <p className="block w-full p-4 text-center text-white">
+              どのキャラクターもイケてる😎
+              <br />
+              てきとじゃんけんで戦ってみてね🔥
+            </p>
+            <Link href="/battle/ready" className="mx-auto ">
+              <Button variant="bg-blue">じゃんけんバトル！⚔️</Button>
+            </Link>
+          </>
+        ) : (
+          <>
+            <p className="block w-full p-4 text-center text-white">
+              まだきみのモンスターはいないよ！
+              <br />
+              まずは「おえかき」からモンスターをつくってね👽
+            </p>
+            <Link href="/painting" className="mx-auto ">
+              <Button variant="bg-blue">モンスターを描く🎨</Button>
+            </Link>
+          </>
+        )}
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {selectedMonster && (

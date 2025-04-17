@@ -83,7 +83,7 @@ const Page = () => {
     toast.error("モンスターの取得に失敗しました");
   }
   return (
-    <div className="pb-[10rem]">
+    <div>
       <Header />
       <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
         モンスターをえらぶ
@@ -165,7 +165,7 @@ const Page = () => {
               </p>
             </>
           ) : (
-            <div className="w-[150px] m-2 bg-black text-indigo-300 aspect-square text-sm p-2 pt-6">
+            <div className="w-[150px] m-2 bg-black  text-indigo-300 aspect-square text-sm p-2 pt-6">
               一覧から選択してね
             </div>
           )}
@@ -173,7 +173,7 @@ const Page = () => {
       </div>
       <div className="flex justify-center mt-8">
         <Button onClick={handleMonsterBattle} variant={"bg-blue"}>
-          バトルをはじめる！
+          バトルをはじめる🔥
         </Button>
       </div>
       <Footer />
