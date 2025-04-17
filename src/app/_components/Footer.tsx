@@ -22,14 +22,14 @@ export const Footer = () => {
     <div className="fixed bottom-0 left-0 w-full bg-white p-4">
       <nav className="w-full">
         <ul className="flex justify-around w-full">
-          <li className="flex flex-col items-center justify-center gap-2">
+          <li className="flex flex-col items-center justify-center gap-2 min-w-[20%]">
             <Link href="/me" className="flex flex-col items-center gap-2">
               <FaRegFaceMeh className="px-6" />
               <p className="w-[6rem] text-[0.9rem] text-center">じぶんページ</p>
             </Link>
           </li>
 
-          <li className="flex flex-col items-center justify-center gap-2">
+          <li className="flex flex-col items-center justify-center gap-2 min-w-[20%]">
             <Link
               href="/battle/ready"
               className="flex flex-col items-center gap-2"
@@ -39,14 +39,14 @@ export const Footer = () => {
             </Link>
           </li>
 
-          <li className="flex flex-col items-center justify-center gap-2">
+          <li className="flex flex-col items-center justify-center gap-2 min-w-[20%]">
             <Link href="/painting" className="flex flex-col items-center gap-2">
               <LuPaintbrushVertical className="px-6" />
               <p className="w-[6rem] text-[0.9rem] text-center">おえかき</p>
             </Link>
           </li>
 
-          <li className="flex flex-col items-center justify-center gap-2">
+          <li className="flex flex-col items-center justify-center gap-2 min-w-[20%]">
             <button
               onClick={handleLogout}
               className="flex flex-col items-center gap-2"

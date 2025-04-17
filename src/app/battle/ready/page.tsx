@@ -165,7 +165,7 @@ const Page = () => {
               </p>
             </>
           ) : (
-            <div className="w-[150px] m-2 bg-black text-indigo-300 aspect-square text-sm p-2 pt-6">
+            <div className="w-[150px] m-2 bg-black  text-indigo-300 aspect-square text-sm p-2 pt-6">
               一覧から選択してね
             </div>
           )}
@@ -173,7 +173,7 @@ const Page = () => {
       </div>
       <div className="flex justify-center mt-8">
         <Button onClick={handleMonsterBattle} variant={"bg-blue"}>
-          バトルをはじめる！
+          バトルをはじめる🔥
         </Button>
       </div>
       <Footer />

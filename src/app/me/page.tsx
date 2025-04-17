@@ -7,7 +7,6 @@ import Image from "next/image";
 import { useSupabaseSession } from "../_hooks/useSupabaseSession";
 import toast, { Toaster } from "react-hot-toast";
 import Loading from "../loading";
-
 import { supabase } from "../_utils/supabase";
 import { Modal } from "../_components/Modal";
 import { Button } from "../_components/Button";
@@ -17,7 +16,6 @@ import useFetchMonsters from "../_hooks/useFetchMonsters";
 
 const Page = () => {
   const { session, isLoading: sessionLoading } = useSupabaseSession();
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMonster, setSelectedMonster] =
     useState<CreateMonsterResponseBody | null>(null);
@@ -106,7 +104,7 @@ const Page = () => {
   }
 
   return (
-    <div>
+    <div className="mb-[5rem]">
       <Header />
       <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
         じぶんページ
@@ -114,13 +112,13 @@ const Page = () => {
       <h3 className="text-white text-xl pt-[1.5rem] pl-[1rem] pb-[0.5rem]">
         ーーー きみの作ったモンスター👾
       </h3>
-      <div className="flex flex-wrap justify-between gap-6 pt-[1rem] pb-[10rem]">
+      <div className="w-[90%] mx-auto flex flex-wrap justify-between gap-1 pt-[1rem] pb-[10rem]">
         {Object.keys(imageUrls).length === monsters.length ? (
           monsters.map((monster) => (
             <div
               key={monster.id}
               onClick={() => openModal(monster)}
-              className="cursor-pointer"
+              className="cursor-pointer sm:max-w-[215px] max-w-[150px] min-w-[43%] pb-4"
             >
               <Image
                 src={imageUrls[monster.thumbnailImageKey] || "/placeholder.png"}
@@ -128,9 +126,9 @@ const Page = () => {
                 width={300}
                 height={200}
                 priority
-                className="sm:max-w-[215px] max-w-[180px] min-w-[110px] object-contain bg-gray-200 m-2 aspect-square"
+                className="  object-contain bg-gray-200 aspect-square"
               />
-              <p className="w-[180px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[1rem] rounded-md">
+              <p className="w-[150px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[0.8rem] rounded-md">
                 {monster.name}
               </p>
             </div>
@@ -139,18 +137,33 @@ const Page = () => {
           <Loading />
         )}
 
-        <p className=" block w-full p-4 text-center text-white">
-          どのキャラクターもイケてる😎
-          <br />
-          てきとじゃんけんで戦ってみてね🔥
-        </p>
-        <Link href="/battle/ready" className="mx-auto ">
-          <Button variant="bg-blue">じゃんけんをする</Button>
-        </Link>
+        {monsters.length > 0 ? (
+          <>
+            <p className="block w-full p-4 text-center text-white">
+              どのキャラクターもイケてる😎
+              <br />
+              てきとじゃんけんで戦ってみてね🔥
+            </p>
+            <Link href="/battle/ready" className="mx-auto ">
+              <Button variant="bg-blue">じゃんけんバトル！⚔️</Button>
+            </Link>
+          </>
+        ) : (
+          <>
+            <p className="block w-full p-4 text-center text-white">
+              まだきみのモンスターはいないよ！
+              <br />
+              まずは「おえかき」からモンスターをつくってね👽
+            </p>
+            <Link href="/painting" className="mx-auto ">
+              <Button variant="bg-blue">モンスターを描く🎨</Button>
+            </Link>
+          </>
+        )}
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {selectedMonster && (
-          <div>
+          <div className="mt-30">
             <Image
               src={
                 imageUrls[selectedMonster.thumbnailImageKey] ||
@@ -160,14 +173,14 @@ const Page = () => {
               width={600}
               height={600}
               priority
-              className="max-w-[430px]  object-contain bg-gray-200  mx-auto"
+              className="max-w-[330px]  object-contain bg-gray-200  mx-auto"
             />
-            <div className="p-2 flex gap-2 w-[90%] mx-auto">
+            <div className="p-2 flex items-center gap-2 w-[90%] mx-auto">
               <input
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                className="border rounded text-white w-[70%] px-2"
+                className="border rounded text-white w-[60%] h-16 px-2 py-2"
               />
               <Button variant="bg-blue" onClick={handleNameUpdate}>
                 なまえ

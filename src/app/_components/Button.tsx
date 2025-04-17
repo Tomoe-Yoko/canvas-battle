@@ -14,7 +14,7 @@ export const Button = ({ variant, children, ...props }: Props) => {
       case "submit":
         return "bg-[#333] text-white text-[1rem] px-12 py-2 rounded tracking-[0.3rem] hover:bg-[#555] cursor-pointer";
       case "bg-blue":
-        return "bg-blue-300 text-[#333] max-w-fit text-[1rem] cursor-pointer";
+        return "bg-indigo-700 text-[#fff] max-w-fit text-[1rem] cursor-pointer";
       case "delete":
         return "bg-pink-300 text-[#333] max-w-fit text-[1rem] cursor-pointer";
       case "cancel":
