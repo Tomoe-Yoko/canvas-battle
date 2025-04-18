@@ -46,7 +46,7 @@ export default function RootLayout({
           initial={{ rotate: 0 }}
           animate={{ rotate: [0, 7, -5, 0] }}
           transition={{ duration: 5, repeat: 7 }}
-          className="absolute z-[-1] top-24 left-40  "
+          className="absolute  w-[11%] z-[-1] top-24 left-[20%]  "
         />
         <motion.img
           src="/top-img/doro.png"
@@ -56,7 +56,7 @@ export default function RootLayout({
           initial={{ y: 0 }}
           animate={{ y: [0, -32, 0] }} // ゆらゆら上下に動く
           transition={{ duration: 3, repeat: 7 }}
-          className="absolute z-[-1] bottom-48 left-8"
+          className="absolute  w-[15%] z-[-1] bottom-48 left-8"
         />
         <motion.img
           src="/top-img/heart.png"
@@ -66,7 +66,7 @@ export default function RootLayout({
           initial={{ scale: 0.95 }}
           animate={{ scale: [0.95, 1.05, 0.95] }}
           transition={{ duration: 1, repeat: 7 }}
-          className="absolute z-[-1] top-16 right-18"
+          className="absolute w-[11%] z-[-1] top-16 right-18"
         />
         <motion.img
           src="/top-img/shy.png"
@@ -76,7 +76,7 @@ export default function RootLayout({
           initial={{ y: 0 }}
           animate={{ y: [0, -15, 0] }} // ゆらゆら上下に動く
           transition={{ duration: 4, repeat: 7 }}
-          className="absolute z-[-1] top-70 right-43"
+          className="absolute w-[11%] z-[-1] top-70 right-[24%]"
         />
         <motion.img
           src="/top-img/neko.png"
@@ -86,7 +86,7 @@ export default function RootLayout({
           initial={{ rotate: 0 }}
           animate={{ rotate: [0, -5, 5, 0] }}
           transition={{ duration: 2, repeat: 7 }}
-          className="absolute z-[-1] bottom-18 right-8"
+          className="absolute w-[15%] z-[-1] bottom-[11%] right-8"
         />
         <main className="relative max-w-[500px] h-screen mx-auto border-x border-white bg-[#020E37] overflow-y-auto hidden-scrollbar">
           {children}

@@ -29,7 +29,7 @@ export default function Home() {
           width={300}
           height={300}
           alt="topLogo"
-          className="w-3xs mx-auto my-20"
+          className="w-4xs mx-auto my-15"
         />
       </motion.div>
       <div className="flex justify-center items-center">
