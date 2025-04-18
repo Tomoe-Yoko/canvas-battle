@@ -6,13 +6,17 @@ import { motion } from "framer-motion";
 
 export default function Home() {
   return (
-    <div className="min-h-svh bg-gradient-to-b from-indigo-900 via-gray-800 to-blue-900">
-      {/* タイトルロゴ */}
+    <div className="min-h-svh bg-gradient-to-b from-indigo-950 via-gray-800 to-blue-950">
       <motion.div
-        initial={{ opacity: 0, y: -50, scale: 0.8 }}
+        initial={{ opacity: 0, y: -50, scale: 0.5 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="text-center pt-16"
+        transition={{
+          type: "spring",
+          stiffness: 300, // バネの硬さ（数値を大きくすると反発が速くなる）
+          damping: 11, // 揺れを抑える（低いとビヨンビヨン揺れる）
+          duration: 0.6, // オプション（springのときはなくてもOK）
+        }}
+        className="pt-16"
       >
         <Image
           src="/title.png"
