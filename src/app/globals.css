@@ -1,7 +1,8 @@
 @import "tailwindcss";
+/* @config "../../../tailwind.config.js"; */
 
 :root {
-  --background: #23293b;
+  --background: #020e37;
   --foreground: #333;
 }
 
@@ -17,6 +18,21 @@
 }
 
 @layer utilities {
+  .bg-custom-image {
+    background-image: url("/top-img/background.png");
+    background-size: cover;
+    background-position: center;
+  }
+  /* scrollbar */
+  .hidden-scrollbar {
+    -ms-overflow-style: none; /* IE, Edge 対応 */
+    scrollbar-width: none; /* Firefox 対応 */
+  }
+  .hidden-scrollbar::-webkit-scrollbar {
+    /* Chrome, Safari 対応 */
+    display: none;
+  }
+
   /* loading */
   .animate-circle {
     animation: circle 0.5s alternate infinite ease;
