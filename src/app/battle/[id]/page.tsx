@@ -187,10 +187,10 @@ const BattleResultPage = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4 }}
-          className="bg-[#23293b] p-10 rounded-lg"
+          className="bg-[#020E37] p-10 rounded-lg"
         >
           {gameOver && (
-            <div className="flex flex-col items-center my-1 bg-[#23293b] p-10 rounded-lg">
+            <div className="flex flex-col items-center my-1 bg-[#020E37] p-10 rounded-lg">
               <p className="text-3xl font-bold text-white">
                 {yourHp > 0 ? "きみの勝利🎉" : "GameOver...😵‍💫"}
               </p>

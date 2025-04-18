@@ -3,10 +3,16 @@ import Link from "next/link";
 import { Button } from "./_components/Button";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { EyeSvg } from "./_components/EyeSvg";
 
 export default function Home() {
   return (
     <div className="min-h-svh bg-gradient-to-b from-indigo-950 via-gray-800 to-blue-950">
+      {/* <div className="min-h-svh "> */}
+      <div className="w-[41%] mx-auto pt-24">
+        <EyeSvg />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: -50, scale: 0.5 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -16,7 +22,7 @@ export default function Home() {
           damping: 11, // 揺れを抑える（低いとビヨンビヨン揺れる）
           duration: 0.6, // オプション（springのときはなくてもOK）
         }}
-        className="pt-16"
+        className="mt-[-3rem]"
       >
         <Image
           src="/title.png"
