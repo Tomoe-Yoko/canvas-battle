@@ -45,20 +45,36 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
       return;
     }
 
-    //画像データをBlobに変換する関数
-    const dataURLtoBlob = (dataURL: string) => {
-      const byteString = atob(dataURL.split(",")[1]);
-      const arrayBuffer = new Uint8Array(byteString.length);
-      for (let i = 0; i < byteString.length; i++)
-        arrayBuffer[i] = byteString.charCodeAt(i);
-      return new Blob([arrayBuffer], { type: "image/png" });
-    };
+    // const dataURLtoBlob = (dataURL: string) => {
+    //   const byteString = atob(dataURL.split(",")[1]);
+    //   const arrayBuffer = new Uint8Array(byteString.length);
+    //   for (let i = 0; i < byteString.length; i++)
+    //     arrayBuffer[i] = byteString.charCodeAt(i);
+    //   return new Blob([arrayBuffer], { type: "image/png" });
+    // };
     try {
       const imageData = await canvasRef.current.exportImage("png");
+      if (!imageData) {
+        toast.error("画像データの取得に失敗しました。もう一度試してね。");
+        console.error("Canvas から画像データが取得できませんでした。");
+        return;
+      }
       const fileId = uuidv4();
       const fileName = `private/${fileId}.png`;
 
       // 🔹 Base64 から Blob に変換
+      const dataURLtoBlob = (dataURL: string): Blob => {
+        try {
+          const byteString = atob(dataURL.split(",")[1]);
+          const arrayBuffer = new Uint8Array(byteString.length);
+          for (let i = 0; i < byteString.length; i++) {
+            arrayBuffer[i] = byteString.charCodeAt(i);
+          }
+          return new Blob([arrayBuffer], { type: "image/png" });
+        } catch (err) {
+          throw new Error("Base64 → Blob 変換に失敗しました:" + err);
+        }
+      };
       const blobData = dataURLtoBlob(imageData);
 
       const { error: uploadError } = await supabase.storage
@@ -80,13 +96,13 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
-      await api.post<CreateMonsterPostRequestBody, typeof monsterData>(
-        "/api/monster",
-        monsterData
-      );
-      toast.success("モンスターが保存された！");
+      const result = await api.post<
+        CreateMonsterPostRequestBody,
+        typeof monsterData
+      >("/api/monster", monsterData);
+      console.log("モンスター保存結果:", result);
+      toast.success(`モンスターが保存された！${thumbnailImageKey}`);
       setIsModalOpen(false);
-      // router.refresh();
       router.push("/me");
     } catch (e) {
       console.error("保存エラー:", e);

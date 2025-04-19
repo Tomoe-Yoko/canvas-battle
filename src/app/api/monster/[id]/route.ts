@@ -26,20 +26,20 @@ import { supabase } from "@/app/_utils/supabase";
 
 const prisma = await buildPrisma();
 
-export async function PUT(
+export const PUT = async (
   request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  { params }: { params: Promise<{ monsterId: string }> }
+) => {
   const token = request.headers.get("Authorization") ?? "";
   const { user, errorResponse } = await getAuthenticatedUser(token);
   if (errorResponse) return errorResponse;
-
-  const monsterId = parseInt(params.id);
+  const { monsterId } = await params;
+  // const {id} =await parseInt();
   const { name } = await request.json();
 
   try {
     const updated = await prisma.monster.updateMany({
-      where: { id: monsterId, userId: user.id },
+      where: { id: parseInt(monsterId, 10), userId: user.id },
       data: { name },
     });
 
@@ -57,21 +57,21 @@ export async function PUT(
       { status: 500 }
     );
   }
-}
+};
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ monsterId: string }> }
 ) {
   const token = request.headers.get("Authorization") ?? "";
   const { user, errorResponse } = await getAuthenticatedUser(token);
   if (errorResponse) return errorResponse;
 
-  const monsterId = parseInt(params.id);
+  const { monsterId } = await params;
 
   try {
     const monster = await prisma.monster.findUnique({
-      where: { id: monsterId },
+      where: { id: parseInt(monsterId, 10) },
     });
 
     if (!monster || monster.userId !== user.id) {
@@ -91,7 +91,7 @@ export async function DELETE(
     }
 
     await prisma.monster.delete({
-      where: { id: monsterId },
+      where: { id: parseInt(monsterId, 10) },
     });
 
     return NextResponse.json({
