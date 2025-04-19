@@ -7,7 +7,7 @@ const prisma = await buildPrisma();
 
 export const GET = async (
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const token = request.headers.get("Authorization") ?? "";
   const { errorResponse } = await getAuthenticatedUser(token);
