@@ -12,6 +12,7 @@ import { api } from "../../_utils/api";
 import { useRouter } from "next/navigation";
 import useFetchMonsters from "@/app/_hooks/useFetchMonsters";
 import { CreateMonsterResponseBody } from "../../_types/monsters";
+import { motion } from "framer-motion";
 
 const Page = () => {
   const { session, isLoading: sessionLoading } = useSupabaseSession(); //ログイン中のユーザー情報を取得
@@ -83,7 +84,7 @@ const Page = () => {
     toast.error("モンスターの取得に失敗しました");
   }
   return (
-    <div className="pb-[10rem]">
+    <div className="pb-[18rem]">
       <Header />
       <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
         モンスターをえらぶ
@@ -175,6 +176,23 @@ const Page = () => {
         <Button onClick={handleMonsterBattle} variant={"bg-blue"}>
           バトルをはじめる🔥
         </Button>
+      </div>
+      <div className="flex justify-end pt-8 pr-18">
+        <motion.img
+          src="/top-img/doro.png"
+          width={230}
+          height={230}
+          alt="topLogo"
+          initial={{ x: 32, y: 0 }}
+          animate={{ x: [50, -18, 100], y: [15, -15, 15] }} // ゆらゆら上下に動く
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut",
+          }}
+          className="w-[32%]"
+        />
       </div>
       <Footer />
     </div>

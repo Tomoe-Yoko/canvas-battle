@@ -28,6 +28,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [monsterName, setMonsterName] = useState("");
   const [thumbnailImageKey, setThumbnailImageKey] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
 
@@ -39,20 +40,16 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
   //画像を保存
   const saveMonster = async (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    if (!canvasRef.current) return;
-    if (!monsterName.trim()) {
-      toast.error("モンスターに名前をつけてね！");
-      return;
-    }
 
-    // const dataURLtoBlob = (dataURL: string) => {
-    //   const byteString = atob(dataURL.split(",")[1]);
-    //   const arrayBuffer = new Uint8Array(byteString.length);
-    //   for (let i = 0; i < byteString.length; i++)
-    //     arrayBuffer[i] = byteString.charCodeAt(i);
-    //   return new Blob([arrayBuffer], { type: "image/png" });
-    // };
+    if (isSubmitting) return; // 二重送信ガード
+    setIsSubmitting(true);
     try {
+      if (!canvasRef.current) return;
+      if (!monsterName.trim()) {
+        toast.error("モンスターに名前をつけてね！");
+        return;
+      }
+
       const imageData = await canvasRef.current.exportImage("png");
       if (!imageData) {
         toast.error("画像データの取得に失敗しました。もう一度試してね。");
@@ -107,6 +104,8 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
     } catch (e) {
       console.error("保存エラー:", e);
       toast.error("画像が保存できなかったよ。もう一回ためしてみて");
+    } finally {
+      setIsSubmitting(false); // 最後に解除
     }
   };
 
@@ -221,8 +220,12 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
             <Button onClick={closeModal} variant="cancel">
               キャンセル
             </Button>
-            <Button variant="bg-blue" onClick={saveMonster}>
-              保存
+            <Button
+              variant="bg-blue"
+              onClick={saveMonster}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "保存中..." : "保存"}
             </Button>
           </div>
         </div>
