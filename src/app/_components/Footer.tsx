@@ -21,7 +21,7 @@ export const Footer = () => {
   return (
     <div className="fixed bottom-0 left-0 w-full bg-white pb-4">
       <nav className="w-full">
-        <ul className="flex justify-around w-full max-h-2/12">
+        <ul className="flex justify-around w-full">
           <li className="flex flex-col items-center justify-center min-w-[20%] pt-1">
             <Link href="/me" className="flex flex-col items-center gap-1">
               <FaRegFaceMeh className="px-6" />
