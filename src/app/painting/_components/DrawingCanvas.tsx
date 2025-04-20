@@ -121,48 +121,11 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
     <div>
       <section className="w-full mb-[20vh]">
         <div className="ml-2  space-x-2">
-          {/* <div className="flex items-center justify-center space-x-2">
-            <div>
-              <label
-                htmlFor="color"
-                className="block text-center text-sm text-white"
-              >
-                色
-              </label>
-              <input
-                id="color"
-                type="color"
-                value={penColor}
-                onChange={(e) => setPenColor(e.target.value)}
-                className="w-16 h-10 border border-white"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="strokeWidth"
-                className="block text-sm text-center text-white
-            "
-              >
-                ペンの太さ
-              </label>
-              <input
-                id="strokeWidth"
-                type="range"
-                min="2"
-                max="20"
-                step="2"
-                value={strokeWidth}
-                onChange={(e) => setStrokeWidth(Number(e.target.value))}
-                className="w-40 cursor-pointer my-2"
-              />
-            </div> 
-          </div>*/}
-
           <div className="flex items-center justify-center space-x-4 my-2">
             {/* ペン（eraseMode を false にする） */}
             {/* ペン */}
             <div className="flex flex-col items-center justify-center">
-              <p className="text-white text-sm">ペン</p>
+              <p className="text-white text-[50%]">ペン</p>
               <button
                 type="button"
                 onClick={() => {
@@ -179,7 +142,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
 
             {/* 色、太さ設定 */}
             <div className="flex flex-col items-center justify-center">
-              <p className="text-white text-sm">ペン設定</p>
+              <p className="text-white text-[50%]">ペン設定</p>
               <button
                 type="button"
                 onClick={openPenSetting}
@@ -190,7 +153,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
             </div>
             {/* 消しゴム（白色に変更） */}
             <div className="flex flex-col items-center justify-center">
-              <p className="text-white text-sm">消しゴム</p>
+              <p className="text-white text-[50%]">消しゴム</p>
               <button
                 type="button"
                 onClick={() => {
@@ -207,7 +170,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
 
             {/* 戻るボタン */}
             <div className="flex flex-col items-center justify-center">
-              <p className="text-white text-sm">一つ戻る</p>
+              <p className="text-white text-[50%]">一つ戻る</p>
               <button
                 type="button"
                 onClick={() => canvasRef.current && canvasRef.current?.undo()}
@@ -219,7 +182,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
 
             {/* 全消しボタン */}
             <div className="flex flex-col items-center justify-center">
-              <p className="text-white text-sm">全消し</p>
+              <p className="text-white text-[50%]">全消し</p>
               <button
                 type="button"
                 onClick={() =>
@@ -233,7 +196,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
 
             {/* 保存ボタン */}
             <div className="flex flex-col items-center justify-center">
-              <p className="text-white text-sm">保存</p>
+              <p className="text-white text-[50%]">保存</p>
               <button
                 type="button"
                 onClick={openModal}
