@@ -89,9 +89,61 @@ const Page = () => {
       <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
         モンスターをえらぶ
       </h2>
-      <p className="text-white text-sm py-[1rem] pl-[1rem]">
-        きみのモンスターと、敵になるモンスター２体えらんでね！
+      <p className="text-white text-sm py-[1rem] w-[85%] mx-auto">
+        モンスター一覧から、きみのモンスターと敵になるモンスター２体えらんでね！
       </p>
+      <div className="flex gap-2 pt-[0.5rem]  justify-center">
+        <div>
+          {selectedYourMonster ? (
+            <>
+              <Image
+                src={imageUrls[selectedYourMonster.thumbnailImageKey]}
+                alt={selectedYourMonster.name}
+                width={150}
+                height={150}
+                className="object-contain m-2 aspect-square bg-amber-100"
+              />
+
+              <p className="w-[150px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[1rem] rounded-md">
+                {selectedYourMonster.name}
+              </p>
+            </>
+          ) : (
+            <div className="w-[150px] m-2 bg-black text-green-300 aspect-square text-sm p-2 pt-6">
+              一覧から選択してね
+            </div>
+          )}{" "}
+          <p className="text-white text-ml text-center">🟢きみのモンスター</p>
+        </div>
+        <div>
+          {selectedEnemyMonster ? (
+            <>
+              <Image
+                src={imageUrls[selectedEnemyMonster.thumbnailImageKey]}
+                alt={selectedEnemyMonster.name}
+                width={150}
+                height={150}
+                className="object-contain bg-gray-200 m-2 aspect-square"
+              />
+              <p className="w-[150px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[1rem] rounded-md">
+                {selectedEnemyMonster.name}
+              </p>{" "}
+            </>
+          ) : (
+            <div className="w-[150px] m-2 bg-black  text-indigo-300 aspect-square text-sm p-2 pt-6">
+              一覧から選択してね
+            </div>
+          )}
+          <p className="text-white text-ml text-center">🟣敵のモンスター</p>
+        </div>
+      </div>
+      <div className="flex justify-center mt-8">
+        <Button onClick={handleMonsterBattle} variant={"bg-blue"}>
+          バトルをはじめる🔥
+        </Button>
+      </div>
+      <hr className=" text-white w-[90%] mx-auto my-[1rem]" />
+
       <div className="w-[95%] mx-auto flex flex-wrap justify-between pt-[0.5rem] pb-[1rem]">
         {Object.keys(imageUrls).length === monsters.length ? (
           monsters.map((monster) => (
@@ -121,62 +173,7 @@ const Page = () => {
           <Loading />
         )}
       </div>
-      <hr className=" text-white w-[90%] mx-auto my-[1rem]" />
-      <div className="flex gap-2 pt-[0.5rem]  justify-center">
-        <div>
-          <p className="text-white text-ml pt-[1rem] text-center">
-            🟢きみのモンスター
-          </p>
 
-          {selectedYourMonster ? (
-            <>
-              <Image
-                src={imageUrls[selectedYourMonster.thumbnailImageKey]}
-                alt={selectedYourMonster.name}
-                width={150}
-                height={150}
-                className="object-contain m-2 aspect-square bg-amber-100"
-              />
-
-              <p className="w-[150px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[1rem] rounded-md">
-                {selectedYourMonster.name}
-              </p>
-            </>
-          ) : (
-            <div className="w-[150px] m-2 bg-black text-green-300 aspect-square text-sm p-2 pt-6">
-              一覧から選択してね
-            </div>
-          )}
-        </div>
-        <div>
-          <p className="text-white text-ml pt-[1rem] text-center">
-            🟣敵のモンスター
-          </p>
-          {selectedEnemyMonster ? (
-            <>
-              <Image
-                src={imageUrls[selectedEnemyMonster.thumbnailImageKey]}
-                alt={selectedEnemyMonster.name}
-                width={150}
-                height={150}
-                className="object-contain bg-gray-200 m-2 aspect-square"
-              />
-              <p className="w-[150px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[1rem] rounded-md">
-                {selectedEnemyMonster.name}
-              </p>
-            </>
-          ) : (
-            <div className="w-[150px] m-2 bg-black  text-indigo-300 aspect-square text-sm p-2 pt-6">
-              一覧から選択してね
-            </div>
-          )}
-        </div>
-      </div>
-      <div className="flex justify-center mt-8">
-        <Button onClick={handleMonsterBattle} variant={"bg-blue"}>
-          バトルをはじめる🔥
-        </Button>
-      </div>
       <div className="flex justify-end pt-8 pr-18">
         <motion.img
           src="/top-img/doro.png"
@@ -184,9 +181,9 @@ const Page = () => {
           height={230}
           alt="topLogo"
           initial={{ x: 32, y: 0 }}
-          animate={{ x: [50, -18, 100], y: [15, -15, 15] }} // ゆらゆら上下に動く
+          animate={{ x: [50, -200, 100], y: [15, -15, 15, -15, 15] }} // ゆらゆら上下に動く
           transition={{
-            duration: 8,
+            duration: 13,
             repeat: Infinity,
             repeatType: "reverse",
             ease: "easeInOut",
