@@ -7,13 +7,14 @@ const prisma = await buildPrisma();
 
 export async function PUT(
   request: NextRequest,
-  context: { params: { id: string } }
+  // context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const token = request.headers.get("Authorization") ?? "";
   const { user, errorResponse } = await getAuthenticatedUser(token);
   if (errorResponse) return errorResponse;
 
-  const monsterId = parseInt(context.params.id);
+  const monsterId = parseInt((await context.params).id);
   const { name } = await request.json();
 
   try {
@@ -40,13 +41,13 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const token = request.headers.get("Authorization") ?? "";
   const { user, errorResponse } = await getAuthenticatedUser(token);
   if (errorResponse) return errorResponse;
 
-  const monsterId = parseInt(context.params.id);
+  const monsterId = parseInt((await context.params).id);
 
   try {
     const monster = await prisma.monster.findUnique({
