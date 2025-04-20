@@ -19,13 +19,13 @@ export const Footer = () => {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-white p-4">
+    <div className="fixed bottom-0 left-0 w-full bg-white p-2">
       <nav className="w-full">
-        <ul className="flex justify-around w-full">
+        <ul className="flex justify-around w-full max-h-2/12">
           <li className="flex flex-col items-center justify-center gap-2 min-w-[20%]">
             <Link href="/me" className="flex flex-col items-center gap-2">
               <FaRegFaceMeh className="px-6" />
-              <p className="w-[6rem] text-[0.9rem] text-center">じぶんページ</p>
+              <p className="w-[6rem] text-[0.8rem] text-center">じぶんページ</p>
             </Link>
           </li>
 
@@ -35,14 +35,14 @@ export const Footer = () => {
               className="flex flex-col items-center gap-2"
             >
               <FaSpaghettiMonsterFlying className="px-6" />
-              <p className="w-[6rem] text-[0.9rem] text-center">じゃんけん</p>
+              <p className="w-[6rem] text-[0.8rem] text-center">じゃんけん</p>
             </Link>
           </li>
 
           <li className="flex flex-col items-center justify-center gap-2 min-w-[20%]">
             <Link href="/painting" className="flex flex-col items-center gap-2">
               <LuPaintbrushVertical className="px-6" />
-              <p className="w-[6rem] text-[0.9rem] text-center">おえかき</p>
+              <p className="w-[6rem] text-[0.8rem] text-center">おえかき</p>
             </Link>
           </li>
 
@@ -52,7 +52,7 @@ export const Footer = () => {
               className="flex flex-col items-center gap-2"
             >
               <FaPersonWalkingArrowRight className="px-6" />
-              <p className="w-[6rem] text-[0.9rem] text-center">おわり</p>
+              <p className="w-[6rem] text-[0.8rem] text-center">おわり</p>
             </button>
           </li>
         </ul>
