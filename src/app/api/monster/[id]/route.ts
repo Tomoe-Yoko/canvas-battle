@@ -1,24 +1,3 @@
-// import { NextRequest, NextResponse } from "next/server";
-// import { buildPrisma } from "@/app/_utils/prisma";
-// import { getAuthenticatedUser } from "@/app/_utils/auth";
-// //delete
-
-// export const DELETE = async (
-//   request: NextRequest,
-//   { params }: { params: { id: string; itemId: string } }
-// ) => {
-//   const token = request.headers.get("Authorization") ?? "";
-//   const authResult = await getAuthenticatedUser(token);
-//   if (authResult instanceof NextResponse) {
-//     return authResult;
-//   }
-
-//   const { user } = authResult; // 認証されたユーザー情報を取得
-//   try {
-//     const prisma = await buildPrisma();
-//   } catch (error) {}
-// };
-// app/api/monster/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { buildPrisma } from "@/app/_utils/prisma";
 import { getAuthenticatedUser } from "@/app/_utils/auth";
@@ -26,20 +5,20 @@ import { supabase } from "@/app/_utils/supabase";
 
 const prisma = await buildPrisma();
 
-export const PUT = async (
+export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ monsterId: string }> }
-) => {
+  context: { params: { id: string } }
+) {
   const token = request.headers.get("Authorization") ?? "";
   const { user, errorResponse } = await getAuthenticatedUser(token);
   if (errorResponse) return errorResponse;
-  const { monsterId } = await params;
-  // const {id} =await parseInt();
+
+  const monsterId = parseInt(context.params.id);
   const { name } = await request.json();
 
   try {
     const updated = await prisma.monster.updateMany({
-      where: { id: parseInt(monsterId, 10), userId: user.id },
+      where: { id: monsterId, userId: user.id },
       data: { name },
     });
 
@@ -57,21 +36,21 @@ export const PUT = async (
       { status: 500 }
     );
   }
-};
+}
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ monsterId: string }> }
+  context: { params: { id: string } }
 ) {
   const token = request.headers.get("Authorization") ?? "";
   const { user, errorResponse } = await getAuthenticatedUser(token);
   if (errorResponse) return errorResponse;
 
-  const { monsterId } = await params;
+  const monsterId = parseInt(context.params.id);
 
   try {
     const monster = await prisma.monster.findUnique({
-      where: { id: parseInt(monsterId, 10) },
+      where: { id: monsterId },
     });
 
     if (!monster || monster.userId !== user.id) {
@@ -91,7 +70,7 @@ export async function DELETE(
     }
 
     await prisma.monster.delete({
-      where: { id: parseInt(monsterId, 10) },
+      where: { id: monsterId },
     });
 
     return NextResponse.json({

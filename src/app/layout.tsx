@@ -2,7 +2,6 @@
 // import type { Metadata } from "next";
 import { DotGothic16 } from "next/font/google";
 import "./globals.css";
-// import Image from "next/image";
 import { motion } from "framer-motion";
 import Head from "next/head";
 
