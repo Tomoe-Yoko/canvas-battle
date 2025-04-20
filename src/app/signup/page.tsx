@@ -7,18 +7,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "../_utils/validationSchema";
 import { Button } from "../_components/Button";
 import { Header } from "../_components/Header";
-
-interface SignUpForm {
-  userName: string;
-  email: string;
-  password: string;
-}
+import PasswordInput from "../_components/PasswordInput";
+import { SignUpForm } from "../_types/users";
 
 const Page = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors }, //エラーが格納される
+    formState: { errors, isSubmitting }, //エラーが格納される
     reset,
   } = useForm<SignUpForm>({
     mode: "onChange",
@@ -32,7 +28,7 @@ const Page = () => {
       password,
       options: {
         data: { userName },
-        emailRedirectTo: `http://localhost:3000/login`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_URL}/login`,
       },
     });
 
@@ -66,6 +62,7 @@ const Page = () => {
             {...register("userName")}
             placeholder="モンスター"
             className="input-style"
+            disabled={isSubmitting}
           />
           <p className="validation">
             {errors.userName?.message as React.ReactNode}
@@ -81,31 +78,28 @@ const Page = () => {
             {...register("email")}
             placeholder="name@company.com"
             className="input-style"
+            disabled={isSubmitting}
           />
           <p className="validation">
             {errors.email?.message as React.ReactNode}
           </p>
         </div>
         <div>
-          <label htmlFor="password" className="label-style">
-            パスワード
-          </label>
-          <input
-            id="password"
-            type="password"
-            {...register("password")}
-            placeholder="••••••••"
-            className="input-style"
+          <PasswordInput<SignUpForm>
+            register={register}
+            errors={errors}
+            isSubmitting={isSubmitting}
+            name="password"
           />
-          <p className="validation">
-            {errors.password?.message as React.ReactNode}
-          </p>
         </div>
         <div className="flex justify-center mt-8">
-          <Button type="submit" variant={"submit"}>
+          <Button type="submit" variant={"submit"} disabled={isSubmitting}>
             登録
           </Button>
         </div>
+        <p className="mx-auto mb-4 text-sm  block w-[95%] p-3 text-text_button">
+          ※「登録」を押すとメールが送信されます。迷惑メールとして判定される場合がありますので、その際は迷惑メールフォルダをご確認ください。
+        </p>
       </form>
       <Toaster position="top-center" reverseOrder={false} />
     </div>

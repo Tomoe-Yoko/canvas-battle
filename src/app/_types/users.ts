@@ -9,3 +9,9 @@ export interface UserProfileUpdateRequest {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface SignUpForm {
+  userName: string;
+  email: string;
+  password: string;
+}

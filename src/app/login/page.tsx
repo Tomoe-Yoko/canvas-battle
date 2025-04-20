@@ -9,6 +9,8 @@ import { api } from "../_utils/api";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Header } from "../_components/Header";
+import PasswordInput from "../_components/PasswordInput";
+
 interface LoginForm {
   userName?: string;
   email: string;
@@ -19,7 +21,7 @@ const Page = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginForm>({
     mode: "onChange",
     resolver: zodResolver(loginSchema),
@@ -57,45 +59,44 @@ const Page = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white w-[70%] mx-auto p-8 rounded-3xl"
       >
-        <label htmlFor="userName" className="label-style">
-          なまえ
-        </label>
-        <input
-          id="userName"
-          type="text"
-          {...register("userName", { required: true })}
-          className="input-style"
-        />
-        <p className="validation">
-          {errors.userName?.message as React.ReactNode}
-        </p>
-        <label htmlFor="email" className="label-style">
-          EMAIL
-        </label>
-        <input
-          id="email"
-          type="email"
-          {...register("email", { required: true })}
-          placeholder="name@company.com"
-          className="input-style"
-        />
-        <p className="validation">{errors.email?.message as React.ReactNode}</p>
-        <label htmlFor="password" className="label-style">
-          パスワード
-        </label>
-        <input
-          id="password"
-          type="password"
-          {...register("password", { required: true })}
-          placeholder="••••••••"
-          className="input-style"
-        />
-
-        <p className="validation">
-          {errors.password?.message as React.ReactNode}
-        </p>
+        <div>
+          <label htmlFor="userName" className="label-style">
+            なまえ
+          </label>
+          <input
+            id="userName"
+            type="text"
+            {...register("userName", { required: true })}
+            className="input-style"
+          />
+          <p className="validation">
+            {errors.userName?.message as React.ReactNode}
+          </p>{" "}
+        </div>
+        <div>
+          <label htmlFor="email" className="label-style">
+            EMAIL
+          </label>
+          <input
+            id="email"
+            type="email"
+            {...register("email", { required: true })}
+            placeholder="name@company.com"
+            className="input-style"
+          />
+          <p className="validation">
+            {errors.email?.message as React.ReactNode}
+          </p>
+        </div>
+        <div>
+          <PasswordInput<LoginForm>
+            register={register}
+            errors={errors}
+            name="password"
+          />
+        </div>
         <div className="flex justify-center mt-8">
-          <Button type="submit" variant={"submit"}>
+          <Button type="submit" variant={"submit"} disabled={isSubmitting}>
             ログイン
           </Button>
         </div>
