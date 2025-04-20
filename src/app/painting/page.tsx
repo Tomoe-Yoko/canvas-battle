@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { Header } from "../_components/Header";
+// import { Header } from "../_components/Header";
 import { Footer } from "../_components/Footer";
 import Loading from "@/app/loading";
 import { useSupabaseSession } from "../_hooks/useSupabaseSession"; // 修正後のフックを正しくインポート
@@ -25,7 +25,7 @@ const Page = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
         モンスターを描こう！
       </h2>

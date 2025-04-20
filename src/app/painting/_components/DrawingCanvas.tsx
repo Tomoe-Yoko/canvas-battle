@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 import { BsEraserFill, BsPencilFill } from "react-icons/bs";
 import { TbClearAll } from "react-icons/tb";
-import { IoReturnUpBackOutline } from "react-icons/io5";
+import { IoReturnUpBackOutline, IoSettings } from "react-icons/io5";
 import { RiDownload2Fill } from "react-icons/ri";
 import { supabase } from "@/app/_utils/supabase";
 import { Modal } from "@/app/_components/Modal";
@@ -28,15 +28,23 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [monsterName, setMonsterName] = useState("");
   const [thumbnailImageKey, setThumbnailImageKey] = useState("");
+  const [isPenSettingOpen, setIsPenSettingOpen] = useState(false); //ペン（色、太さ）設定
+  const [isErasing, setIsErasing] = useState(false); // false = ペン, true = 消しゴム
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
+
+  //ぺんの設定モーダル
+  const openPenSetting = () => setIsPenSettingOpen(true);
+  const closePenSetting = () => setIsPenSettingOpen(false);
 
   //Modal
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   //画像を保存
   const saveMonster = async (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
@@ -113,7 +121,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
     <div>
       <section className="w-full mb-[20vh]">
         <div className="ml-2  space-x-2">
-          <div className="flex items-center justify-center space-x-2">
+          {/* <div className="flex items-center justify-center space-x-2">
             <div>
               <label
                 htmlFor="color"
@@ -126,7 +134,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
                 type="color"
                 value={penColor}
                 onChange={(e) => setPenColor(e.target.value)}
-                className="w-16 h-10"
+                className="w-16 h-10 border border-white"
               />
             </div>
             <div>
@@ -147,76 +155,191 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
                 onChange={(e) => setStrokeWidth(Number(e.target.value))}
                 className="w-40 cursor-pointer my-2"
               />
-            </div>
-          </div>
+            </div> 
+          </div>*/}
+
           <div className="flex items-center justify-center space-x-4 my-2">
             {/* ペン（eraseMode を false にする） */}
-            <button
-              type="button"
-              onClick={() => canvasRef.current?.eraseMode(false)}
-              className="bg-white p-2 rounded-full w-[50px]"
-            >
-              <BsPencilFill />
-            </button>
+            {/* ペン */}
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-white text-sm">ペン</p>
+              <button
+                type="button"
+                onClick={() => {
+                  canvasRef.current?.eraseMode(false);
+                  setIsErasing(false);
+                }}
+                className={`p-2 rounded-lg w-[50px] ${
+                  !isErasing ? "bg-yellow-100" : "bg-gray-300"
+                }`}
+              >
+                <BsPencilFill />
+              </button>
+            </div>
 
+            {/* 色、太さ設定 */}
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-white text-sm">ペン設定</p>
+              <button
+                type="button"
+                onClick={openPenSetting}
+                className="bg-gray-300 p-2 rounded-lg w-[50px]"
+              >
+                <IoSettings />
+              </button>
+            </div>
             {/* 消しゴム（白色に変更） */}
-            <button
-              type="button"
-              onClick={() => canvasRef.current?.eraseMode(true)}
-              className="bg-white p-2 rounded-full w-[50px]"
-            >
-              <BsEraserFill />
-            </button>
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-white text-sm">消しゴム</p>
+              <button
+                type="button"
+                onClick={() => {
+                  canvasRef.current?.eraseMode(true);
+                  setIsErasing(true);
+                }}
+                className={`p-2 rounded-lg w-[50px] ${
+                  isErasing ? "bg-yellow-100" : "bg-gray-300"
+                }`}
+              >
+                <BsEraserFill />
+              </button>
+            </div>
 
             {/* 戻るボタン */}
-            <button
-              type="button"
-              onClick={() => canvasRef.current && canvasRef.current?.undo()}
-              className="bg-white p-2 rounded-full w-[50px]"
-            >
-              <IoReturnUpBackOutline />
-            </button>
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-white text-sm">一つ戻る</p>
+              <button
+                type="button"
+                onClick={() => canvasRef.current && canvasRef.current?.undo()}
+                className="bg-gray-300 p-2 rounded-lg w-[50px]"
+              >
+                <IoReturnUpBackOutline />
+              </button>
+            </div>
 
             {/* 全消しボタン */}
-            <button
-              type="button"
-              onClick={() =>
-                canvasRef.current && canvasRef.current?.clearCanvas()
-              }
-              className="bg-white p-2 rounded-full w-[50px]"
-            >
-              <TbClearAll />
-            </button>
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-white text-sm">全消し</p>
+              <button
+                type="button"
+                onClick={() =>
+                  canvasRef.current && canvasRef.current?.clearCanvas()
+                }
+                className="bg-gray-300 p-2 rounded-lg w-[50px]"
+              >
+                <TbClearAll />
+              </button>
+            </div>
 
             {/* 保存ボタン */}
-            <button
-              type="button"
-              onClick={openModal}
-              className="bg-white p-2 rounded-full w-[50px]"
-            >
-              <RiDownload2Fill />
-            </button>
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-white text-sm">保存</p>
+              <button
+                type="button"
+                onClick={openModal}
+                className="bg-gray-300 p-2 rounded-lg w-[50px]"
+              >
+                <RiDownload2Fill />
+              </button>
+            </div>
           </div>
         </div>
-        <ReactSketchCanvas
-          ref={canvasRef}
-          width="100%"
-          height="70vh"
-          strokeColor={penColor}
-          strokeWidth={strokeWidth}
-        />
+        <div className="w-90% mx-auto aspect-square">
+          <ReactSketchCanvas
+            ref={canvasRef}
+            width="100%"
+            // height="70vh"
+            strokeColor={penColor}
+            strokeWidth={strokeWidth}
+          />
+        </div>
       </section>
+      <Modal isOpen={isPenSettingOpen} onClose={closePenSetting}>
+        <div className="bg-white px-6 py-6 rounded-lg shadow-md w-[95%] mx-auto">
+          <h3 className="text-2xl font-bold text-center mb-4">ペンの設定</h3>
+
+          {/* 色選択 */}
+          <div className="mb-4 flex justify-center gap-4">
+            <label
+              htmlFor="color"
+              className="block text-xl font-medium mb-2 text-gray-800"
+            >
+              色
+            </label>
+            <input
+              id="color"
+              type="color"
+              value={penColor}
+              onChange={(e) => setPenColor(e.target.value)}
+              className="w-32 h-16 border "
+            />
+          </div>
+
+          {/* 太さ選択 */}
+          {/* <div className="mb-4">
+            <label
+              htmlFor="strokeWidth"
+              className="block text-xl font-medium mb-2 text-gray-800"
+            >
+              ペンの太さ: {strokeWidth}px
+            </label>
+            <input
+              id="strokeWidth"
+              type="range"
+              min="3"
+              max="32"
+              step="4"
+              value={strokeWidth}
+              onChange={(e) => setStrokeWidth(Number(e.target.value))}
+              className="w-full cursor-pointer "
+            />
+          </div> */}
+
+          {/* ペンの太さをドットで選択 */}
+          <div className="mb-8">
+            <label className="block text-xl font-medium mb-4 ">
+              ペンの太さ
+            </label>
+            <div className="flex justify-between items-center gap-3 px-2">
+              {[4, 8, 12, 16, 20, 24, 28, 32].map((size) => (
+                <button
+                  key={size}
+                  onClick={() => setStrokeWidth(size)}
+                  className={`rounded-full transition-all duration-200 ${
+                    strokeWidth === size
+                      ? "ring-6 ring-blue-400 scale-110"
+                      : "opacity-60 hover:opacity-100"
+                  }`}
+                  style={{
+                    width: `${size}px`,
+                    height: `${size}px`,
+                    backgroundColor: "black",
+                  }}
+                  aria-label={`ペンの太さ ${size}px`}
+                ></button>
+              ))}
+            </div>
+          </div>
+
+          {/* 閉じるボタン */}
+          <div className="flex justify-center mt-16">
+            <Button onClick={closePenSetting} variant="bg-blue">
+              これでかく！
+            </Button>
+          </div>
+        </div>
+      </Modal>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <div className="bg-white px-6 py-8 rounded-lg shadow-lg w-[430px]">
+        <div className="bg-white px-6 py-8 rounded-lg shadow-lg w-[95%] mx-auto">
           <h3 className="text-lg font-bold mb-4">なまえをつけよう</h3>
           <input
             type="text"
             value={monsterName}
             onChange={(e) => setMonsterName(e.target.value)}
-            className="p-4 text-2xl border border-blue-700"
+            className="p-4 text-2xl border border-indigo-700"
           />
-          <div className="flex justify-end space-x-2 mt-4">
+          <div className="flex justify-center space-x-2 mt-4">
             <Button onClick={closeModal} variant="cancel">
               キャンセル
             </Button>
@@ -230,6 +353,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
           </div>
         </div>
       </Modal>
+
       <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
