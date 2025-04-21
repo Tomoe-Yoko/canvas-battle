@@ -298,7 +298,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
             type="text"
             value={monsterName}
             onChange={(e) => setMonsterName(e.target.value)}
-            className="p-4 text-2xl border border-indigo-700"
+            className=" w-full p-4 text-2xl border border-indigo-700"
           />
           <div className="flex justify-center space-x-2 mt-4">
             <Button onClick={closeModal} variant="cancel">
