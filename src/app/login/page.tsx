@@ -57,7 +57,7 @@ const Page = () => {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white w-[80%] mx-auto p-8 rounded-3xl"
+        className="bg-white w-[85%] mx-auto p-8 rounded-3xl"
       >
         <div>
           <label htmlFor="userName" className="label-style">

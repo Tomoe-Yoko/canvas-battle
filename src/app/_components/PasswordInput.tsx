@@ -36,11 +36,11 @@ const PasswordInput = <T extends FieldValues>({
           type={showPassword ? "text" : "password"}
           {...register(name)}
           placeholder="••••••••"
-          className=" input-style"
+          className="input-style"
           disabled={isSubmitting}
         />
         <div
-          className="absolute right-6 top-3 transform-translate-y-1/2 cursor-pointer"
+          className="absolute right-2 top-3 transform-translate-y-1/2 cursor-pointer bg-white z-10 px-2"
           onClick={() => setShowPassword(!showPassword)}
         >
           {showPassword ? <RiEyeCloseLine /> : <RiEyeLine />}

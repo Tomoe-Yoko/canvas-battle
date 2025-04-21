@@ -50,7 +50,7 @@ const Page = () => {
       <h2 className="text-white text-center text-[24px] py-12">ユーザー登録</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white w-[80%]  mx-auto p-8 rounded-3xl"
+        className="bg-white w-[85%]  mx-auto p-8 rounded-3xl"
       >
         <div>
           <label htmlFor="userName" className="label-style">
