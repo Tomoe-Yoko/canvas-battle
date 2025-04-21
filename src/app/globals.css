@@ -11,7 +11,7 @@
   @apply text-base font-semibold tracking-wide;
 }
 .input-style {
-  @apply w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none;
+  @apply w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm tracking-wider;
 }
 .validation {
   @apply text-red-400 text-sm mb-4;

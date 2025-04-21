@@ -47,10 +47,10 @@ const Page = () => {
   return (
     <div className=" min-h-screen">
       <Header />
-      <h2 className="text-white text-center text-[24px] py-16">ユーザー登録</h2>
+      <h2 className="text-white text-center text-[24px] py-12">ユーザー登録</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white w-[70%] mx-auto p-8 rounded-3xl"
+        className="bg-white w-[80%]  mx-auto p-8 rounded-3xl"
       >
         <div>
           <label htmlFor="userName" className="label-style">
@@ -92,7 +92,7 @@ const Page = () => {
             name="password"
           />
         </div>
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-4">
           <Button type="submit" variant={"submit"} disabled={isSubmitting}>
             登録
           </Button>

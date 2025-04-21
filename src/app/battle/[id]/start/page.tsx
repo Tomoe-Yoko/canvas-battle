@@ -43,15 +43,15 @@ const Page = () => {
           animate={{ scale: 1 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="flex items-center mt-4 ml-4 gap-4">
+          <div className="flex items-end mt-4 ml-4 gap-4">
             <Image
               src={monsterUrl}
               alt="きみのモンスター"
-              width={240}
-              height={240}
+              width={210}
+              height={210}
               className="object-contain text-right ring-7 ring-lime-300  rounded-2xl"
             />
-            <p className="mt-4 mr-8 text-white text-right text-3xl">
+            <p className="mt-4 mr-8 text-white text-right text-xl">
               {monster.name}
             </p>
           </div>
@@ -69,15 +69,15 @@ const Page = () => {
           animate={{ scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex items-center justify-end mt-4 mr-4 gap-4">
-            <p className="mt-4 ml-8 text-white text-left text-3xl">
+          <div className="flex items-end justify-end mt-4 mr-4 gap-4">
+            <p className="mt-4 ml-8 text-white text-left text-xl">
               {enemy.name}
             </p>
             <Image
               src={enemyUrl}
               alt="敵のモンスター"
-              width={240}
-              height={240}
+              width={210}
+              height={210}
               className="object-contain border-indigo-300 ring-7 ring-indigo-300 rounded-2xl"
             />
           </div>

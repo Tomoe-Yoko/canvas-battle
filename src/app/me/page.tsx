@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Header } from "../_components/Header";
-import { Footer } from "../_components/Footer";
+// import { Header } from "../_components/Header";
+import { Navigation } from "../_components/Navigation";
 import { CreateMonsterResponseBody } from "../_types/monsters";
 import Image from "next/image";
 import { useSupabaseSession } from "../_hooks/useSupabaseSession";
@@ -105,7 +105,7 @@ const Page = () => {
 
   return (
     <div className="mb-[5rem]">
-      <Header />
+      {/* <Header /> */}
       <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
         じぶんページ
       </h2>
@@ -197,7 +197,7 @@ const Page = () => {
         )}
       </Modal>
       <Toaster />
-      <Footer />
+      <Navigation />
     </div>
   );
 };

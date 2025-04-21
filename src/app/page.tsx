@@ -43,6 +43,12 @@ export default function Home() {
           </Link>
         </div>
       </div>
+
+      <footer className="py-6 row-start-3 flex gap-6 flex-wrap items-center justify-center">
+        <p className="flex items-center mt-4 text-gray-500 text-sm">
+          &copy; Canvas Battle
+        </p>
+      </footer>
     </div>
   );
 }
