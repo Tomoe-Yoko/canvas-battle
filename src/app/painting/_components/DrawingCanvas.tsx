@@ -120,91 +120,89 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
   return (
     <div>
       <section className="w-full mb-[20vh]">
-        <div className="ml-2  space-x-2">
-          <div className="flex items-center justify-center space-x-4 my-2">
-            {/* ペン（eraseMode を false にする） */}
-            {/* ペン */}
-            <div className="flex flex-col items-center justify-center">
-              <p className="text-white text-[50%]">ペン</p>
-              <button
-                type="button"
-                onClick={() => {
-                  canvasRef.current?.eraseMode(false);
-                  setIsErasing(false);
-                }}
-                className={`p-2 rounded-lg w-[50px] ${
-                  !isErasing ? "bg-yellow-100" : "bg-gray-300"
-                }`}
-              >
-                <BsPencilFill />
-              </button>
-            </div>
+        <div className="w-[90%] mx-auto flex items-center justify-center gap-3 my-2">
+          {/* ペン（eraseMode を false にする） */}
+          {/* ペン */}
+          <div className=" flex flex-col items-center justify-center">
+            <p className="text-white text-[50%]">ペン</p>
+            <button
+              type="button"
+              onClick={() => {
+                canvasRef.current?.eraseMode(false);
+                setIsErasing(false);
+              }}
+              className={`p-2 rounded-lg w-[45px] ${
+                !isErasing ? "bg-yellow-100" : "bg-gray-300"
+              }`}
+            >
+              <BsPencilFill />
+            </button>
+          </div>
 
-            {/* 色、太さ設定 */}
-            <div className="flex flex-col items-center justify-center">
-              <p className="text-white text-[50%]">ペン設定</p>
-              <button
-                type="button"
-                onClick={openPenSetting}
-                className="bg-gray-300 p-2 rounded-lg w-[50px]"
-              >
-                <IoSettings />
-              </button>
-            </div>
-            {/* 消しゴム（白色に変更） */}
-            <div className="flex flex-col items-center justify-center">
-              <p className="text-white text-[50%]">消しゴム</p>
-              <button
-                type="button"
-                onClick={() => {
-                  canvasRef.current?.eraseMode(true);
-                  setIsErasing(true);
-                }}
-                className={`p-2 rounded-lg w-[50px] ${
-                  isErasing ? "bg-yellow-100" : "bg-gray-300"
-                }`}
-              >
-                <BsEraserFill />
-              </button>
-            </div>
+          {/* 色、太さ設定 */}
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-white text-[50%]">ペン設定</p>
+            <button
+              type="button"
+              onClick={openPenSetting}
+              className="bg-gray-300 p-2 rounded-lg w-[45px]"
+            >
+              <IoSettings />
+            </button>
+          </div>
+          {/* 消しゴム（白色に変更） */}
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-white text-[50%]">消しゴム</p>
+            <button
+              type="button"
+              onClick={() => {
+                canvasRef.current?.eraseMode(true);
+                setIsErasing(true);
+              }}
+              className={`p-2 rounded-lg w-[45px] ${
+                isErasing ? "bg-yellow-100" : "bg-gray-300"
+              }`}
+            >
+              <BsEraserFill />
+            </button>
+          </div>
 
-            {/* 戻るボタン */}
-            <div className="flex flex-col items-center justify-center">
-              <p className="text-white text-[50%]">一つ戻る</p>
-              <button
-                type="button"
-                onClick={() => canvasRef.current && canvasRef.current?.undo()}
-                className="bg-gray-300 p-2 rounded-lg w-[50px]"
-              >
-                <IoReturnUpBackOutline />
-              </button>
-            </div>
+          {/* 戻るボタン */}
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-white text-[50%]">一つ戻る</p>
+            <button
+              type="button"
+              onClick={() => canvasRef.current && canvasRef.current?.undo()}
+              className="bg-gray-300 p-2 rounded-lg w-[45px]"
+            >
+              <IoReturnUpBackOutline />
+            </button>
+          </div>
 
-            {/* 全消しボタン */}
-            <div className="flex flex-col items-center justify-center">
-              <p className="text-white text-[50%]">全消し</p>
-              <button
-                type="button"
-                onClick={() =>
-                  canvasRef.current && canvasRef.current?.clearCanvas()
-                }
-                className="bg-gray-300 p-2 rounded-lg w-[50px]"
-              >
-                <TbClearAll />
-              </button>
-            </div>
+          {/* 全消しボタン */}
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-white text-[50%]">全消し</p>
+            <button
+              type="button"
+              onClick={() =>
+                canvasRef.current && canvasRef.current?.clearCanvas()
+              }
+              className="bg-gray-300 p-2 rounded-lg w-[45px]"
+            >
+              <TbClearAll />
+            </button>
+          </div>
 
-            {/* 保存ボタン */}
-            <div className="flex flex-col items-center justify-center">
-              <p className="text-white text-[50%]">保存</p>
-              <button
-                type="button"
-                onClick={openModal}
-                className="bg-gray-300 p-2 rounded-lg w-[50px]"
-              >
-                <RiDownload2Fill />
-              </button>
-            </div>
+          {/* 保存ボタン */}
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-white text-[50%]">保存</p>
+            <button
+              type="button"
+              onClick={openModal}
+              className="bg-gray-300 p-2 rounded-lg w-[45px]"
+            >
+              <RiDownload2Fill />
+            </button>
           </div>
         </div>
         <div className="w-90% mx-auto aspect-square">
@@ -263,14 +261,14 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
             <label className="block text-xl font-medium mb-4 ">
               ペンの太さ
             </label>
-            <div className="flex justify-between items-center gap-3 px-2">
+            <div className="flex justify-between items-center gap-4 ">
               {[4, 8, 12, 16, 20, 24, 28, 32].map((size) => (
                 <button
                   key={size}
                   onClick={() => setStrokeWidth(size)}
                   className={`rounded-full transition-all duration-200 ${
                     strokeWidth === size
-                      ? "ring-6 ring-blue-400 scale-110"
+                      ? "ring-6 ring-indigo-500 scale-110"
                       : "opacity-60 hover:opacity-100"
                   }`}
                   style={{

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 // import { Header } from "../_components/Header";
-import { Footer } from "../_components/Footer";
+import { Navigation } from "../_components/Navigation";
 import Loading from "@/app/loading";
 import { useSupabaseSession } from "../_hooks/useSupabaseSession"; // 修正後のフックを正しくインポート
 import toast from "react-hot-toast";
@@ -30,7 +30,7 @@ const Page = () => {
         モンスターを描こう！
       </h2>
       <DrawingCanvas user={session.user} session={session} />
-      <Footer />
+      <Navigation />
     </>
   );
 };

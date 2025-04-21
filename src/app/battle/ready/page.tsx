@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Header } from "../../_components/Header";
-import { Footer } from "../../_components/Footer";
+import { Navigation } from "../../_components/Navigation";
 import Image from "next/image";
 import { useSupabaseSession } from "../../_hooks/useSupabaseSession";
 import { CreateBattleRequestBody } from "../../_types/battle";
@@ -191,7 +191,7 @@ const Page = () => {
           className="w-[32%]"
         />
       </div>
-      <Footer />
+      <Navigation />
     </div>
   );
 };

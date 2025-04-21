@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "../_utils/supabase";
 import { LuPaintbrushVertical } from "react-icons/lu";
 
-export const Footer = () => {
+export const Navigation = () => {
   const router = useRouter();
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -19,12 +19,15 @@ export const Footer = () => {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-white pb-4">
+    <div className="fixed -bottom-0 -inset-x-0 max-w-[500px] bg-[#a2a5bdee] m-auto py-3">
       <nav className="w-full">
-        <ul className="flex justify-around w-full">
+        <ul className="flex justify-around w-11/12 mx-auto">
           <li className="flex flex-col items-center justify-center min-w-[20%] pt-1">
-            <Link href="/me" className="flex flex-col items-center gap-1">
-              <FaRegFaceMeh className="px-6" />
+            <Link
+              href="/me"
+              className="flex flex-col items-center gap-1 w-[32px]"
+            >
+              <FaRegFaceMeh />
               <p className="w-[6rem] text-[0.7rem] text-center">じぶんページ</p>
             </Link>
           </li>
@@ -32,16 +35,19 @@ export const Footer = () => {
           <li className="flex flex-col items-center justify-center min-w-[20%] pt-1">
             <Link
               href="/battle/ready"
-              className="flex flex-col items-center gap-1"
+              className="flex flex-col items-center gap-1 w-[32px]"
             >
-              <FaSpaghettiMonsterFlying className="px-6 w-[6rem]" />
+              <FaSpaghettiMonsterFlying />
               <p className="w-[6rem] text-[0.7rem] text-center">じゃんけん</p>
             </Link>
           </li>
 
           <li className="flex flex-col items-center justify-center min-w-[20%] pt-1">
-            <Link href="/painting" className="flex flex-col items-center gap-1">
-              <LuPaintbrushVertical className="px-6" />
+            <Link
+              href="/painting"
+              className="flex flex-col items-center gap-1 w-[32px]"
+            >
+              <LuPaintbrushVertical />
               <p className="w-[6rem] text-[0.7rem] text-center">おえかき</p>
             </Link>
           </li>
@@ -49,9 +55,9 @@ export const Footer = () => {
           <li className="flex flex-col items-center justify-center min-w-[20%] pt-1">
             <button
               onClick={handleLogout}
-              className="flex flex-col items-center gap-1"
+              className="flex flex-col items-center gap-1 w-[32px]"
             >
-              <FaPersonWalkingArrowRight className="px-6" />
+              <FaPersonWalkingArrowRight />
               <p className="w-[6rem] text-[0.7rem] text-center">おわり</p>
             </button>
           </li>

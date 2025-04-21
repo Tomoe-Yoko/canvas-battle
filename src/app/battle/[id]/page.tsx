@@ -1,6 +1,6 @@
 "use client";
 // import { Header } from "../../_components/Header";
-import { Footer } from "../../_components/Footer";
+import { Navigation } from "../../_components/Navigation";
 import Image from "next/image";
 import Loading from "@/app/loading";
 import useBattleGame from "../_hooks/useBattleGame";
@@ -8,6 +8,7 @@ import Roulette from "../_components/Roulette";
 import useGetBattleMonster from "../_hooks/useGetBattleMonster";
 import { Modal } from "@/app/_components/Modal";
 import { motion } from "framer-motion";
+import { Button } from "@/app/_components/Button";
 
 const BattleResultPage = () => {
   const {
@@ -43,7 +44,7 @@ const BattleResultPage = () => {
   const { monster, enemy } = data.battleView;
 
   return (
-    <div className="mb-60">
+    <div className="h-svh">
       {/* <Header /> */}
       <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
         BATTLE🔥
@@ -52,16 +53,16 @@ const BattleResultPage = () => {
         {/* 自分のモンスター */}
         <div className="flex">
           <div className="w-[60%] flex flex-col items-center">
-            <p className="mt-4 mb-2 mr-8 text-white text-right">
+            <p className="mt-4 mb-2  text-white text-right text-xs">
               きみ：{monster.name}
             </p>
-            <div className="flex justify-end">
+            <div className="flex justify-end h-[25vh] aspect-square ">
               <Image
                 src={monsterUrl}
                 alt="きみのモンスター"
                 width={210}
                 height={210}
-                className="object-contain bg-gray-200  rounded-full "
+                className="object-contain bg-gray-200  rounded-md"
               />
             </div>
             <div className="flex gap-1 justify-center">
@@ -76,7 +77,7 @@ const BattleResultPage = () => {
                       color: isAlive ? "#dc2626" : "#ececec",
                     }}
                     transition={{ duration: 0.7 }}
-                    className="text-[30px]"
+                    className="text-[18px]"
                   >
                     ♥
                   </motion.span>
@@ -86,13 +87,13 @@ const BattleResultPage = () => {
           </div>
 
           {/* 手を選択するボタン */}
-          <div className="flex flex-col items-center w-[40%] mt-[2rem]">
+          <div className="flex flex-col items-center w-[35%] mt-[1rem]">
             <p className="text-center text-blue-400">どれをだす？</p>
             {hands.map((hand, index) => (
               <button
                 key={hand}
                 onClick={() => play(hand)}
-                className={`w-8/12 px-4 py-2 mb-1 text-[32px] border border-blue-400 rounded-full hover:bg-blue-400 animate-blink btn-blink-${
+                className={`w-8/12 px-2 py-2 mb-2 text-[24px] border border-blue-400 rounded-full animate-blink btn-blink-${
                   index + 1
                 }`}
               >
@@ -131,7 +132,7 @@ const BattleResultPage = () => {
               </div>
             </div>
           ) : (
-            <p className="h-[53px] pt-2 text-center text-[24px] text-gray-300 bg-gray-700">
+            <p className="h-[53px] pt-2 text-center text-[20px] text-gray-300 bg-gray-700">
               対戦中...
             </p>
           )}
@@ -146,16 +147,16 @@ const BattleResultPage = () => {
             />
           </div>
           <div className="w-[60%] flex flex-col items-center">
-            <p className="mt-4 mb-2 ml-8 text-white text-left">
+            <p className="mt-4 mb-2  text-white text-left  text-xs">
               てき：{enemy.name}
             </p>
-            <div>
+            <div className="h-[25vh] aspect-square ">
               <Image
                 src={enemyUrl}
                 alt="敵のモンスター"
                 width={210}
                 height={210}
-                className="object-contain bg-gray-200 rounded-full"
+                className="object-contain bg-gray-200  rounded-md aspect-square"
               />
             </div>
             <div className="flex gap-1 justify-center">
@@ -169,7 +170,7 @@ const BattleResultPage = () => {
                       scale: 1,
                       color: isAlive ? "#dc2626" : "#ececec",
                     }}
-                    className="text-[30px]"
+                    className="text-[18px]"
                     transition={{ duration: 0.7 }}
                   >
                     ♥
@@ -190,22 +191,19 @@ const BattleResultPage = () => {
           className="bg-[#020E37] p-10 rounded-lg"
         >
           {gameOver && (
-            <div className="flex flex-col items-center my-1 bg-[#020E37] p-10 rounded-lg">
-              <p className="text-3xl font-bold text-white">
+            <div className="flex flex-col items-center my-1 bg-[#020E37] p-5 rounded-lg gap-4">
+              <p className="text-2xl font-bold text-white">
                 {yourHp > 0 ? "きみの勝利🎉" : "GameOver...😵‍💫"}
               </p>
-              <button
-                className="mt-8  px-6 py-4 text-2xl bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                onClick={resetGame}
-              >
+              <Button variant="bg-blue" onClick={resetGame}>
                 もう一回する！
-              </button>
+              </Button>
             </div>
           )}
         </motion.div>
       </Modal>
 
-      <Footer />
+      <Navigation />
     </div>
   );
 };
