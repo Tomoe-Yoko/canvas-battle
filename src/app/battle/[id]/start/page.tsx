@@ -34,9 +34,7 @@ const Page = () => {
   const { monster, enemy } = data.battleView;
   return (
     <div>
-      <h2 className="text-center text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
-        バトル開始！🔥
-      </h2>
+      <h2 className="title-after-login">バトル開始！🔥</h2>
       <div className="">
         <motion.div
           initial={{ scale: 0.5 }}

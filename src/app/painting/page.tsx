@@ -26,9 +26,7 @@ const Page = () => {
   return (
     <>
       {/* <Header /> */}
-      <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
-        モンスターを描こう！
-      </h2>
+      <h2 className="title-after-login">モンスターを描こう！</h2>
       <DrawingCanvas user={session.user} session={session} />
       <Navigation />
     </>

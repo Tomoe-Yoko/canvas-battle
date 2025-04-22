@@ -46,9 +46,7 @@ const BattleResultPage = () => {
   return (
     <div className="h-svh">
       {/* <Header /> */}
-      <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
-        BATTLE🔥
-      </h2>
+      <h2 className="title-after-login">BATTLE🔥</h2>
       <div className="px-4">
         {/* 自分のモンスター */}
         <div className="flex">

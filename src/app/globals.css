@@ -19,18 +19,21 @@
 
 @layer utilities {
   .bg-custom-image {
-    background-image: url("/top-img/background.png");
-    background-size: cover;
-    background-position: center;
+    @apply bg-[url('/top-img/background.png')] bg-cover bg-center;
   }
-  /* scrollbar */
+  /* ログイン後ｈ2 */
+  .title-after-login {
+    @apply text-white text-2xl py-[0.8rem] pl-[1rem] bg-gray-700;
+  }
+
+  /* たてscrollbar */
   .hidden-scrollbar {
     -ms-overflow-style: none; /* IE, Edge 対応 */
     scrollbar-width: none; /* Firefox 対応 */
   }
   .hidden-scrollbar::-webkit-scrollbar {
-    /* Chrome, Safari 対応 */
-    display: none;
+    /* Chrome, Safari 対応 display: none; */
+    @apply hidden;
   }
 
   /* loading */

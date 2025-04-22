@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Header } from "../../_components/Header";
+// import { Header } from "../../_components/Header";
 import { Navigation } from "../../_components/Navigation";
 import Image from "next/image";
 import { useSupabaseSession } from "../../_hooks/useSupabaseSession";
@@ -84,11 +84,9 @@ const Page = () => {
     toast.error("モンスターの取得に失敗しました");
   }
   return (
-    <div className="pb-[18rem]">
-      <Header />
-      <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
-        モンスターをえらぶ
-      </h2>
+    <div className="pb-[18rem] overflow-x-hidden">
+      {/* <Header /> */}
+      <h2 className="title-after-login">モンスターをえらぶ</h2>
       <p className="text-white text-sm py-[1rem] w-[85%] mx-auto">
         モンスター一覧から、きみのモンスターと敵になるモンスター２体えらんでね！
       </p>
@@ -96,15 +94,17 @@ const Page = () => {
         <div>
           {selectedYourMonster ? (
             <>
-              <Image
-                src={imageUrls[selectedYourMonster.thumbnailImageKey]}
-                alt={selectedYourMonster.name}
-                width={150}
-                height={150}
-                className="object-contain m-2 aspect-square bg-amber-100"
-              />
+              <div className="border-2 border-gray-300 border-solid">
+                <Image
+                  src={imageUrls[selectedYourMonster.thumbnailImageKey]}
+                  alt={selectedYourMonster.name}
+                  width={150}
+                  height={150}
+                  className="object-contain m-2 aspect-square"
+                />
+              </div>
 
-              <p className="w-[150px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[1rem] rounded-md">
+              <p className="w-[150px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[1rem] rounded-md ">
                 {selectedYourMonster.name}
               </p>
             </>
@@ -112,19 +112,21 @@ const Page = () => {
             <div className="w-[150px] m-2 bg-black text-green-300 aspect-square text-sm p-2 pt-6">
               一覧から選択してね
             </div>
-          )}{" "}
+          )}
           <p className="text-white text-ml text-center">🟢きみのモンスター</p>
         </div>
         <div>
           {selectedEnemyMonster ? (
             <>
-              <Image
-                src={imageUrls[selectedEnemyMonster.thumbnailImageKey]}
-                alt={selectedEnemyMonster.name}
-                width={150}
-                height={150}
-                className="object-contain bg-gray-200 m-2 aspect-square"
-              />
+              <div className="border-2 border-gray-300 border-solid">
+                <Image
+                  src={imageUrls[selectedEnemyMonster.thumbnailImageKey]}
+                  alt={selectedEnemyMonster.name}
+                  width={150}
+                  height={150}
+                  className="object-contain bg-gray-200 m-2 aspect-square"
+                />
+              </div>
               <p className="w-[150px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[1rem] rounded-md">
                 {selectedEnemyMonster.name}
               </p>{" "}

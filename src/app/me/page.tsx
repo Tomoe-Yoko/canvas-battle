@@ -98,9 +98,7 @@ const Page = () => {
   return (
     <div className="mb-[5rem]">
       {/* <Header /> */}
-      <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
-        じぶんページ
-      </h2>
+      <h2 className="title-after-login">じぶんページ</h2>
       <h3 className="text-white text-xl pt-[1.5rem] pl-[1rem] pb-[0.5rem]">
         ーーー きみの作ったモンスター👾
       </h3>
