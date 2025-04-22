@@ -183,7 +183,7 @@ const BattleResultPage = () => {
       </div>
       {/* ゲーム終了表示 */}
 
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <Modal isOpen={isModalOpen} onClose={closeModal} showCloseButton={false}>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import { Header } from "../_components/Header";
 import { Navigation } from "../_components/Navigation";
 import { CreateMonsterResponseBody } from "../_types/monsters";
@@ -21,14 +21,13 @@ const Page = () => {
     useState<CreateMonsterResponseBody | null>(null);
   const [newName, setNewName] = useState("");
 
-  // モンスターと画像URLを一括取得
-  const { monsters, imageUrls, isLoading, error, mutate } = useFetchMonsters();
-
   useEffect(() => {
     if (!sessionLoading && !session?.user) {
       toast.error("ログインしてね");
     }
   }, [session, sessionLoading]);
+  // モンスターと画像URLを一括取得
+  const { monsters, imageUrls, isLoading, mutate } = useFetchMonsters();
 
   //Modal
   const openModal = (monster: CreateMonsterResponseBody) => {
@@ -95,13 +94,6 @@ const Page = () => {
 
   /////////
   if (isLoading) return <Loading />;
-  if (error instanceof Error) {
-    toast.error("モンスターの取得に失敗しました");
-
-    return (
-      <p className="text-center text-red-500">データの取得に失敗しました</p>
-    );
-  }
 
   return (
     <div className="mb-[5rem]">
