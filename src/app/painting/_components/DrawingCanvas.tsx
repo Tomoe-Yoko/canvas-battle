@@ -13,9 +13,8 @@ import { v4 as uuidv4 } from "uuid";
 import toast, { Toaster } from "react-hot-toast";
 import { CreateMonsterPostRequestBody } from "@/app/_types/monsters";
 import { api } from "@/app/_utils/api";
-
 import { Button } from "@/app/_components/Button";
-
+import imageCompression from "browser-image-compression";
 interface Props {
   user: { id: string };
   session: { user: { id: string } };
@@ -49,6 +48,28 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
   const saveMonster = async (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
 
+    // 圧縮処理関数
+    const compressImage = async (file: File): Promise<File> => {
+      const options = {
+        maxSizeMB: 0.1, // 最大サイズ (70KB 以下に圧縮)
+        useWebWorker: true, // 圧縮を Web Worker で実行してパフォーマンス向上
+        maxWidthOrHeight: undefined, // 元の幅と高さを維持
+      };
+
+      try {
+        const compressedFile = await imageCompression(file, options);
+        // console.log(
+        //   "圧縮後のファイルサイズ:",
+        //   compressedFile.size / 1024,
+        //   "KB"
+        // );
+        return compressedFile;
+      } catch (error) {
+        console.error("画像圧縮に失敗しました:", error);
+        throw new Error("画像圧縮に失敗しました");
+      }
+    };
+
     if (isSubmitting) return; // 二重送信ガード
     setIsSubmitting(true);
     try {
@@ -64,6 +85,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
         console.error("Canvas から画像データが取得できませんでした。");
         return;
       }
+
       const fileId = uuidv4();
       const fileName = `private/${fileId}.png`;
 
@@ -81,10 +103,11 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
         }
       };
       const blobData = dataURLtoBlob(imageData);
-
+      // 圧縮処理を実行
+      const compressedFile = await compressImage(blobData as File);
       const { error: uploadError } = await supabase.storage
         .from("post-monster")
-        .upload(fileName, blobData, {
+        .upload(fileName, compressedFile, {
           cacheControl: "3600",
           upsert: false,
         });
@@ -101,11 +124,12 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
-      const result = await api.post<
-        CreateMonsterPostRequestBody,
-        typeof monsterData
-      >("/api/monster", monsterData);
-      console.log("モンスター保存結果:", result);
+      // const result =
+      await api.post<CreateMonsterPostRequestBody, typeof monsterData>(
+        "/api/monster",
+        monsterData
+      );
+      // console.log("モンスター保存結果:", result);
       toast.success(`モンスターが保存された！${thumbnailImageKey}`);
       setIsModalOpen(false);
       router.push("/me");
@@ -209,18 +233,21 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
           <ReactSketchCanvas
             ref={canvasRef}
             width="100%"
-            // height="70vh"
             strokeColor={penColor}
             strokeWidth={strokeWidth}
           />
         </div>
       </section>
-      <Modal isOpen={isPenSettingOpen} onClose={closePenSetting}>
-        <div className="bg-white px-6 py-6 rounded-lg shadow-md w-[95%] mx-auto">
+      <Modal
+        isOpen={isPenSettingOpen}
+        onClose={closePenSetting}
+        showCloseButton={false}
+      >
+        <div className="bg-white px-6 py-3 rounded-lg shadow-md w-[95%] mx-auto">
           <h3 className="text-2xl font-bold text-center mb-4">ペンの設定</h3>
 
           {/* 色選択 */}
-          <div className="mb-4 flex justify-center gap-4">
+          <div className="mb-4 flex gap-4">
             <label
               htmlFor="color"
               className="block text-xl font-medium mb-2 text-gray-800"
@@ -235,26 +262,6 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
               className="w-32 h-16 border "
             />
           </div>
-
-          {/* 太さ選択 */}
-          {/* <div className="mb-4">
-            <label
-              htmlFor="strokeWidth"
-              className="block text-xl font-medium mb-2 text-gray-800"
-            >
-              ペンの太さ: {strokeWidth}px
-            </label>
-            <input
-              id="strokeWidth"
-              type="range"
-              min="3"
-              max="32"
-              step="4"
-              value={strokeWidth}
-              onChange={(e) => setStrokeWidth(Number(e.target.value))}
-              className="w-full cursor-pointer "
-            />
-          </div> */}
 
           {/* ペンの太さをドットで選択 */}
           <div className="mb-8">
@@ -283,7 +290,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
           </div>
 
           {/* 閉じるボタン */}
-          <div className="flex justify-center mt-16">
+          <div className="flex justify-end mt-24">
             <Button onClick={closePenSetting} variant="bg-blue">
               これでかく！
             </Button>

@@ -9,6 +9,7 @@ import useGetBattleMonster from "../_hooks/useGetBattleMonster";
 import { Modal } from "@/app/_components/Modal";
 import { motion } from "framer-motion";
 import { Button } from "@/app/_components/Button";
+import { useState } from "react";
 
 const BattleResultPage = () => {
   const {
@@ -30,6 +31,7 @@ const BattleResultPage = () => {
 
   const { fetchLoading, monsterUrl, enemyUrl, sessionLoading, data } =
     useGetBattleMonster(); // バトルするモンスター画像を取得するカスタムフック
+  const [navVisible, setNavVisible] = useState(false);
 
   if (
     sessionLoading ||
@@ -42,13 +44,13 @@ const BattleResultPage = () => {
   }
 
   const { monster, enemy } = data.battleView;
-
+  const handleNavigation = () => {
+    setNavVisible((prev) => !prev);
+  };
   return (
     <div className="h-svh">
       {/* <Header /> */}
-      <h2 className="text-white text-3xl py-[1rem] pl-[1rem] bg-gray-700">
-        BATTLE🔥
-      </h2>
+      <h2 className="title-after-login">BATTLE🔥</h2>
       <div className="px-4">
         {/* 自分のモンスター */}
         <div className="flex">
@@ -139,7 +141,7 @@ const BattleResultPage = () => {
         </div>
         {/* 敵のモンスター */}
         <div className="flex">
-          <div className="w-[40%] mt-[-3rem]">
+          <div className="w-[40%] mt-[-5rem]">
             <Roulette
               mustSpin={mustSpin}
               spinKey={spinKey}
@@ -183,7 +185,7 @@ const BattleResultPage = () => {
       </div>
       {/* ゲーム終了表示 */}
 
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <Modal isOpen={isModalOpen} onClose={closeModal} showCloseButton={false}>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -202,8 +204,24 @@ const BattleResultPage = () => {
           )}
         </motion.div>
       </Modal>
-
-      <Navigation />
+      <button
+        onClick={handleNavigation}
+        className="relative flex flex-col items-center left-4 bottom-24 text-gray-600600 px-4 py-2 bg-amber-200 rounded-3xl text-[10px] hover:bg-amber-400 transition-all duration-200 ease-in-out shadow-md"
+      >
+        {navVisible ? <span>メニューとじる</span> : <span>メニューボタン</span>}
+        <Image
+          src="/top-img/shy.png"
+          alt="navButton"
+          width={40}
+          height={40}
+          className="object-contain aspect-square"
+        />
+      </button>
+      {navVisible && (
+        <div className="block">
+          <Navigation />
+        </div>
+      )}
     </div>
   );
 };
