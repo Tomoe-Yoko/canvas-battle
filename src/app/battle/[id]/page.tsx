@@ -204,24 +204,37 @@ const BattleResultPage = () => {
           )}
         </motion.div>
       </Modal>
-      <button
-        onClick={handleNavigation}
-        className="relative flex flex-col items-center left-4 bottom-24 text-gray-600600 px-4 py-2 bg-amber-200 rounded-3xl text-[10px] hover:bg-amber-400 transition-all duration-200 ease-in-out shadow-md"
-      >
-        {navVisible ? <span>メニューとじる</span> : <span>メニューボタン</span>}
-        <Image
-          src="/top-img/shy.png"
-          alt="navButton"
-          width={40}
-          height={40}
-          className="object-contain aspect-square"
-        />
-      </button>
-      {navVisible && (
-        <div className="block">
-          <Navigation />
-        </div>
-      )}
+      <div className="relative flex flex-col items-start">
+        <button
+          onClick={handleNavigation}
+          className={`z-20 transition-transform duration-300 ease-in-out transform  ${
+            navVisible ? "-translate-y-24" : ""
+          } flex flex-col items-center text-gray-600 px-4 py-2 mb-8 bg-amber-200 rounded-3xl text-[10px] hover:bg-amber-400 shadow-md ml-4`}
+        >
+          {navVisible ? (
+            <span>メニューとじる</span>
+          ) : (
+            <span>メニューボタン</span>
+          )}
+          <Image
+            src="/top-img/shy.png"
+            alt="navButton"
+            width={40}
+            height={40}
+            className="object-contain aspect-square"
+          />
+        </button>
+
+        {navVisible && (
+          <div
+            className={`absolute top-full left-0 w-full transition-transform duration-300 ease-in-out transform ${
+              navVisible ? "translate-y-0" : "translate-y-full"
+            }`}
+          >
+            <Navigation />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
