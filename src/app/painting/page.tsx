@@ -2,11 +2,12 @@
 import React, { useEffect } from "react";
 // import { Header } from "../_components/Header";
 import { Navigation } from "../_components/Navigation";
+import { CatWalk } from "../_components/CatWalk";
 import Loading from "@/app/loading";
 import { useSupabaseSession } from "../_hooks/useSupabaseSession"; // 修正後のフックを正しくインポート
 import toast from "react-hot-toast";
 import DrawingCanvas from "./_components/DrawingCanvas";
-import Image from "next/image";
+// import Image from "next/image";
 
 const Page = () => {
   const { session, isLoading } = useSupabaseSession();
@@ -29,7 +30,7 @@ const Page = () => {
       {/* <Header /> */}
       <h2 className="title-after-login">モンスターを描こう！</h2>
       <DrawingCanvas user={session.user} session={session} />
-      <div className="flex items-center justify-center mt-4 w-50% mx-auto">
+      {/* <div className="flex items-center justify-center mt-4 w-50% mx-auto">
         <Image
           src="/top-img/heart.png"
           alt="painting"
@@ -44,7 +45,8 @@ const Page = () => {
           height={60}
           className="mx-auto mt-4 rotate-{}}"
         />
-      </div>
+      </div> */}
+      <CatWalk />
       <Navigation />
     </>
   );
