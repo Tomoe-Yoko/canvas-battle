@@ -42,13 +42,15 @@ const Page = () => {
           transition={{ duration: 0.3 }}
         >
           <div className="flex items-end mt-4 ml-4 gap-4">
-            <Image
-              src={monsterUrl}
-              alt="きみのモンスター"
-              width={210}
-              height={210}
-              className="object-contain text-right ring-7 ring-lime-300  rounded-2xl"
-            />
+            <div className="flex justify-end h-[25vh] aspect-square ">
+              <Image
+                src={monsterUrl}
+                alt="きみのモンスター"
+                width={210}
+                height={210}
+                className="object-contain text-right ring-7 ring-lime-300  rounded-2xl bg-gray-100 "
+              />
+            </div>
             <p className="mt-4 mr-8 text-white text-right text-xl">
               {monster.name}
             </p>
@@ -71,13 +73,15 @@ const Page = () => {
             <p className="mt-4 ml-8 text-white text-left text-xl">
               {enemy.name}
             </p>
-            <Image
-              src={enemyUrl}
-              alt="敵のモンスター"
-              width={210}
-              height={210}
-              className="object-contain border-indigo-300 ring-7 ring-indigo-300 rounded-2xl"
-            />
+            <div className="flex justify-end h-[25vh] aspect-square ">
+              <Image
+                src={enemyUrl}
+                alt="敵のモンスター"
+                width={210}
+                height={210}
+                className="object-contain border-indigo-300 ring-7 ring-indigo-300 rounded-2xl bg-gray-100 "
+              />
+            </div>
           </div>
         </motion.div>
       </div>

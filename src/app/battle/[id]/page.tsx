@@ -64,7 +64,7 @@ const BattleResultPage = () => {
                 alt="きみのモンスター"
                 width={210}
                 height={210}
-                className="object-contain bg-gray-200  rounded-md"
+                className="object-contain bg-gray-100  rounded-md"
               />
             </div>
             <div className="flex gap-1 justify-center">
@@ -158,7 +158,7 @@ const BattleResultPage = () => {
                 alt="敵のモンスター"
                 width={210}
                 height={210}
-                className="object-contain bg-gray-200  rounded-md aspect-square"
+                className="object-contain bg-gray-100  rounded-md aspect-square"
               />
             </div>
             <div className="flex gap-1 justify-center">
