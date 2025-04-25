@@ -143,7 +143,8 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
 
   return (
     <div>
-      <section className="w-full mb-[20vh]">
+      {/* <section className="w-full mb-[20vh]"> */}
+      <section className="w-full mb-[16px]">
         <div className="w-[90%] mx-auto flex items-center justify-center gap-3 my-2">
           {/* ペン（eraseMode を false にする） */}
           {/* ペン */}
