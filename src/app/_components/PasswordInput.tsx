@@ -7,7 +7,6 @@ import {
   Path,
   UseFormRegister,
 } from "react-hook-form";
-// import { SignUpForm } from "../_types/users";
 import { RiEyeCloseLine, RiEyeLine } from "react-icons/ri";
 
 interface PasswordInputProps<T extends FieldValues> {
