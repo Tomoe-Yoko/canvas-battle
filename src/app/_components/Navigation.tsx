@@ -2,9 +2,7 @@
 
 import React from "react";
 import { FaRegFaceMeh } from "react-icons/fa6";
-// import { FaRocket } from "react-icons/fa6";
 import { FaSpaghettiMonsterFlying } from "react-icons/fa6";
-// import { FaPaintbrush } from "react-icons/fa6";
 import { FaPersonWalkingArrowRight } from "react-icons/fa6";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

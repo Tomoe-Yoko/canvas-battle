@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect } from "react";
-// import { Header } from "../_components/Header";
 import { Navigation } from "../_components/Navigation";
 import { CatWalk } from "../_components/CatWalk";
 import Loading from "@/app/loading";
@@ -30,22 +29,6 @@ const Page = () => {
       {/* <Header /> */}
       <h2 className="title-after-login">モンスターを描こう！</h2>
       <DrawingCanvas user={session.user} session={session} />
-      {/* <div className="flex items-center justify-center mt-4 w-50% mx-auto">
-        <Image
-          src="/top-img/heart.png"
-          alt="painting"
-          width={60}
-          height={60}
-          className="mx-auto mt-4"
-        />
-        <Image
-          src="/top-img/neko.png"
-          alt="painting"
-          width={60}
-          height={60}
-          className="mx-auto mt-4 rotate-{}}"
-        />
-      </div> */}
       <CatWalk />
       <Navigation />
     </>

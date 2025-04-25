@@ -17,7 +17,6 @@ export const api = {
       if (res.status !== 200) {
         const errorData = await res.json(); // エラーレスポンスを取得
         console.error("Error fetching data:", errorData); // エラーログを出力
-        // throw new Error("データの取得に失敗しました。");
       }
 
       const data: ResponseType = await res.json();

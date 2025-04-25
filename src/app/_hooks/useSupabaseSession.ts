@@ -24,5 +24,3 @@ export const useSupabaseSession = () => {
 
   return { session, token, isLoading };
 };
-
-// https://shiftb.dev/courses/react/z3g0nzbra3v#h36ddb5106c
