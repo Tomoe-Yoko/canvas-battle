@@ -28,7 +28,7 @@ const Page = () => {
       password,
       options: {
         data: { userName },
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_URL}/login`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/login`,
       },
     });
 
