@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
@@ -21,7 +20,7 @@ interface BattleViewResponse {
 
 const useGetBattleMonster = () => {
   const { session, isLoading: sessionLoading } = useSupabaseSession();
-  const params = useParams(); // ← これで [id] を取得
+  const params = useParams(); //id取得
   const battleId = params?.id as string;
 
   const { data, isLoading: fetchLoading } = useFetch<{

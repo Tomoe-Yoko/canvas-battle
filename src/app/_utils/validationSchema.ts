@@ -1,7 +1,7 @@
 //zod
 import { z } from "zod";
 
-// ページごとに書くのが良い
+// ページごとに書いた
 // サインアップ用
 export const signUpSchema = z.object({
   userName: z.string().min(1, "名前は必須です"),

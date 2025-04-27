@@ -1,5 +1,5 @@
+"use client";
 import React, { ComponentPropsWithoutRef, ReactNode } from "react";
-
 type Variant =
   | "bg-top"
   | "submit"

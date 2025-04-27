@@ -7,7 +7,6 @@ const prisma = await buildPrisma();
 
 export async function PUT(
   request: NextRequest,
-  // context: { params: { id: string } }
   context: { params: Promise<{ id: string }> }
 ) {
   const token = request.headers.get("Authorization") ?? "";

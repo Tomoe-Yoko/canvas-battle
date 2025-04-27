@@ -1,5 +1,4 @@
 "use client";
-
 import React, { FC, ReactNode } from "react";
 import { IoMdClose } from "react-icons/io";
 import ReactModal from "react-modal";

@@ -108,4 +108,4 @@ const Page = () => {
 export default Page;
 
 // youtube:https://www.youtube.com/watch?v=f1fysEKNwQA
-//react-hook-form: https://www.react-hook-form.com/get-started#Handleerrors
+//rhf: https://www.react-hook-form.com/get-started#Handleerrors

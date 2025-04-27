@@ -6,7 +6,6 @@ import Loading from "@/app/loading";
 import { useSupabaseSession } from "../_hooks/useSupabaseSession"; // 修正後のフックを正しくインポート
 import toast from "react-hot-toast";
 import DrawingCanvas from "./_components/DrawingCanvas";
-// import Image from "next/image";
 
 const Page = () => {
   const { session, isLoading } = useSupabaseSession();
@@ -26,7 +25,6 @@ const Page = () => {
 
   return (
     <>
-      {/* <Header /> */}
       <h2 className="title-after-login">モンスターを描こう！</h2>
       <DrawingCanvas user={session.user} session={session} />
       <CatWalk />

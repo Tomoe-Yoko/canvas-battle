@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import { FaRegFaceMeh } from "react-icons/fa6";
 import { FaSpaghettiMonsterFlying } from "react-icons/fa6";

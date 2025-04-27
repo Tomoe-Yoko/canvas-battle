@@ -13,6 +13,7 @@ const useBattleGame = () => {
   const [mustSpin, setMustSpin] = useState(false);
   const [spinKey, setSpinKey] = useState(0); // 敵ルーレット開始イベントを検知するためのキー
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   //勝敗
   const judge = (you: Hand, cpu: Hand): "win" | "lose" | "draw" => {
     if (you === cpu) return "draw";
@@ -35,21 +36,23 @@ const useBattleGame = () => {
     setSpinKey((prev) => prev + 1); // スピンキーを更新してルーレットを回す
     setMustSpin(true); // ルーレットを回すフラグを立てる
   };
-  //勝った時のエフェクト
 
+  //勝った時のエフェクト
   const launchParticles = () => {
     confetti({
       particleCount: 150,
       spread: 360,
     });
   };
+
   // 敵のルーレットが止まったときに呼ぶ
   const handleCpuStop = (cpuChoice: Hand) => {
     setMustSpin(false); // ルーレットをとめる
-    setCpuHand(cpuChoice); // 敵の手をセット
+    setCpuHand(cpuChoice);
     if (!yourHand) return;
     const matchResult = judge(yourHand, cpuChoice);
-    //日本語で表示
+
+    //jp表示
     const ResultText =
       matchResult === "win"
         ? "勝ち🎉"
@@ -61,10 +64,10 @@ const useBattleGame = () => {
       setYourHp((hp) => hp - 1);
     } else if (matchResult === "win") {
       setCpuHp((hp) => hp - 1);
-      launchParticles(); // 勝ったときのエフェクト
+      launchParticles();
     }
 
-    // HPが0になったらゲーム終了
+    // HPが0になったら終了
     if (
       yourHp - (matchResult === "lose" ? 1 : 0) === 0 ||
       cpuHp - (matchResult === "win" ? 1 : 0) === 0
@@ -73,14 +76,15 @@ const useBattleGame = () => {
       openModal();
     }
   };
-  //Modal
+
   const openModal = () => {
     setIsModalOpen(true);
   };
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  // ゲームリセット
+
+  //reset
   const resetGame = () => {
     setYourHand(null);
     setCpuHand(null);
@@ -90,6 +94,7 @@ const useBattleGame = () => {
     setGameOver(false);
     closeModal();
   };
+
   return {
     hands,
     cpuHand,

@@ -5,7 +5,7 @@ import { Wheel } from "react-custom-roulette";
 interface Props {
   mustSpin: boolean; //スピンするかどうか
   onStop: (result: "rock" | "scissors" | "paper") => void; //結果
-  spinKey: number; //外部のスピン開始イベントを検知するためのキ
+  spinKey: number; //外部のスピン開始イベントを検知するためのキー
 }
 
 const RouletteClientOnly: React.FC<Props> = ({ mustSpin, onStop }) => {
@@ -30,7 +30,6 @@ const RouletteClientOnly: React.FC<Props> = ({ mustSpin, onStop }) => {
           prizeNumber={prizeNumber}
           data={jankenData}
           backgroundColors={["#355070", "#6b597a", "#b56576"]}
-          // backgroundColors={["#8ecae6", "#ccffff", "#219ebc"]}
           textColors={["#ffffff"]}
           fontSize={100}
           spinDuration={0.24}

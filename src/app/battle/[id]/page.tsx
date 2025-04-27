@@ -1,5 +1,4 @@
 "use client";
-// import { Header } from "../../_components/Header";
 import { Navigation } from "../../_components/Navigation";
 import Image from "next/image";
 import Loading from "@/app/loading";
@@ -49,7 +48,6 @@ const BattleResultPage = () => {
   };
   return (
     <div className="h-svh">
-      {/* <Header /> */}
       <h2 className="title-after-login">BATTLE🔥</h2>
       <div className="px-4">
         {/* 自分のモンスター */}

@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-// import { Header } from "../../_components/Header";
 import { Navigation } from "../../_components/Navigation";
 import Image from "next/image";
 import { useSupabaseSession } from "../../_hooks/useSupabaseSession";
@@ -30,7 +29,7 @@ const Page = () => {
     }
   }, [session, sessionLoading]);
 
-  ////////////monster選択
+  //monster選択
   const handleMonsterClick = (monster: CreateMonsterResponseBody) => {
     if (selectedYourMonster?.id === monster.id) {
       setSelectedYourMonster(null);
@@ -65,14 +64,13 @@ const Page = () => {
         CreateBattleRequestBody,
         { id: number; userId: string; monsterId: number; enemyId: number }
       >("/api/battle", {
-        id: Date.now(), // Example: Use a unique identifier like a timestamp
+        id: Date.now(),
         userId: session.user.id,
         monsterId: selectedYourMonster.id,
         enemyId: selectedEnemyMonster.id,
       });
 
-      const { id } = res; // Extract battleId from the response
-      // router.push(`/battle/${id}/start`);
+      const { id } = res;
       router.push(`/battle/${id}/start`);
     } catch (err) {
       toast.error("バトル登録に失敗しました");
@@ -85,7 +83,6 @@ const Page = () => {
   }
   return (
     <div className="pb-[18rem] overflow-x-hidden">
-      {/* <Header /> */}
       <h2 className="title-after-login">モンスターをえらぶ</h2>
       <p className="text-white text-sm py-[1rem] w-[85%] mx-auto">
         モンスター一覧から、きみのモンスターと敵になるモンスター２体えらんでね！

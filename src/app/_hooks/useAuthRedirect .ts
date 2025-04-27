@@ -22,14 +22,13 @@ export const useAuthRedirect = () => {
         }
 
         // サーバーに「このトークンのユーザーは登録済み？」確認
-        const response = await api.get<{ isNewUser: boolean }>("/api/users");
-
-        if (response.isNewUser) {
+        const response = await api.get<{ isUser: boolean }>("/api/users");
+        if (response.isUser) {
           // 登録済みなら /me へ
           router.replace("/me");
         } else {
           // 新規ユーザーなら何もしない（今のページにとどまる）
-          console.log("新規ユーザーなので stay on login page");
+          return;
         }
       } catch (error) {
         console.error("認証チェックエラー:", error);
@@ -42,27 +41,3 @@ export const useAuthRedirect = () => {
 
   return {};
 };
-
-// "use client";
-// import { useEffect } from "react";
-
-// import { supabase } from "../_utils/supabase";
-// import { useRouter } from "next/navigation";
-
-// export const useAuthRedirect = () => {
-//   const router = useRouter();
-//   useEffect(() => {
-//     const checkSession = async () => {
-//       try {
-//         const { data } = await supabase.auth.getSession();
-//         router.replace(data.session ? "/me" : "/login");
-//       } catch (error) {
-//         console.error("セッション情報取得失敗:", error);
-//         router.replace("/login");
-//       }
-//     };
-//     checkSession();
-//   }, [router]);
-
-//   return {};
-// };
