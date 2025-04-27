@@ -12,8 +12,10 @@ import { Button } from "../_components/Button";
 import { api } from "../_utils/api";
 import Link from "next/link";
 import useFetchMonsters from "../_hooks/useFetchMonsters";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+  const router = useRouter();
   const { session, isLoading: sessionLoading } = useSupabaseSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMonster, setSelectedMonster] =
@@ -21,10 +23,11 @@ const Page = () => {
   const [newName, setNewName] = useState("");
 
   useEffect(() => {
-    if (!sessionLoading && !session?.user) {
+    if (!session?.user) {
       toast.error("ログインしてね");
+      router.push("/login");
     }
-  }, [session, sessionLoading]);
+  }, [session, sessionLoading, router]);
   // モンスターと画像URLを一括取得
   const { monsters, imageUrls, isLoading, mutate } = useFetchMonsters();
 

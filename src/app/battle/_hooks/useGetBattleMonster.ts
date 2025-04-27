@@ -5,6 +5,7 @@ import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import toast from "react-hot-toast";
 import { useFetch } from "@/app/_hooks/useFetch";
 import { supabase } from "@/app/_utils/supabase";
+import { useRouter } from "next/navigation";
 
 interface BattleViewResponse {
   id: number;
@@ -20,6 +21,7 @@ interface BattleViewResponse {
 
 const useGetBattleMonster = () => {
   const { session, isLoading: sessionLoading } = useSupabaseSession();
+  const router = useRouter();
   const params = useParams(); //id取得
   const battleId = params?.id as string;
 
@@ -34,8 +36,9 @@ const useGetBattleMonster = () => {
   useEffect(() => {
     if (!sessionLoading && !session?.user) {
       toast.error("ログインしてね");
+      router.push("/login");
     }
-  }, [sessionLoading, session]);
+  }, [sessionLoading, session, router]);
 
   useEffect(() => {
     const generateSignedUrls = async () => {
