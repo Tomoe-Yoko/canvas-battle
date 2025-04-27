@@ -31,7 +31,7 @@ const Page = () => {
         emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_BASE_URL}/login`,
       },
     });
-
+    console.log(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/login`);
     if (error) {
       toast("登録に失敗", {
         icon: "😭",

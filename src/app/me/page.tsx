@@ -13,6 +13,7 @@ import { api } from "../_utils/api";
 import Link from "next/link";
 import useFetchMonsters from "../_hooks/useFetchMonsters";
 import { useRouter } from "next/navigation";
+import { LoginForm } from "../_types/users";
 
 const Page = () => {
   const router = useRouter();
@@ -23,10 +24,30 @@ const Page = () => {
   const [newName, setNewName] = useState("");
 
   useEffect(() => {
-    if (!sessionLoading && !session?.user) {
-      toast.error("ログインしてね");
-      router.push("/login");
-    }
+    // 新規ユーザーなら登録
+    const checkAndInitUser = async () => {
+      if (!sessionLoading && session?.user) {
+        try {
+          const { data }: { data: LoginForm } = await api.get(`/api/users`);
+
+          if (!data) {
+            await api.post("/api/users", {
+              id: session.user.id,
+              email: session.user.email,
+              name: session.user.user_metadata.full_name || "no-name",
+            });
+            toast.success("新しいユーザーを登録しました！");
+          }
+        } catch (error) {
+          console.error("ユーザー確認エラー:", error);
+          toast.error("ユーザー情報の取得に失敗しました");
+        }
+      } else if (!sessionLoading && !session?.user) {
+        toast.error("ログインしてね");
+        router.push("/login");
+      }
+    };
+    checkAndInitUser();
   }, [session, sessionLoading, router]);
   // モンスターと画像URLを一括取得
   const { monsters, imageUrls, isLoading, mutate } = useFetchMonsters();
