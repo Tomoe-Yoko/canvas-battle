@@ -5,22 +5,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../_utils/validationSchema";
 import { supabase } from "../_utils/supabase";
-import { api } from "../_utils/api";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Header } from "../_components/Header";
 import PasswordInput from "../_components/PasswordInput";
 import { Session } from "@supabase/supabase-js";
 import Loading from "../loading";
-// import { useAuthRedirect } from "../_hooks/useAuthRedirect ";
+import { LoginForm } from "../_types/users";
 
-interface LoginForm {
-  userName?: string;
-  email: string;
-  password: string;
-}
 const Page = () => {
-  // useAuthRedirect();
   const router = useRouter();
   const {
     register,
@@ -32,7 +25,7 @@ const Page = () => {
   });
 
   const [session, setSession] = useState<Session | null | undefined>(undefined);
-
+  //  // ログイン状態の確認
   useEffect(() => {
     const checkSession = async () => {
       const {
@@ -56,8 +49,6 @@ const Page = () => {
     return <Loading />;
   }
 
-  //
-
   const onSubmit = async (data: LoginForm) => {
     try {
       const { email, password } = data;
@@ -73,7 +64,7 @@ const Page = () => {
         }
         throw new Error(error.message);
       }
-      await api.post("/api/users", { data });
+
       router.push("/me");
     } catch (error) {
       console.error("Login failed:", error);
@@ -82,11 +73,11 @@ const Page = () => {
       });
     }
   };
+
   return (
     <div className=" min-h-screen">
       <Header />
       <h2 className="text-white text-center text-[24px] py-12">ログイン</h2>
-
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white w-[85%] mx-auto p-8 rounded-3xl"
