@@ -18,8 +18,8 @@ interface LoginForm {
   password: string;
 }
 const Page = () => {
-  const router = useRouter();
   useAuthRedirect();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
