@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../_components/Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,7 +10,9 @@ import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Header } from "../_components/Header";
 import PasswordInput from "../_components/PasswordInput";
-import { useAuthRedirect } from "../_hooks/useAuthRedirect ";
+import { Session } from "@supabase/supabase-js";
+import Loading from "../loading";
+// import { useAuthRedirect } from "../_hooks/useAuthRedirect ";
 
 interface LoginForm {
   userName?: string;
@@ -18,7 +20,7 @@ interface LoginForm {
   password: string;
 }
 const Page = () => {
-  useAuthRedirect();
+  // useAuthRedirect();
   const router = useRouter();
   const {
     register,
@@ -28,6 +30,34 @@ const Page = () => {
     mode: "onChange",
     resolver: zodResolver(loginSchema),
   });
+
+  const [session, setSession] = useState<Session | null | undefined>(undefined);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session) {
+        setSession(session);
+      } else {
+        setSession(null);
+      }
+    };
+    checkSession();
+  }, [session]);
+
+  if (session === undefined) {
+    return <Loading />;
+  }
+
+  if (session) {
+    router.replace("/me");
+    return <Loading />;
+  }
+
+  //
+
   const onSubmit = async (data: LoginForm) => {
     try {
       const { email, password } = data;
@@ -61,20 +91,6 @@ const Page = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white w-[85%] mx-auto p-8 rounded-3xl"
       >
-        <div>
-          <label htmlFor="userName" className="label-style">
-            なまえ
-          </label>
-          <input
-            id="userName"
-            type="text"
-            {...register("userName", { required: true })}
-            className="input-style"
-          />
-          <p className="validation">
-            {errors.userName?.message as React.ReactNode}
-          </p>
-        </div>
         <div>
           <label htmlFor="email" className="label-style">
             EMAIL
