@@ -23,7 +23,7 @@ const Page = () => {
   const [newName, setNewName] = useState("");
 
   useEffect(() => {
-    if (!session?.user) {
+    if (!sessionLoading && !session?.user) {
       toast.error("ログインしてね");
       router.push("/login");
     }
