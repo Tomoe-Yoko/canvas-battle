@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { DotGothic16 } from "next/font/google";
 import "./globals.css";
-// import { motion } from "framer-motion";
-// import Head from "next/head";
 import ClientBackground from "./_components/ClientBackground";
 
 const DotGothic = DotGothic16({

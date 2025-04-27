@@ -25,11 +25,11 @@ export const useAuthRedirect = () => {
         const response = await api.get<{ isNewUser: boolean }>("/api/users");
 
         if (response.isNewUser) {
-          // 新規ユーザーなら何もしない（今のページにとどまる）
-          console.log("新規ユーザーなので stay on login page");
-        } else {
           // 登録済みなら /me へ
           router.replace("/me");
+        } else {
+          // 新規ユーザーなら何もしない（今のページにとどまる）
+          console.log("新規ユーザーなので stay on login page");
         }
       } catch (error) {
         console.error("認証チェックエラー:", error);
