@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Header } from "../_components/Header";
 import PasswordInput from "../_components/PasswordInput";
+import { useAuthRedirect } from "../_hooks/useAuthRedirect ";
 
 interface LoginForm {
   userName?: string;
@@ -17,6 +18,7 @@ interface LoginForm {
   password: string;
 }
 const Page = () => {
+  useAuthRedirect();
   const router = useRouter();
   const {
     register,

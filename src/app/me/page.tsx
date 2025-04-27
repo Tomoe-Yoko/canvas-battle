@@ -13,10 +13,8 @@ import { Button } from "../_components/Button";
 import { api } from "../_utils/api";
 import Link from "next/link";
 import useFetchMonsters from "../_hooks/useFetchMonsters";
-import { useAuthRedirect } from "../_hooks/useAuthRedirect ";
 
 const Page = () => {
-  useAuthRedirect();
   const { session, isLoading: sessionLoading } = useSupabaseSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMonster, setSelectedMonster] =
