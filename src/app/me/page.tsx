@@ -34,7 +34,7 @@ const Page = () => {
             await api.post("/api/users", {
               id: session.user.id,
               email: session.user.email,
-              name: session.user.user_metadata.full_name || "no-name",
+              name: session.user.user_metadata.userName || "",
             });
             toast.success("新しいユーザーを登録しました！");
           }
