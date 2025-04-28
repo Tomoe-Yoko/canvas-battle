@@ -28,9 +28,12 @@ const Page = () => {
     const checkAndInitUser = async () => {
       if (!sessionLoading && session?.user) {
         try {
-          const { data }: { data: LoginForm } = await api.get(`/api/users`);
+          // const { data }: { data: LoginForm } = await api.get(`/api/users`);
+          // console.log(data);
+          const res: LoginForm = await api.get(`/api/users`);
 
-          if (!data) {
+          if (!res.userName) {
+            // if (!data) {
             await api.post("/api/users", {
               id: session.user.id,
               email: session.user.email,
