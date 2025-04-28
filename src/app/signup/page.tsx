@@ -94,7 +94,7 @@ const Page = () => {
         </div>
         <div className="flex justify-center mt-4">
           <Button type="submit" variant={"submit"} disabled={isSubmitting}>
-            登録
+            {isSubmitting ? "登録中..." : "登録"}
           </Button>
         </div>
         <p className="mx-auto mb-4 text-sm  block w-[95%] p-3 text-text_button">

@@ -36,7 +36,7 @@ const useGetBattleMonster = () => {
   useEffect(() => {
     if (!sessionLoading && !session?.user) {
       toast.error("ログインしてね");
-      router.push("/login");
+      router.replace("/login");
     }
   }, [sessionLoading, session, router]);
 

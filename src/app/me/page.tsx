@@ -13,7 +13,7 @@ import { api } from "../_utils/api";
 import Link from "next/link";
 import useFetchMonsters from "../_hooks/useFetchMonsters";
 import { useRouter } from "next/navigation";
-import { LoginForm } from "../_types/users";
+// import { LoginForm } from "../_types/users";
 
 const Page = () => {
   const router = useRouter();
@@ -28,17 +28,14 @@ const Page = () => {
     const checkAndInitUser = async () => {
       if (!sessionLoading && session?.user) {
         try {
-          // const { data }: { data: LoginForm } = await api.get(`/api/users`);
-          // console.log(data);
-          const res: LoginForm = await api.get(`/api/users`);
-
-          if (!res.userName) {
-            // if (!data) {
+          const res = await api.get<{ userName: string | null }>(`/api/users`);
+          if (!res.userName || res.userName.trim() === "") {
             await api.post("/api/users", {
               id: session.user.id,
               email: session.user.email,
               name: session.user.user_metadata.userName || "",
             });
+            console.log(res.data);
             toast.success("新しいユーザーを登録しました！");
           }
         } catch (error) {
@@ -47,7 +44,7 @@ const Page = () => {
         }
       } else if (!sessionLoading && !session?.user) {
         toast.error("ログインしてね");
-        router.push("/login");
+        router.replace("/login");
       }
     };
     checkAndInitUser();
@@ -196,15 +193,33 @@ const Page = () => {
                 onChange={(e) => setNewName(e.target.value)}
                 className="border rounded text-white w-[60%] h-16 px-2 py-2"
               />
-              <Button variant="bg-blue" onClick={handleNameUpdate}>
-                なまえ
-                <br />
-                変更
+              <Button
+                variant="bg-blue"
+                onClick={handleNameUpdate}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    なまえ
+                    <br />
+                    変更中
+                  </>
+                ) : (
+                  <>
+                    なまえ
+                    <br />
+                    変更
+                  </>
+                )}
               </Button>
             </div>
             <div className="flex justify-center gap-2 mt-4">
-              <Button variant="delete" onClick={handleDelete}>
-                モンスター削除
+              <Button
+                variant="delete"
+                onClick={handleDelete}
+                disabled={isLoading}
+              >
+                {isLoading ? "モンスター削除中" : "モンスター削除"}
               </Button>
             </div>
           </div>

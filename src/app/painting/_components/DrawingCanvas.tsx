@@ -132,7 +132,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
       // console.log("モンスター保存結果:", result);
       toast.success(`モンスターが保存された！${thumbnailImageKey}`);
       setIsModalOpen(false);
-      router.push("/me");
+      router.replace("/me");
     } catch (e) {
       console.error("保存エラー:", e);
       toast.error("画像が保存できなかったよ。もう一回ためしてみて");

@@ -15,7 +15,7 @@ const Page = () => {
   useEffect(() => {
     if (!sessionLoading && data?.battleView && monsterUrl && enemyUrl) {
       const timer = setTimeout(() => {
-        router.push(`/battle/${id}/`);
+        router.replace(`/battle/${id}/`);
       }, 2000);
       return () => clearTimeout(timer);
     }

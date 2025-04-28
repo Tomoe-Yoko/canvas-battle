@@ -25,7 +25,7 @@ const Page = () => {
   });
 
   const [session, setSession] = useState<Session | null | undefined>(undefined);
-  //  // ログイン状態の確認
+  // ログイン状態の確認
   useEffect(() => {
     const checkSession = async () => {
       const {
@@ -65,7 +65,7 @@ const Page = () => {
         throw new Error(error.message);
       }
 
-      router.push("/me");
+      router.replace("/me");
     } catch (error) {
       console.error("Login failed:", error);
       toast("ログインに失敗", {

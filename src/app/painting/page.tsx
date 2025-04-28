@@ -3,19 +3,17 @@ import React, { useEffect } from "react";
 import { Navigation } from "../_components/Navigation";
 import { CatWalk } from "../_components/CatWalk";
 import Loading from "@/app/loading";
-import { useSupabaseSession } from "../_hooks/useSupabaseSession"; // 修正後のフックを正しくインポート
+import { useSupabaseSession } from "../_hooks/useSupabaseSession";
 import toast from "react-hot-toast";
 import DrawingCanvas from "./_components/DrawingCanvas";
 
 const Page = () => {
   const { session, isLoading } = useSupabaseSession();
-  // session がないときにエラートーストを表示
   useEffect(() => {
     if (!isLoading && !session?.user) {
       toast.error("ログインしてね");
     }
-  }, [session, isLoading]); // session や isLoading が変わったときに実行
-
+  }, [session, isLoading]);
   if (isLoading) {
     return <Loading />;
   }
