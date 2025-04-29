@@ -71,7 +71,7 @@ const Page = () => {
       });
 
       const { id } = res;
-      router.push(`/battle/${id}/start`);
+      router.replace(`/battle/${id}/start`);
     } catch (err) {
       toast.error("バトル登録に失敗しました");
       console.error(err);

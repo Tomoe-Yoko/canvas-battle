@@ -24,34 +24,37 @@ const Page = () => {
   const [newName, setNewName] = useState("");
 
   useEffect(() => {
-    // 新規ユーザーなら登録
-    const checkAndInitUser = async () => {
-      if (!sessionLoading && session?.user) {
-        try {
-          const res = await api.get<{ userName: string | null }>(`/api/users`);
-          if (!res.userName || res.userName.trim() === "") {
-            await api.post("/api/users", {
-              id: session.user.id,
-              email: session.user.email,
-              name: session.user.user_metadata.userName || "",
-            });
-            console.log(res.data);
-            toast.success("新しいユーザーを登録しました！");
-          }
-        } catch (error) {
-          console.error("ユーザー確認エラー:", error);
-          toast.error("ユーザー情報の取得に失敗しました");
-        }
-      } else if (!sessionLoading && !session?.user) {
+    const fetcherOrNewUser = async () => {
+      if (sessionLoading) return;
+      if (!session?.user) {
         toast.error("ログインしてね");
         router.replace("/login");
+        return;
+      }
+      try {
+        const res = await api.get<{ data: { userName: string } }>("/api/users");
+        if (!res.data.userName || res.data.userName.trim() === "") {
+          await api.post("/api/users", {
+            id: session.user.id,
+            email: session.user.email,
+            name: session.user.user_metadata.userName || "",
+          });
+          toast.success("新しいユーザーを登録しました！");
+          console.log(res.data.userName);
+        }
+        // else {
+        //   // 既存ユーザーはここで何もしない、必要ならデータをセットする
+        //   console.log("既存ユーザー:", res);
+        // }
+      } catch (e) {
+        console.error("ユーザー情報取得エラー:", e);
+        toast.error("ユーザー情報の取得に失敗しました");
       }
     };
-    checkAndInitUser();
-  }, [session, sessionLoading, router]);
-  // モンスターと画像URLを一括取得
-  const { monsters, imageUrls, isLoading, mutate } = useFetchMonsters();
 
+    fetcherOrNewUser();
+  }, [session, sessionLoading, router]);
+  const { monsters, imageUrls, isLoading, mutate } = useFetchMonsters();
   //Modal
   const openModal = (monster: CreateMonsterResponseBody) => {
     setSelectedMonster(monster);
