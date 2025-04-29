@@ -244,7 +244,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
         onClose={closePenSetting}
         showCloseButton={false}
       >
-        <div className="bg-white px-6 py-3 rounded-lg shadow-md w-[95%] mx-auto">
+        <div className="bg-white px-6 py-3 rounded-lg shadow-md w-[95%] mx-auto max-w-[43rem]">
           <h3 className="text-2xl font-bold text-center mb-4">ペンの設定</h3>
 
           {/* 色選択 */}
@@ -300,7 +300,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
       </Modal>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <div className="bg-white px-6 py-8 rounded-lg shadow-lg w-[95%] mx-auto">
+        <div className="bg-white px-6 py-8 rounded-lg shadow-lg w-[95%] mx-auto max-w-[43rem]">
           <h3 className="text-lg font-bold mb-4">なまえをつけよう</h3>
           <input
             type="text"
