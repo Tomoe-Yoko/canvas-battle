@@ -48,6 +48,7 @@ const Page = () => {
                 alt="きみのモンスター"
                 width={210}
                 height={210}
+                unoptimized
                 className="object-contain text-right ring-7 ring-lime-300  rounded-2xl bg-gray-100 "
               />
             </div>

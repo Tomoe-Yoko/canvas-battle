@@ -97,6 +97,7 @@ const Page = () => {
                   alt={selectedYourMonster.name}
                   width={150}
                   height={150}
+                  unoptimized
                   className="object-contain m-2 aspect-square"
                 />
               </div>

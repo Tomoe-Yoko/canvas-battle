@@ -62,6 +62,7 @@ const BattleResultPage = () => {
                 alt="きみのモンスター"
                 width={210}
                 height={210}
+                unoptimized
                 className="object-contain bg-gray-100  rounded-md"
               />
             </div>
@@ -156,6 +157,7 @@ const BattleResultPage = () => {
                 alt="敵のモンスター"
                 width={210}
                 height={210}
+                unoptimized
                 className="object-contain bg-gray-100  rounded-md aspect-square"
               />
             </div>
@@ -219,6 +221,7 @@ const BattleResultPage = () => {
             alt="navButton"
             width={40}
             height={40}
+            unoptimized
             className="object-contain aspect-square"
           />
         </button>
