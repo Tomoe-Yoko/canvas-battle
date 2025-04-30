@@ -140,6 +140,7 @@ const Page = () => {
                 width={300}
                 height={200}
                 priority
+                unoptimized
                 className="  object-contain bg-gray-200 aspect-square"
               />
               <p className="w-[150px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[0.8rem] rounded-md">
