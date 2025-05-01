@@ -270,7 +270,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
               ペンの太さ
             </label>
             <div className="flex justify-between items-center gap-4 ">
-              {[4, 8, 12, 16, 20, 24, 28, 32].map((size) => (
+              {[8, 12, 16, 20, 24, 28, 32].map((size) => (
                 <button
                   key={size}
                   onClick={() => setStrokeWidth(size)}
