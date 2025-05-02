@@ -23,7 +23,7 @@ interface Props {
 const DrawingCanvas: React.FC<Props> = ({ session }) => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
   const [penColor, setPenColor] = useState("black");
-  const [strokeWidth, setStrokeWidth] = useState(3);
+  const [strokeWidth, setStrokeWidth] = useState(16);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [monsterName, setMonsterName] = useState("");
   const [thumbnailImageKey, setThumbnailImageKey] = useState("");
