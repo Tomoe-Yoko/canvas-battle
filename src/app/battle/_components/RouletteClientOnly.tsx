@@ -8,7 +8,7 @@ interface Props {
   spinKey: number; //外部のスピン開始イベントを検知するためのキー
 }
 
-const RouletteClientOnly: React.FC<Props> = ({ mustSpin, onStop }) => {
+const Roulette: React.FC<Props> = ({ mustSpin, onStop }) => {
   const jankenData = [
     { option: "✊", value: "rock" },
     { option: "✌️", value: "scissors" },
@@ -46,4 +46,4 @@ const RouletteClientOnly: React.FC<Props> = ({ mustSpin, onStop }) => {
     </div>
   );
 };
-export default RouletteClientOnly;
+export default Roulette;
