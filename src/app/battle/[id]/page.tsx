@@ -3,12 +3,13 @@ import { Navigation } from "../../_components/Navigation";
 import Image from "next/image";
 import Loading from "@/app/loading";
 import useBattleGame from "../_hooks/useBattleGame";
-import Roulette from "../_components/Roulette";
+// import Roulette from "../_components/Roulette";
 import useGetBattleMonster from "../_hooks/useGetBattleMonster";
 import { Modal } from "@/app/_components/Modal";
 import { motion } from "framer-motion";
 import { Button } from "@/app/_components/Button";
 import { useState } from "react";
+import Roulette from "../_components/RouletteClientOnly";
 
 const BattleResultPage = () => {
   const {

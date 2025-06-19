@@ -22,14 +22,16 @@ interface Props {
 
 const DrawingCanvas: React.FC<Props> = ({ session }) => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
-  const [penColor, setPenColor] = useState("black");
-  const [strokeWidth, setStrokeWidth] = useState(3);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [monsterName, setMonsterName] = useState("");
   const [thumbnailImageKey, setThumbnailImageKey] = useState("");
-  const [isPenSettingOpen, setIsPenSettingOpen] = useState(false); //ペン（色、太さ）設定
   const [isErasing, setIsErasing] = useState(false); // false = ペン, true = 消しゴム
-
+  const [isPenSettingOpen, setIsPenSettingOpen] = useState(false); //ペン設定modal
+  const [penColor, setPenColor] = useState("black");
+  const [strokeWidth, setStrokeWidth] = useState(16);
+  const [isEraserSettingOpen, setIsEraserPenSettingOpen] = useState(false); //eraser設定modal
+  const [eraserWidth, setEraserWidth] = useState(16);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
@@ -169,7 +171,11 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
             <p className="text-white text-[50%]">ペン設定</p>
             <button
               type="button"
-              onClick={openPenSetting}
+              onClick={() => {
+                openPenSetting();
+                setIsErasing(false);
+                canvasRef.current?.eraseMode(false);
+              }}
               className="bg-gray-300 p-2 rounded-lg w-[45px]"
             >
               <IoSettings />
@@ -181,8 +187,10 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
             <button
               type="button"
               onClick={() => {
-                canvasRef.current?.eraseMode(true);
-                setIsErasing(true);
+                setIsEraserPenSettingOpen(true);
+                // canvasRef.current?.eraseMode(true);
+                // canvasRef.current?.setStrokeWidth(strokeWidth); // 追加
+                // setIsErasing(true);
               }}
               className={`p-2 rounded-lg w-[45px] ${
                 isErasing ? "bg-yellow-100" : "bg-gray-300"
@@ -231,12 +239,22 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
           </div>
         </div>
         <div className="w-90% mx-auto aspect-square">
-          <ReactSketchCanvas
-            ref={canvasRef}
-            width="100%"
-            strokeColor={penColor}
-            strokeWidth={strokeWidth}
-          />
+          <div
+            onPointerDown={() => {
+              if (canvasRef.current) {
+                canvasRef.current.eraseMode(isErasing);
+              }
+            }}
+            className="aspect-square"
+          >
+            <ReactSketchCanvas
+              ref={canvasRef}
+              width="100%"
+              strokeColor={penColor}
+              strokeWidth={strokeWidth}
+              eraserWidth={eraserWidth}
+            />
+          </div>
         </div>
       </section>
       <Modal
@@ -270,7 +288,8 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
               ペンの太さ
             </label>
             <div className="flex justify-between items-center gap-4 ">
-              {[4, 8, 12, 16, 20, 24, 28, 32].map((size) => (
+              {/* {[4, 8, 12, 16, 20, 24, 28, 32].map((size) => ( */}
+              {[8, 12, 16, 20, 24, 28, 32].map((size) => (
                 <button
                   key={size}
                   onClick={() => setStrokeWidth(size)}
@@ -292,13 +311,62 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
 
           {/* 閉じるボタン */}
           <div className="flex justify-end mt-24">
-            <Button onClick={closePenSetting} variant="bg-blue">
+            <Button
+              onClick={() => {
+                closePenSetting();
+              }}
+              variant="bg-blue"
+            >
               これでかく！
             </Button>
           </div>
         </div>
       </Modal>
-
+      <Modal
+        isOpen={isEraserSettingOpen}
+        onClose={() => setIsEraserPenSettingOpen(false)}
+        showCloseButton={false}
+      >
+        {/* 消しゴムの太さ設定 */}
+        <div className="bg-white px-6 py-3 rounded-lg shadow-md w-[95%] mx-auto max-w-[43rem]">
+          <label className="block text-xl font-medium m-[1rem auto 3rem] block text-center padding-[1rem 0 3rem]">
+            消しゴムの太さ
+          </label>
+          <div className="flex justify-between items-center gap-4">
+            {[8, 12, 16, 20, 24, 28, 32].map((size) => (
+              <button
+                key={size}
+                onClick={() => setEraserWidth(size)}
+                className={`rounded-full transition-all duration-200 ${
+                  eraserWidth === size
+                    ? "ring-6 ring-indigo-500 scale-110"
+                    : "opacity-60 hover:opacity-100"
+                }`}
+                style={{
+                  width: `${size}px`,
+                  height: `${size}px`,
+                  backgroundColor: "gray",
+                }}
+                aria-label={`消しゴムの太さ ${size}px`}
+              ></button>
+            ))}
+          </div>
+          {/* 閉じるボタン */}
+          <div className="flex justify-end mt-24">
+            <Button
+              onClick={() => {
+                setIsEraserPenSettingOpen(false);
+                canvasRef.current?.eraseMode(true);
+                // canvasRef.current?.setEraserWidth(eraserWidth); // 追加
+                setIsErasing(true);
+              }}
+              variant="bg-blue"
+            >
+              これでけす！
+            </Button>
+          </div>
+        </div>
+      </Modal>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className="bg-white px-6 py-8 rounded-lg shadow-lg w-[95%] mx-auto max-w-[43rem]">
           <h3 className="text-lg font-bold mb-4">なまえをつけよう</h3>

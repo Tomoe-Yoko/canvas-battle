@@ -127,7 +127,7 @@ const Page = () => {
               </div>
               <p className="w-[150px] mx-auto text-center text-white bg-[#333c54] p-2 tracking-[2px] text-[1rem] rounded-md">
                 {selectedEnemyMonster.name}
-              </p>{" "}
+              </p>
             </>
           ) : (
             <div className="w-[150px] m-2 bg-black  text-indigo-300 aspect-square text-sm p-2 pt-6">
@@ -144,13 +144,13 @@ const Page = () => {
       </div>
       <hr className=" text-white w-[90%] mx-auto my-[1rem]" />
 
-      <div className="w-[95%] mx-auto flex flex-wrap justify-between pt-[0.5rem] pb-[1rem]">
+      <div className="w-[93%] mx-auto flex flex-wrap justify-around gap-2 pt-[0.5rem] pb-[1rem]">
         {Object.keys(imageUrls).length === monsters.length ? (
           monsters.map((monster) => (
             <div
               key={monster.id}
               onClick={() => handleMonsterClick(monster)}
-              className={`cursor-pointer ${
+              className={`w-[22%] min-w-[60px] cursor-pointer ${
                 selectedYourMonster?.id === monster.id
                   ? "ring-4 ring-lime-300"
                   : selectedEnemyMonster?.id === monster.id
