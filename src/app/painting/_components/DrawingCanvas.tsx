@@ -171,7 +171,11 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
             <p className="text-white text-[50%]">ペン設定</p>
             <button
               type="button"
-              onClick={openPenSetting}
+              onClick={() => {
+                openPenSetting();
+                setIsErasing(false);
+                canvasRef.current?.eraseMode(false);
+              }}
               className="bg-gray-300 p-2 rounded-lg w-[45px]"
             >
               <IoSettings />
@@ -284,6 +288,7 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
               ペンの太さ
             </label>
             <div className="flex justify-between items-center gap-4 ">
+              {/* {[4, 8, 12, 16, 20, 24, 28, 32].map((size) => ( */}
               {[8, 12, 16, 20, 24, 28, 32].map((size) => (
                 <button
                   key={size}
@@ -306,7 +311,12 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
 
           {/* 閉じるボタン */}
           <div className="flex justify-end mt-24">
-            <Button onClick={closePenSetting} variant="bg-blue">
+            <Button
+              onClick={() => {
+                closePenSetting();
+              }}
+              variant="bg-blue"
+            >
               これでかく！
             </Button>
           </div>
@@ -346,6 +356,8 @@ const DrawingCanvas: React.FC<Props> = ({ session }) => {
             <Button
               onClick={() => {
                 setIsEraserPenSettingOpen(false);
+                canvasRef.current?.eraseMode(true);
+                // canvasRef.current?.setEraserWidth(eraserWidth); // 追加
                 setIsErasing(true);
               }}
               variant="bg-blue"
