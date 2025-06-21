@@ -38,14 +38,14 @@ const Page = () => {
       }
     };
     checkSession();
-  }, [session]);
-
-  if (session === undefined) {
-    return <Loading />;
-  }
-
-  if (session) {
-    router.replace("/me");
+  }, []);
+  useEffect(() => {
+    if (session) {
+      router.replace("/me");
+    }
+  }, [session, router]);
+  //|| sessionはローディングのちらつき防止
+  if (session === undefined || session) {
     return <Loading />;
   }
 
