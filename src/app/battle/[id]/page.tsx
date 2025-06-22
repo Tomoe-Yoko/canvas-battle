@@ -3,6 +3,7 @@ import { Navigation } from "../../_components/Navigation";
 import Image from "next/image";
 import Loading from "@/app/loading";
 import useBattleGame from "../_hooks/useBattleGame";
+import { useRouter } from "next/navigation";
 // import Roulette from "../_components/Roulette";
 import useGetBattleMonster from "../_hooks/useGetBattleMonster";
 import { Modal } from "@/app/_components/Modal";
@@ -12,6 +13,7 @@ import { useState } from "react";
 import Roulette from "../_components/RouletteClientOnly";
 
 const BattleResultPage = () => {
+  const router = useRouter();
   const {
     hands,
     cpuHand,
@@ -200,6 +202,12 @@ const BattleResultPage = () => {
               </p>
               <Button variant="bg-blue" onClick={resetGame}>
                 もう一回する！
+              </Button>
+              <Button
+                variant="bg-blue"
+                onClick={() => router.replace("/battle/ready")}
+              >
+                バトルをやめる
               </Button>
             </div>
           )}
