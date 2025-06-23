@@ -42,10 +42,6 @@ const Page = () => {
           toast.success("新しいユーザーを登録しました！");
           console.log(res.data.userName);
         }
-        // else {
-        //   // 既存ユーザーはここで何もしない、必要ならデータをセットする
-        //   console.log("既存ユーザー:", res);
-        // }
       } catch (e) {
         console.error("ユーザー情報取得エラー:", e);
         toast.error("ユーザー情報の取得に失敗しました");
@@ -74,14 +70,16 @@ const Page = () => {
         toast.error("名前を入力してね！");
         return;
       }
-      await api.put(`/api/monster/${selectedMonster.id}`, { name: newName });
+      await Promise.all([
+        api.put(`/api/monster/${selectedMonster.id}`, { name: newName }),
+      ]);
       closeModal();
       await mutate();
       toast.success("名前を更新したよ！");
-      await api.get<{
-        status: string;
-        monstersView: CreateMonsterResponseBody[];
-      }>("/api/monster");
+      // await api.get<{
+      //   status: string;
+      //   monstersView: CreateMonsterResponseBody[];
+      // }>("/api/monster");
     } catch (err) {
       console.error(err);
       toast.error("エラーが発生しました");
@@ -90,7 +88,7 @@ const Page = () => {
 
   const handleDelete = async () => {
     if (!selectedMonster) return;
-    const confirm = window.confirm("本当に削除してもいいですか？");
+    const confirm = window.confirm("本当に消してもいいですか？");
     if (!confirm) return;
 
     try {
@@ -98,13 +96,11 @@ const Page = () => {
       const { error: storageError } = await supabase.storage
         .from("post-monster") // バケット名を指定
         .remove([selectedMonster.thumbnailImageKey]); // thumbnailImageKeyを利用
-      closeModal();
-      await mutate();
-      toast.success("削除しました！");
-      await api.get<{
-        status: string;
-        monstersView: CreateMonsterResponseBody[];
-      }>("/api/monster");
+
+      // await api.get<{
+      //   status: string;
+      //   monstersView: CreateMonsterResponseBody[];
+      // }>("/api/monster");
 
       if (storageError) {
         toast.error("バケットから画像を削除できませんでした。");
@@ -112,6 +108,9 @@ const Page = () => {
           `Failed to delete image from bucket: ${storageError.message}`
         );
       }
+      closeModal();
+      await mutate();
+      toast.success("削除しました！");
     } catch (err) {
       console.error(err);
       toast.error("エラーが発生しました");
@@ -202,19 +201,11 @@ const Page = () => {
                 onClick={handleNameUpdate}
                 disabled={isLoading}
               >
-                {isLoading ? (
-                  <>
-                    なまえ
-                    <br />
-                    変更中
-                  </>
-                ) : (
-                  <>
-                    なまえ
-                    <br />
-                    変更
-                  </>
-                )}
+                <>
+                  なまえ
+                  <br />
+                  変更
+                </>
               </Button>
             </div>
             <div className="flex justify-center gap-2 mt-4">
