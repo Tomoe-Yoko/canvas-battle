@@ -55,7 +55,7 @@ export const Navigation = () => {
               className="flex flex-col items-center gap-1 w-[32px]"
             >
               <FaPersonWalkingArrowRight />
-              <p className="w-[6rem] text-[0.7rem] text-center">おわり</p>
+              <p className="w-[6rem] text-[0.7rem] text-center">ログアウト</p>
             </button>
           </li>
         </ul>
