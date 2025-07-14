@@ -1,10 +1,14 @@
 # 🆚 Canvas Battle
+[![キャンバスバトルTOP画像](https://github.com/user-attachments/assets/b6b08aa1-4583-4382-96a9-1a378f02eb19)](https://canvasbattle-woad.vercel.app)
 
-[アプリを開く](https://canvasbattle-woad.vercel.app)
 
 ## 概要
 
 **Canvas Battle** は、お絵描きしたキャラクターで**じゃんけんバトル**を楽しめる、子どもから大人まで遊べるWebアプリです。
+---
+
+## URL
+https://canvasbattle-woad.vercel.app
 
 ---
 ## 開発の経緯
@@ -17,11 +21,50 @@
 
 ---
 ## 遊び方
--お絵描きページにて、自由にキャラクターをお絵描きします。
--描いたキャラクターでじゃんけんバトルに挑戦します。
-　"敵"か"きみ"のどちらかのハート（HP）がなくなるとゲーム終了。何度も対戦できます。
+
+ <markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+<th>おえかき</th>
+<th>じゃんけん</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="https://github.com/user-attachments/assets/44c2fc82-a3ab-44fb-81cf-4b4a3d44d5bb" alt="image" style="max-width: 100%;"></td>
+<td><img src="https://github.com/user-attachments/assets/1f61da31-966a-47b4-a6b5-f3c115455cc2" alt="image" style="max-width: 100%;"></td>
+</tr>
+<tr>
+<td>ログイン後、お絵描きページにて、自由にキャラクターをお絵描きします。</td>
+<td>じゃんけんページにて自分と敵のモンスターを選定します。</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+
+<markdown-accessiblity-table data-catalyst=""><table>
+<thead>
+<tr>
+ <th>バトル開始</th>
+<th>じゃんけんバトル</th>
+
+</tr>
+</thead>
+<tbody>
+<tr> 
+<td><img src="https://github.com/user-attachments/assets/d3bf64f3-4d7d-40bf-a264-18a164b21b9d" alt="image" style="max-width: 100%;"></td>
+<td><img src="https://github.com/user-attachments/assets/745f44a3-56f0-49ef-807e-28c95d6ed7b6" alt="image" style="max-width: 100%;"></td>
+</tr>
+<tr>
+ <td>描いたキャラクターでじゃんけんバトルに挑戦です。</td>
+<td>　"敵"か"きみ"のどちらかのハート（HP）がなくなるとゲーム終了。何度も対戦できます。</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+
+
  
 ---
+
 
 ## 主な機能
 
@@ -44,6 +87,7 @@
 ---
 
 ## 使用技術
+![機能の表](https://github.com/user-attachments/assets/db0d6961-6d16-41d9-a251-4a1194f69721)
 
 ### フロントエンド
 - **言語:** TypeScript
@@ -74,6 +118,10 @@
 
 ---
 
+## ER図
+![機能の表](https://github.com/user-attachments/assets/9b648eb0-1159-45b4-bbbd-d85378e56689)
+
+---
 ## 今後
 
 - **UI改善:**  
