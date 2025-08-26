@@ -104,7 +104,7 @@ https://canvasbattle-woad.vercel.app
   - React Custom Roulette（ルーレット）
   - Canvas Confetti（演出）
   - Framer Motion（アニメーション）
-  - Browser Image Compression（※結果的に不要かも）
+
 
 ### バックエンド & データベース
 
